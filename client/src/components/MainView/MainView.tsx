@@ -9,6 +9,7 @@ import {
   alertOpenState,
   alertTitleState,
   alertMessageState,
+  currentNodeState,
 } from '../../global/Atoms'
 import { useLocation } from 'react-router-dom'
 import { FrontendNodeGateway } from '../../nodes'
@@ -17,10 +18,17 @@ import { Alert } from '../Alert'
 import { ContextMenu } from '../ContextMenu/ContextMenu'
 import { Header } from '../Header'
 import { LoadingScreen } from '../LoadingScreen'
-import { CompleteLinkModal, CreateNodeModal, MoveNodeModal } from '../Modals'
+import {
+  CompleteLinkModal,
+  CreateNodeModal,
+  MoveNodeModal,
+  OpenGraphModal,
+} from '../Modals'
 import { NodeView } from '../NodeView'
 import { TreeView } from '../TreeView'
+import { SearchView } from '../Search'
 import './MainView.scss'
+import { useHistory } from 'react-router-dom'
 import { createNodeIdsToNodesMap, emptyNode, makeRootWrapper } from './mainViewUtils'
 
 export const MainView = React.memo(function MainView() {
@@ -28,9 +36,14 @@ export const MainView = React.memo(function MainView() {
   const [isAppLoaded, setIsAppLoaded] = useState(false)
   // modal states
   const [createNodeModalOpen, setCreateNodeModalOpen] = useState(false)
+  const [openGraphModal, setOpenGraphModal] = useState(false)
   const [completeLinkModalOpen, setCompleteLinkModalOpen] = useState(false)
   const [moveNodeModalOpen, setMoveNodeModalOpen] = useState(false)
+  // search states
+  const [searchNode, setSearchNode] = useState(false)
+  const [searchResults, setSearchResults] = useState<INode[]>([])
   // node states
+  const currentNode = useRecoilValue(currentNodeState)
   const [selectedNode, setSelectedNode] = useRecoilState(selectedNodeState)
   const [rootNodes, setRootNodes] = useState<RecursiveNodeTree[]>([
     new RecursiveNodeTree(emptyNode),
@@ -43,6 +56,8 @@ export const MainView = React.memo(function MainView() {
   const setAlertIsOpen = useSetRecoilState(alertOpenState)
   const setAlertTitle = useSetRecoilState(alertTitleState)
   const setAlertMessage = useSetRecoilState(alertMessageState)
+  // history
+  const history = useHistory()
 
   /** update our frontend root nodes from the database */
   const loadRootsFromDB = useCallback(async () => {
@@ -101,6 +116,33 @@ export const MainView = React.memo(function MainView() {
     setCreateNodeModalOpen(true)
   }, [setCreateNodeModalOpen])
 
+  const handleOpenGraphClick = useCallback(() => {
+    setOpenGraphModal(true)
+  }, [setOpenGraphModal])
+
+  const handleSearchButtonClick = useCallback(
+    async (query: string) => {
+      const searchResp = await FrontendNodeGateway.searchNode(query)
+      if (!searchResp.success) {
+        setAlertIsOpen(true)
+        setAlertTitle('Search Failed')
+        setAlertMessage(
+          'Search failed. Please make sure your query is valid and not empty.'
+        )
+        return
+      }
+      const searchResults = searchResp.payload as INode[]
+      history.push('/')
+      setSearchResults(searchResults)
+      setSearchNode(true)
+    },
+    [setSearchNode]
+  )
+
+  useEffect(() => {
+    setSearchNode(false)
+  }, [currentNode, selectedNode])
+
   const handleDeleteNodeButtonClick = useCallback(
     async (node: INode) => {
       if (node) {
@@ -137,6 +179,8 @@ export const MainView = React.memo(function MainView() {
 
   const handleHomeClick = useCallback(() => {
     setSelectedNode(null)
+    setSearchNode(false)
+    setSearchResults([])
   }, [])
 
   const getSelectedNodeChildren = useCallback(() => {
@@ -196,6 +240,7 @@ export const MainView = React.memo(function MainView() {
           <Header
             onHomeClick={handleHomeClick}
             onCreateNodeButtonClick={handleCreateNodeButtonClick}
+            onSearchButtonClick={handleSearchButtonClick}
             nodeIdsToNodesMap={nodeIdsToNodesMap}
           />
           <CreateNodeModal
@@ -203,6 +248,13 @@ export const MainView = React.memo(function MainView() {
             onClose={() => setCreateNodeModalOpen(false)}
             roots={rootNodes}
             nodeIdsToNodesMap={nodeIdsToNodesMap}
+            onSubmit={loadRootsFromDB}
+          />
+          <OpenGraphModal
+            isOpen={openGraphModal}
+            onClose={() => setOpenGraphModal(false)}
+            // roots={rootNodes}
+            // nodeIdsToNodesMap={nodeIdsToNodesMap}
             onSubmit={loadRootsFromDB}
           />
           <CompleteLinkModal
@@ -228,21 +280,26 @@ export const MainView = React.memo(function MainView() {
               />
             </div>
             <div className="divider" onPointerDown={onPointerDown} />
-            <div className="node-wrapper">
-              <NodeView
-                childNodes={
-                  selectedNode
-                    ? getSelectedNodeChildren()
-                    : rootNodes.map((root) => root.node)
-                }
-                currentNode={selectedNode ? selectedNode : rootRecursiveNodeTree.node}
-                onDeleteButtonClick={handleDeleteNodeButtonClick}
-                onMoveButtonClick={handleMoveNodeButtonClick}
-                onCompleteLinkClick={handleCompleteLinkClick}
-                onCreateNodeButtonClick={handleCreateNodeButtonClick}
-                nodeIdsToNodesMap={nodeIdsToNodesMap}
-              />
-            </div>
+            {searchNode ? (
+              <SearchView searchResults={searchResults} />
+            ) : (
+              <div className="node-wrapper">
+                <NodeView
+                  childNodes={
+                    selectedNode
+                      ? getSelectedNodeChildren()
+                      : rootNodes.map((root) => root.node)
+                  }
+                  currentNode={selectedNode ? selectedNode : rootRecursiveNodeTree.node}
+                  onDeleteButtonClick={handleDeleteNodeButtonClick}
+                  onMoveButtonClick={handleMoveNodeButtonClick}
+                  onCompleteLinkClick={handleCompleteLinkClick}
+                  onCreateNodeButtonClick={handleCreateNodeButtonClick}
+                  onOpenGraphClick={handleOpenGraphClick}
+                  nodeIdsToNodesMap={nodeIdsToNodesMap}
+                />
+              </div>
+            )}
           </div>
         </div>
       )}

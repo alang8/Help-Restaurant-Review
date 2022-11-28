@@ -1,15 +1,15 @@
+import { Link } from '@tiptap/extension-link'
+import { EditorContent, useEditor } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
 import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { BiSave } from 'react-icons/bi'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { FrontendAnchorGateway } from '../../../../anchors'
 import {
   currentNodeState,
   refreshAnchorState,
   refreshLinkListState,
-  refreshState,
-  selectedAnchorsState,
   selectedExtentState,
-  startAnchorState,
 } from '../../../../global/Atoms'
 import { FrontendLinkGateway } from '../../../../links'
 import { FrontendNodeGateway } from '../../../../nodes'
@@ -17,13 +17,13 @@ import {
   Extent,
   failureServiceResponse,
   IAnchor,
-  ILink,
   INodeProperty,
   IServiceResponse,
-  ITextExtent,
   makeINodeProperty,
+  makeITextExtent,
   successfulServiceResponse,
 } from '../../../../types'
+import { Button } from '../../../Button'
 import './TextContent.scss'
 import { TextMenu } from './TextMenu'
 interface ITextContentProps {}
@@ -31,26 +31,30 @@ interface ITextContentProps {}
 /** The content of an text node, including all its anchors */
 export const TextContent = (props: ITextContentProps) => {
   const currentNode = useRecoilValue(currentNodeState)
-  const startAnchor = useRecoilValue(startAnchorState)
-  const [refresh, setRefresh] = useRecoilState(refreshState)
   const [anchorRefresh, setAnchorRefresh] = useRecoilState(refreshAnchorState)
   const [linkMenuRefresh, setLinkMenuRefresh] = useRecoilState(refreshLinkListState)
-  const [selectedAnchors, setSelectedAnchors] = useRecoilState(selectedAnchorsState)
-  const [selectedExtent, setSelectedExtent] = useRecoilState(selectedExtentState)
-  const [onSave, setOnSave] = useState(false)
-  const history = useHistory()
+  const setSelectedExtent = useSetRecoilState(selectedExtentState)
+  const [refreshLinkList, setRefreshLinkList] = useRecoilState(refreshLinkListState)
 
-  const editor = null
+  // State variable for current node text content
+  const [textContent, setTextContent] = useState(currentNode.content)
 
-  // TODO: Add all of the functionality for a rich text editor!
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Link.configure({ openOnClick: true, autolink: false, linkOnPaste: false }),
+    ],
+    content: currentNode.content,
+    onUpdate: ({ editor }) => {
+      setTextContent(editor.getHTML())
+    },
+  })
 
   // This function adds anchor marks for anchors in the database to the text editor
-  // TODO: Replace 'http://localhost:3000/' with your frontend URL when you're ready to deploy
   const addAnchorMarks = async (): Promise<IServiceResponse<any>> => {
     if (!editor) {
       return failureServiceResponse('no editor')
     }
-    const anchorMarks: ITextExtent[] = []
     const anchorResponse = await FrontendAnchorGateway.getAnchorsByNodeId(
       currentNode.nodeId
     )
@@ -77,7 +81,7 @@ export const TextContent = (props: ITextContentProps) => {
           to: anchor.extent.endCharacter + 1,
         })
         editor.commands.setLink({
-          href: 'http://localhost:3000/' + node + '/',
+          href: `https://calm-mesa-01359.web.app/${node}/`,
           target: anchor.anchorId,
         })
       }
@@ -89,6 +93,10 @@ export const TextContent = (props: ITextContentProps) => {
   useEffect(() => {
     if (editor) {
       editor.commands.setContent(currentNode.content)
+      setTextContent(currentNode.content)
+      editor.commands.selectAll()
+      // Unset all the links in the editor
+      editor.commands.unsetLink()
       addAnchorMarks()
     }
   }, [currentNode, editor])
@@ -123,5 +131,139 @@ export const TextContent = (props: ITextContentProps) => {
     return <div>{currentNode.content}</div>
   }
 
-  return <div>{currentNode.content}</div>
+  /**
+   * Check if there are any anchors that need to be deleted. These anchors will be
+   * any anchor in the database but not in the editor.
+   */
+  const checkDeleteAnchors = async (anchorsArray: string[]) => {
+    // Get all the anchors in the database for this node
+    const getAnchorsResp = await FrontendAnchorGateway.getAnchorsByNodeId(
+      currentNode.nodeId
+    )
+    if (!getAnchorsResp.success) {
+      console.log('Failed to get anchors by node ID:' + getAnchorsResp.message)
+      return
+    }
+    const allDatabaseAnchorsForNode = getAnchorsResp.payload!
+    // Get all the anchors that do not link from the node itself. That is, these
+    // anchors have an extent
+    const anchorsWithExtent: IAnchor[] = allDatabaseAnchorsForNode.filter((anchor) => {
+      return anchor.extent != null
+    })
+    // Find the anchors that need to be deleted
+    const anchorsToDelete: IAnchor[] = anchorsWithExtent.filter((anchor) => {
+      return !anchorsArray.includes(anchor.anchorId)
+    })
+    // Get the anchor IDs that need to be deleted
+    const anchorsToDeleteId: string[] = anchorsToDelete.map((anchor) => {
+      return anchor.anchorId
+    })
+
+    // Delete the links associated with the to be deleted anchors
+    const getLinksResp = await FrontendLinkGateway.getLinksByAnchorIds(anchorsToDeleteId)
+    if (!getLinksResp.success) {
+      console.log('Failed to get links by anchor IDs:' + getLinksResp.message)
+      return
+    }
+    const linksToDelete = getLinksResp.payload!
+
+    // Iterate through the links and delete both the anchors and the link itself
+    linksToDelete.forEach(async (link) => {
+      // Delete both anchors associated to a link
+      const deleteAnchorsResp = await FrontendAnchorGateway.deleteAnchors([
+        link.anchor1Id,
+        link.anchor2Id,
+      ])
+      if (!deleteAnchorsResp.success) {
+        console.log('Failed to delete anchors:' + deleteAnchorsResp.message)
+        return
+      }
+
+      // Delete link itself
+      const deleteLinkResp = await FrontendLinkGateway.deleteLink(link.linkId)
+      if (!deleteLinkResp.success) {
+        console.log('Failed to delete link:' + deleteLinkResp.message)
+      }
+    })
+
+    // Set the content to whatever the current node is
+    editor.commands.setContent(textContent)
+    editor.commands.selectAll()
+    // Unset all the links in the editor
+    editor.commands.unsetLink()
+    // Color only the links that are still present in editor
+    await addAnchorMarks()
+  }
+
+  /**
+   * Method to update the anchors in the database if the editor has changed.
+   */
+  const updateAnchors = async () => {
+    const anchorsArray: string[] = []
+    let promiseArray: Promise<any>[] = []
+    // Iterate through all the marks in the editor
+    editor.state.doc.descendants((node, pos, parent, index) => {
+      promiseArray = node.marks.map(async (nodeMark) => {
+        if (nodeMark.type.name === 'link') {
+          // Find the anchor ID that is associated with this mark
+          const anchorID: string = nodeMark.attrs.target
+          anchorsArray.push(anchorID)
+          const anchorResp = await FrontendAnchorGateway.getAnchor(anchorID)
+          if (!anchorResp.success) {
+            console.log('error')
+          }
+          // Create the new extent for the anchor
+          const newExtent = makeITextExtent(
+            node.text!,
+            pos - 1,
+            pos - 1 + node.text!.length
+          )
+          // Backend call to update the anchor and extent in the database
+          const updateExtentResp = await FrontendAnchorGateway.updateExtent(
+            anchorID,
+            newExtent
+          )
+          if (!updateExtentResp.success) {
+            console.log('Failed to update extent: ' + updateExtentResp.message)
+          }
+        }
+      })
+    })
+    // Wait for all the promises to resolve
+    await Promise.all(promiseArray)
+    await checkDeleteAnchors(anchorsArray)
+  }
+
+  /* Method to update the text content for an editor. This method is called
+  whenever the user hits the save button. */
+  const handleUpdateTextContent = async () => {
+    const nodeProperty: INodeProperty = makeINodeProperty('content', textContent)
+    const textContentUpdateResp = await FrontendNodeGateway.updateNode(
+      currentNode.nodeId,
+      [nodeProperty]
+    )
+    if (!textContentUpdateResp.success) {
+      console.log('Failed to update text content: ' + textContentUpdateResp.message)
+      return
+    }
+    setAnchorRefresh(!anchorRefresh)
+    setLinkMenuRefresh(!linkMenuRefresh)
+    setRefreshLinkList(!refreshLinkList)
+    await updateAnchors()
+    setAnchorRefresh(!anchorRefresh)
+    setLinkMenuRefresh(!linkMenuRefresh)
+  }
+
+  return (
+    <div>
+      <TextMenu editor={editor} />
+      <Button
+        text="Save"
+        icon={<BiSave />}
+        onClick={() => handleUpdateTextContent()}
+        style={{ background: '#ADD8E6', marginTop: '20px', height: '40px' }}
+      />
+      <EditorContent editor={editor} onPointerUp={onPointerUp} />
+    </div>
+  )
 }

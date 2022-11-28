@@ -1,25 +1,24 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { FrontendAnchorGateway } from '../../anchors'
 import { generateObjectId } from '../../global'
+import {
+  alertMessageState,
+  alertOpenState,
+  alertTitleState,
+  currentNodeState,
+  endAnchorState,
+  isLinkingState,
+  refreshLinkListState,
+  selectedAnchorsState,
+  selectedExtentState,
+  startAnchorState,
+} from '../../global/Atoms'
 import { IAnchor, INode, isSameExtent, NodeIdsToNodesMap } from '../../types'
 import { NodeBreadcrumb } from './NodeBreadcrumb'
 import { NodeContent } from './NodeContent'
 import { NodeHeader } from './NodeHeader'
 import { NodeLinkMenu } from './NodeLinkMenu'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import {
-  isLinkingState,
-  refreshState,
-  startAnchorState,
-  endAnchorState,
-  selectedAnchorsState,
-  selectedExtentState,
-  alertOpenState,
-  alertTitleState,
-  alertMessageState,
-  currentNodeState,
-  refreshLinkListState,
-} from '../../global/Atoms'
 import './NodeView.scss'
 
 export interface INodeViewProps {
@@ -34,6 +33,8 @@ export interface INodeViewProps {
   onDeleteButtonClick: (node: INode) => void
   // handler for opening move node modal
   onMoveButtonClick: (node: INode) => void
+  // handler for opening graph view
+  onOpenGraphClick: () => void
   // children used when rendering folder node
   childNodes?: INode[]
 }
@@ -47,6 +48,7 @@ export const NodeView = (props: INodeViewProps) => {
     onCreateNodeButtonClick,
     onDeleteButtonClick,
     onMoveButtonClick,
+    onOpenGraphClick,
     childNodes,
   } = props
   const setIsLinking = useSetRecoilState(isLinkingState)
@@ -54,13 +56,12 @@ export const NodeView = (props: INodeViewProps) => {
   const setEndAnchor = useSetRecoilState(endAnchorState)
   const setSelectedAnchors = useSetRecoilState(selectedAnchorsState)
   const selectedExtent = useRecoilValue(selectedExtentState)
-  const refresh = useRecoilValue(refreshState)
   const refreshLinkList = useRecoilValue(refreshLinkListState)
   const [anchors, setAnchors] = useState<IAnchor[]>([])
   const setAlertIsOpen = useSetRecoilState(alertOpenState)
   const setAlertTitle = useSetRecoilState(alertTitleState)
   const setAlertMessage = useSetRecoilState(alertMessageState)
-  const [currNode, setCurrentNode] = useRecoilState(currentNodeState)
+  const setCurrentNode = useSetRecoilState(currentNodeState)
   const {
     filePath: { path },
   } = currentNode
@@ -187,10 +188,11 @@ export const NodeView = (props: INodeViewProps) => {
     <div className="node">
       <div className="nodeView" style={{ width: nodeViewWidth }}>
         <NodeHeader
-          onMoveButtonClick={onMoveButtonClick}
           onDeleteButtonClick={onDeleteButtonClick}
+          onMoveButtonClick={onMoveButtonClick}
           onHandleStartLinkClick={handleStartLinkClick}
           onHandleCompleteLinkClick={handleCompleteLinkClick}
+          onOpenGraphClick={onOpenGraphClick}
         />
         <div className="nodeView-scrollable">
           {hasBreadcrumb && (

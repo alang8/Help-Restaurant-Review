@@ -1,46 +1,93 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react'
-import * as fa from 'react-icons/fa'
-import * as ri from 'react-icons/ri'
-import { fetchLinks } from '..'
-import { useHistory } from 'react-router-dom'
-import { INodeContentProps } from '../NodeContent'
-import './ImageContent.scss'
-import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil'
 import {
-  selectedNodeState,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+} from '@chakra-ui/react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { BiUndo } from 'react-icons/bi'
+import * as fa from 'react-icons/fa'
+import { useHistory } from 'react-router-dom'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { fetchLinks } from '..'
+import { FrontendAnchorGateway } from '../../../../anchors'
+import {
+  currentNodeState,
+  refreshLinkListState,
   selectedAnchorsState,
   selectedExtentState,
-  currentNodeState,
   startAnchorState,
-  refreshLinkListState,
 } from '../../../../global/Atoms'
-import { FrontendAnchorGateway } from '../../../../anchors'
 import { FrontendNodeGateway } from '../../../../nodes'
-import { Extent, IAnchor, IImageExtent, INode, isIImageExtent } from '../../../../types'
+import { IAnchor, IImageExtent } from '../../../../types'
+import { IImageDim, makeIImageDim } from '../../../../types/IImageDim'
+import { Button } from '../../../Button'
 import './ImageContent.scss'
-
-interface IImageContentProps {}
 
 /** The content of an image node, including any anchors */
 export const ImageContent = () => {
+  const formatImageDimension = (val: number) => val + 'px'
+
   const startAnchor = useRecoilValue(startAnchorState)
 
   // recoil state management
   const currentNode = useRecoilValue(currentNodeState)
   const refreshLinkList = useRecoilValue(refreshLinkListState)
   const [selectedAnchors, setSelectedAnchors] = useRecoilState(selectedAnchorsState)
-  const [selectedExtent, setSelectedExtent] = useRecoilState(selectedExtentState)
-  const setSelectedNode = useSetRecoilState(selectedNodeState)
+  const setSelectedExtent = useSetRecoilState(selectedExtentState)
 
   const content = currentNode.content
+
+  // State variables for image dimensions
+  const [imageHeight, setImageHeight] = React.useState(0)
+  const [imageWidth, setImageWidth] = React.useState(0)
+  // Get the original dimension of the image
+  useEffect(() => {
+    // Set image height to the current height if height is valid
+    currentNode.imgDim!.xCurrent >= 10 &&
+    currentNode.imgDim!.xCurrent <= currentNode.imgDim!.xOriginal
+      ? setImageHeight(currentNode.imgDim!.xCurrent)
+      : setImageHeight(currentNode.imgDim!.xOriginal)
+
+    // Set image width to the current width if width is valid
+    currentNode.imgDim!.yCurrent >= 10 &&
+    currentNode.imgDim!.yCurrent <= currentNode.imgDim!.yOriginal
+      ? setImageWidth(currentNode.imgDim!.yCurrent)
+      : setImageWidth(currentNode.imgDim!.yOriginal)
+  }, [currentNode])
+
+  // Use effect to update the image height
+  useEffect(() => {
+    // Asynchronous unction to update the image dimensions
+    const updateImageDimensions = async () => {
+      if (imageHeight >= 10 && imageHeight <= currentNode.imgDim!.xOriginal) {
+        const imgDim: IImageDim = makeIImageDim(
+          currentNode.imgDim!.xOriginal,
+          currentNode.imgDim!.yOriginal,
+          imageHeight,
+          imageWidth
+        )
+        const updateNodeResp = await FrontendNodeGateway.updateNode(currentNode.nodeId, [
+          { fieldName: 'imgDim', value: imgDim },
+        ])
+        if (!updateNodeResp.success) {
+          console.log('Error updating image dimensions: ' + updateNodeResp.message)
+        }
+      }
+    }
+    updateImageDimensions()
+  }, [imageHeight, imageWidth, setImageHeight, setImageWidth])
 
   /* State variable to keep track of anchors rendered on image */
   const [imageAnchors, setImageAnchors] = useState<JSX.Element[]>([])
   const [startAnchorVisualization, setStartAnchorVisualization] = useState<JSX.Element>()
 
   let dragging: boolean = false // Indicated whether we are currently dragging the image
-  let currentTop: number // To store the top of the currently selected region for onPointerMove
-  let currentLeft: number // To store the left of the currently selected region for onPointerMove
+  // To store the top of the currently selected region for onPointerMove
+  let currentTop: number
+  // To store the left of the currently selected region for onPointerMove
+  let currentLeft: number
   let xLast: number
   let yLast: number
 
@@ -48,7 +95,7 @@ export const ImageContent = () => {
    * useRef Here is an example of use ref to store a mutable html object
    * The selection ref is how we can access the selection that we render
    *
-   * TODO [Editable]: This is the component that we would want to resize
+   * [Editable]: This is the component that we would want to resize
    */
   const imageContainer = useRef<HTMLHeadingElement>(null)
 
@@ -198,7 +245,7 @@ export const ImageContent = () => {
         let width = parseFloat(selection.current.style.width)
         let height = parseFloat(selection.current.style.height)
 
-        // TODO: You may need to change this depending on your screen resolution
+        // This may vary depending on screen resolution
         const divider = 1
 
         // Horizontal dragging
@@ -273,7 +320,7 @@ export const ImageContent = () => {
   }
 
   useEffect(() => {
-    // this code ensures that an extent selected on one node doesn't display on another node
+    // ensures that an extent selected on one node doesn't display on another node
     setSelectedExtent(null)
     if (selection.current) {
       // Note: This is a rather hacky solution to hide the selected region
@@ -383,14 +430,59 @@ export const ImageContent = () => {
     }
   }
 
+  /**
+   * This method resets the image dimensions to the original dimensions of the image
+   **/
+  function resetImageDimensions() {
+    setImageHeight(currentNode.imgDim!.xOriginal)
+    setImageWidth(currentNode.imgDim!.yOriginal)
+  }
+
   return (
     <div className="imageWrapper">
+      <div className="imageButtonWrapper">
+        <Button
+          text="Reset Crop"
+          icon={<BiUndo />}
+          onClick={() => resetImageDimensions()}
+          style={{ height: '40px' }}
+        />
+        <NumberInput
+          onChange={(valueString) => setImageHeight(Number(valueString))}
+          value={formatImageDimension(imageHeight)}
+          step={5}
+          defaultValue={imageHeight}
+          min={10}
+          max={currentNode.imgDim!.xOriginal}
+        >
+          <NumberInputField />
+          <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+          </NumberInputStepper>
+        </NumberInput>
+        <NumberInput
+          onChange={(valueString) => setImageWidth(Number(valueString))}
+          value={formatImageDimension(imageWidth)}
+          step={5}
+          defaultValue={imageWidth}
+          min={10}
+          max={currentNode.imgDim!.yOriginal}
+        >
+          <NumberInputField />
+          <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+          </NumberInputStepper>
+        </NumberInput>
+      </div>
       <div
         ref={imageContainer}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
         onPointerMove={onPointerMove}
         className="imageContent-wrapper"
+        style={{ height: imageHeight, width: imageWidth }}
       >
         {startAnchorVisualization}
         {imageAnchors}
@@ -408,7 +500,7 @@ export const ImageContent = () => {
             </div>
           </div>
         }
-        <img src={content} />
+        <img src={content} style={{ objectFit: 'cover', objectPosition: '0 0' }} />
       </div>
     </div>
   )

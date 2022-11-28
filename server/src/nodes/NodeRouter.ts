@@ -172,6 +172,22 @@ export class NodeRouter {
         res.status(500).send(e.message)
       }
     })
+
+    /**
+     * Request to search for node titles and content with the given search string
+     *
+     * @param req request object coming from client
+     * @param res response object to send to client
+     */
+    NodeExpressRouter.get('/search/:query', async (req: Request, res: Response) => {
+      try {
+        const query = req.params.query
+        const response = await this.BackendNodeGateway.searchForNodes(query)
+        res.status(200).send(response)
+      } catch (e) {
+        res.status(500).send(e.message)
+      }
+    })
   }
 
   /**

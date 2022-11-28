@@ -1,4 +1,5 @@
 import { INodePath, makeINodePath } from './INodePath'
+import { IImageDim, makeIImageDim } from './IImageDim'
 
 // nodeTypes returns a string array of the types available
 export const nodeTypes: string[] = ['text', 'image', 'folder']
@@ -14,10 +15,11 @@ export interface INode {
   nodeId: string // unique randomly generated ID which contains the type as a prefix
   title: string // user create node title
   dateCreated?: Date // date that the node was created
+  imgDim?: IImageDim // the image dimensions for an image node
 }
 
 /**
- * TODO [Editable]: Since we want to store new metadata for images we should add
+ * Since we want to store new metadata for images we should add
  * new metadata fields to our INode object. There are different ways you can do this.
  *
  * 1. One would be creating a new interface that extends INode.
@@ -54,7 +56,11 @@ export function makeINode(
   children: string[] = [],
   type: NodeType = 'text',
   title: string | null = null,
-  content: any = null
+  content: any = null,
+  xOriginal: number = 0,
+  yOriginal: number = 0,
+  xCurrent: number = 0,
+  yCurrent: number = 0
 ): INode {
   return {
     nodeId: nodeId,
@@ -62,6 +68,7 @@ export function makeINode(
     type: type,
     content: content ?? 'content' + nodeId,
     filePath: makeINodePath(path, children),
+    imgDim: makeIImageDim(xOriginal, yOriginal, xCurrent, yCurrent),
   }
 }
 

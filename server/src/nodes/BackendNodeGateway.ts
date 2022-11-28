@@ -413,4 +413,17 @@ export class BackendNodeGateway {
             newPath
         )
   }
+
+  /**
+   * Method to search for nodes by title and content with a given search query.
+   *
+   * @param nodeId the nodeId of the node
+   * @returns Promise<IServiceResponse<{}>>
+   */
+  async searchForNodes(query: string): Promise<IServiceResponse<{}>> {
+    const searchResp = await this.nodeCollectionConnection.searchForNodes(query)
+    return searchResp.success
+      ? successfulServiceResponse(searchResp.payload)
+      : failureServiceResponse(`failed to search for nodes with query: ${query}`)
+  }
 }

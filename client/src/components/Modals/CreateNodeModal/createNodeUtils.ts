@@ -9,6 +9,7 @@ import {
   NodeIdsToNodesMap,
   NodeType,
 } from '../../../types'
+import { IImageDim, makeIImageDim } from '../../../types/IImageDim'
 
 export async function http<T>(request: AxiosRequestConfig): Promise<T> {
   const response: AxiosResponse<T> = await axios(request)
@@ -86,6 +87,16 @@ export async function createNodeFromModal({
   }
 
   let newNode: INode | IFolderNode
+  let imgDim: IImageDim | undefined = undefined
+  if (type === 'image') {
+    const imgMeta = await getMeta(content)
+    imgDim = makeIImageDim(
+      imgMeta.normalizedHeight,
+      imgMeta.normalizedWidth,
+      imgMeta.normalizedHeight,
+      imgMeta.normalizedWidth
+    )
+  }
   switch (type) {
     case 'folder':
       newNode = {
@@ -106,6 +117,7 @@ export async function createNodeFromModal({
         nodeId: nodeId,
         title: title,
         type: type,
+        imgDim: imgDim,
       }
   }
 

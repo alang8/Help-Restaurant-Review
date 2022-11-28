@@ -25,6 +25,7 @@ import {
   startAnchorState,
   endAnchorState,
   selectedAnchorsState,
+  refreshLinkListState,
 } from '../../../global/Atoms'
 import './CompleteLinkModal.scss'
 
@@ -49,6 +50,7 @@ export const CompleteLinkModal = (props: ICompleteLinkModalProps) => {
   const endAnchor = useRecoilValue(endAnchorState)
   const setSelectedAnchors = useSetRecoilState(selectedAnchorsState)
   const [refresh, setRefresh] = useRecoilState(refreshState)
+  const [refreshLinkList, setRefreshLinkList] = useRecoilState(refreshLinkListState)
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value)
@@ -107,6 +109,7 @@ export const CompleteLinkModal = (props: ICompleteLinkModalProps) => {
         setIsLinking(false)
         setStartAnchor(null)
         setRefresh(!refresh)
+        setRefreshLinkList(!refreshLinkList)
       } else {
         setError('Error: Failed to create link')
       }

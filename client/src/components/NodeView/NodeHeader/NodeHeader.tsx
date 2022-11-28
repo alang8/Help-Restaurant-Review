@@ -2,6 +2,7 @@ import { Select } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import * as bi from 'react-icons/bi'
 import * as ri from 'react-icons/ri'
+import * as si from 'react-icons/si'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import {
   alertMessageState,
@@ -21,10 +22,11 @@ import { EditableText } from '../../EditableText'
 import './NodeHeader.scss'
 
 interface INodeHeaderProps {
-  onHandleCompleteLinkClick: () => void
-  onHandleStartLinkClick: () => void
   onDeleteButtonClick: (node: INode) => void
   onMoveButtonClick: (node: INode) => void
+  onHandleStartLinkClick: () => void
+  onHandleCompleteLinkClick: () => void
+  onOpenGraphClick: () => void
 }
 
 export const NodeHeader = (props: INodeHeaderProps) => {
@@ -33,6 +35,7 @@ export const NodeHeader = (props: INodeHeaderProps) => {
     onMoveButtonClick,
     onHandleStartLinkClick,
     onHandleCompleteLinkClick,
+    onOpenGraphClick,
   } = props
   const currentNode = useRecoilValue(currentNodeState)
   const [refresh, setRefresh] = useRecoilState(refreshState)
@@ -68,12 +71,37 @@ export const NodeHeader = (props: INodeHeaderProps) => {
 
   /* Method to update the node title */
   const handleUpdateTitle = async (title: string) => {
-    // TODO: Task 8
+    setTitle(title)
+    const nodeProperty: INodeProperty = makeINodeProperty('title', title)
+    const titleUpdateResp = await FrontendNodeGateway.updateNode(currentNode.nodeId, [
+      nodeProperty,
+    ])
+    if (!titleUpdateResp.success) {
+      setAlertIsOpen(true)
+      setAlertTitle('Title update failed')
+      setAlertMessage(titleUpdateResp.message)
+    }
+    setRefresh(!refresh)
+    setRefreshLinkList(!refreshLinkList)
   }
 
   /* Method called on title right click */
   const handleTitleRightClick = () => {
-    // TODO: Task 9 - context menu
+    ContextMenuItems.splice(0, ContextMenuItems.length)
+    const menuItem: JSX.Element = (
+      <div
+        key={'titleRename'}
+        className="contextMenuItem"
+        onClick={(e) => {
+          ContextMenuItems.splice(0, ContextMenuItems.length)
+          setEditingTitle(true)
+        }}
+      >
+        <div className="itemTitle">Rename</div>
+        <div className="itemShortcut">ctrl + shift + R</div>
+      </div>
+    )
+    ContextMenuItems.push(menuItem)
   }
 
   /* useEffect which updates the title and editing state when the node is changed */
@@ -84,19 +112,49 @@ export const NodeHeader = (props: INodeHeaderProps) => {
 
   /* Node key handlers*/
   const nodeKeyHandlers = (e: KeyboardEvent) => {
-    // TODO: Task 9 - keyboard shortcuts
+    // keyboard shortcuts
+    // key handlers with no modifiers
+    switch (e.key) {
+      case 'Enter':
+        if (editingTitle == true) {
+          e.preventDefault()
+          setEditingTitle(false)
+        }
+        break
+      case 'Escape':
+        if (editingTitle == true) {
+          e.preventDefault()
+          setEditingTitle(false)
+        }
+        break
+    }
+
+    // ctrl + shift key events
+    if (e.shiftKey && e.ctrlKey) {
+      switch (e.key) {
+        case 'R':
+          e.preventDefault()
+          setEditingTitle(true)
+          break
+      }
+    }
   }
 
   // Trigger on node load or when editingTitle changes
   useEffect(() => {
-    // TODO: Task 9 - keyboard shortcuts
+    // keyboard shortcuts
+    document.addEventListener('keydown', nodeKeyHandlers)
   }, [editingTitle])
 
   const folder: boolean = currentNode.type === 'folder'
   const notRoot: boolean = currentNode.nodeId !== 'root'
   return (
     <div className="nodeHeader">
-      <div className="nodeHeader-title">
+      <div
+        className="nodeHeader-title"
+        onDoubleClick={(e) => setEditingTitle(true)}
+        onContextMenu={handleTitleRightClick}
+      >
         <EditableText
           text={title}
           editing={editingTitle}
@@ -116,6 +174,11 @@ export const NodeHeader = (props: INodeHeaderProps) => {
               icon={<ri.RiDragDropLine />}
               text="Move"
               onClick={() => onMoveButtonClick(currentNode)}
+            />
+            <Button
+              icon={<si.SiGraphql />}
+              text="Show Graph"
+              onClick={onOpenGraphClick}
             />
             <Button
               icon={<ri.RiExternalLinkLine />}

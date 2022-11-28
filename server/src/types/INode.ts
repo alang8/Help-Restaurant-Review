@@ -1,5 +1,6 @@
 import { isSameFilePath } from '.'
 import INodePath, { makeINodePath } from './INodePath'
+import IImageDim, { makeIImageDim } from './IImageDim'
 
 // nodeTypes returns a string array of the types available
 export const nodeTypes: string[] = ['text', 'image', 'folder']
@@ -15,10 +16,11 @@ export interface INode {
   nodeId: string // unique randomly generated ID which contains the type as a prefix
   title: string // user create node title
   dateCreated?: Date // date that the node was created
+  imgDim?: IImageDim // the image dimensions for an image node
 }
 
 /**
- * TODO [Editable]: Since we want to store new metadata for images we should add
+ * [Editable]: Since we want to store new metadata for images we should add
  * new metadata fields to our INode object. There are different ways you can do this.
  *
  * 1. One would be creating a new interface that extends INode.
@@ -43,6 +45,7 @@ export const allNodeFields: string[] = [
   'content',
   'filePath',
   'viewType',
+  'imgDim',
 ]
 
 // Type declaration for map from nodeId --> INode
@@ -65,11 +68,16 @@ export function makeINode(
   children?: any,
   type?: any,
   title?: any,
-  content?: any
+  content?: any,
+  xOriginal?: any,
+  yOriginal?: any,
+  xCurrent?: any,
+  yCurrent?: any
 ): INode {
   return {
     content: content ?? 'content' + nodeId,
     filePath: makeINodePath(path, children),
+    imgDim: makeIImageDim(xOriginal, yOriginal, xCurrent, yCurrent),
     nodeId: nodeId,
     title: title ?? 'node' + nodeId,
     type: type ?? 'text',
@@ -105,8 +113,8 @@ export function isINode(object: any): object is INode {
   const filePath: INodePath = object.filePath
   // if both are defined
   if (filePath && propsDefined) {
-    for (let i = 0; i < filePath.path.length; i++) {
-      if (typeof filePath.path[i] !== 'string') {
+    for (const element of filePath.path) {
+      if (typeof element !== 'string') {
         return false
       }
     }

@@ -12,20 +12,29 @@ import './Header.scss'
 interface IHeaderProps {
   nodeIdsToNodesMap: NodeIdsToNodesMap
   onCreateNodeButtonClick: () => void
+  onSearchButtonClick: (query: string) => void
   onHomeClick: () => void
 }
 
 export const Header = (props: IHeaderProps) => {
-  const { onCreateNodeButtonClick, onHomeClick, nodeIdsToNodesMap } = props
+  const { onHomeClick, onCreateNodeButtonClick, onSearchButtonClick, nodeIdsToNodesMap } =
+    props
   const customButtonStyle = { height: 30, marginLeft: 10, width: 30 }
+  const searchButtonStyle = { height: 30, marginLeft: 10, width: 80 }
   const [isLinking, setIsLinking] = useRecoilState(isLinkingState)
   const [startAnchor, setStartAnchor] = useRecoilState(startAnchorState)
   const setSelectedExtent = useSetRecoilState(selectedExtentState)
+  const [searchTerm, setSearchTerm] = React.useState('')
 
   const handleCancelLink = () => {
     setStartAnchor(null)
     setSelectedExtent(null)
     setIsLinking(false)
+  }
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const searchValue = e.target.value
+    setSearchTerm(searchValue)
   }
 
   return (
@@ -49,6 +58,21 @@ export const Header = (props: IHeaderProps) => {
           style={customButtonStyle}
           icon={<ai.AiOutlinePlus />}
           onClick={onCreateNodeButtonClick}
+        />
+        <div className="search-bar">
+          <ri.RiSearch2Line />
+          <input
+            type="text"
+            placeholder="Search.."
+            className="search-input"
+            value={searchTerm}
+            onChange={handleSearchChange}
+          ></input>
+        </div>
+        <Button
+          style={searchButtonStyle}
+          text="Search"
+          onClick={() => onSearchButtonClick(searchTerm)}
         />
       </div>
       {isLinking && startAnchor && (

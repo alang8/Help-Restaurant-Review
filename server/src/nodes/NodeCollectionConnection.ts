@@ -194,6 +194,29 @@ export class NodeCollectionConnection {
   }
 
   /**
+   * Search nodes by a given query from the database.
+   *
+   * @returns successfulServiceResponse<INode[]>
+   */
+  async searchForNodes(query: string): Promise<IServiceResponse<INode[]>> {
+    await this.client
+      .db()
+      .collection(this.collectionName)
+      .createIndex({ title: 'text', content: 'text' })
+
+    const foundNodes: INode[] = []
+    await this.client
+      .db()
+      .collection(this.collectionName)
+      .find({ $text: { $search: query } })
+      .sort({ score: { $meta: 'textScore' } })
+      .forEach(function(doc) {
+        foundNodes.push(doc)
+      })
+    return successfulServiceResponse(foundNodes)
+  }
+
+  /**
    * Update the path of given node.
    *
    * @param {string} nodeId

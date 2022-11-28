@@ -8,5 +8,11 @@
     "start": "echo \"Make sure you have CD'd into either the client or server folder\"",
     "test": "echo \"Make sure you have CD'd into either the client or server folder\"",
     "lint": "echo \"Make sure you have CD'd into either the client or server folder\""
+  },
+  "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/material": "^5.10.14",
+    "react-flow-renderer": "^10.3.17"
   }
 }
