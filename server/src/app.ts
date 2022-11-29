@@ -6,6 +6,7 @@ import cors from 'cors'
 import { MongoClient } from 'mongodb'
 import { AnchorRouter } from './anchors'
 import { LinkRouter } from './links'
+import { ReviewRouter } from './reviews'
 
 dotenv.config()
 const PORT = process.env.PORT
@@ -36,6 +37,9 @@ app.use('/anchor', myAnchorRouter.getExpressRouter())
 // link router
 const myLinkRouter = new LinkRouter(mongoClient)
 app.use('/link', myLinkRouter.getExpressRouter())
+// review router
+const myReviewRouter = new ReviewRouter(mongoClient)
+app.use('/review', myReviewRouter.getExpressRouter())
 
 app.get('*', (req: Request, res: Response) => {
   res.send('MyHypermedia Backend Service')
