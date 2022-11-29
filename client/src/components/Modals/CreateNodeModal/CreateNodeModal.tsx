@@ -101,7 +101,9 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
+    console.log(files)
     const link = files && files[0] && (await uploadImage(files[0]))
+    console.log(link)
     link && setImageContent(link)
   }
 
@@ -160,6 +162,8 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
       },
       rating: null,
       reviews: [],
+      websiteUrl: websiteUrl,
+      imageContent: imageContent,
     }
 
     const attributes = {

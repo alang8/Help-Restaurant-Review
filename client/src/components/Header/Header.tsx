@@ -20,7 +20,12 @@ export const Header = (props: IHeaderProps) => {
   const { onHomeClick, onCreateNodeButtonClick, onSearchButtonClick, nodeIdsToNodesMap } =
     props
   const customButtonStyle = { height: 30, marginLeft: 10, width: 30 }
-  const searchButtonStyle = { height: 30, width: 80 }
+  const searchButtonStyle = {
+    height: 30,
+    width: 80,
+    backgroundColor: '#fff',
+    hoverColor: '#000',
+  }
   const loginButtonStyle = {
     height: 30,
     marginLeft: 10,

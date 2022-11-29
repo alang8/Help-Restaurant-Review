@@ -150,12 +150,66 @@ export const NodeHeader = (props: INodeHeaderProps) => {
   }, [editingTitle])
 
   const folder: boolean = currentNode.type === 'folder'
-  const notRoot: boolean = currentNode.nodeId !== 'root'
+  const root: boolean = currentNode.nodeId === 'root'
+  const restaurant = currentNode.type === 'restaurant'
 
   const customButtonStyle = { height: 30, marginLeft: 10, width: 30 }
+  const reviewButtonStyle = {
+    height: 40,
+    width: 150,
+    backgroundColor: '#EA3B2E',
+    color: '#f5f5f5',
+    fontWeight: 'bold',
+  }
   return (
-    <div className="nodeHeader">
-      <div
+    // <div className="nodeHeader">
+    <>
+      {root ? (
+        <div className="nodeHeader">
+          <div
+            className="nodeHeader-title"
+            onDoubleClick={(e) => setEditingTitle(true)}
+            onContextMenu={handleTitleRightClick}
+          >
+            <EditableText
+              text={title}
+              editing={editingTitle}
+              setEditing={setEditingTitle}
+              onEdit={handleUpdateTitle}
+            />
+          </div>
+          <div className="nodeHeader-buttonBar">
+            <Button
+              isWhite={isLinking}
+              style={customButtonStyle}
+              icon={<ai.AiOutlinePlus />}
+              onClick={onCreateNodeButtonClick}
+            />
+          </div>
+        </div>
+      ) : (
+        restaurant && (
+          <div className="heroContainer">
+            <img
+              src={currentNode.content.imageContent}
+              className="hero"
+              alt="Restaurant Image"
+            />
+            <div className="heroContent">
+              <div>
+                <h1 className="heroTitle">{currentNode.title}</h1>
+                <div className="heroRating">{currentNode.content.rating} / 5</div>
+              </div>
+              <Button
+                text="Write a Review"
+                style={reviewButtonStyle}
+                onClick={() => alert('You tryna write a review bruh?')}
+              />
+            </div>
+          </div>
+        )
+      )}
+      {/* <div
         className="nodeHeader-title"
         onDoubleClick={(e) => setEditingTitle(true)}
         onContextMenu={handleTitleRightClick}
@@ -218,7 +272,7 @@ export const NodeHeader = (props: INodeHeaderProps) => {
             )}
           </>
         )}
-      </div>
-    </div>
+      </div> */}
+    </>
   )
 }

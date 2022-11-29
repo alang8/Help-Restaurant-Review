@@ -38,3 +38,67 @@
     }
   }
 }
+
+.heroContainer {
+  position: relative;
+  padding-bottom: 0px;
+  margin: 0;
+
+  .hero {
+    width: 100%;
+    // background: url(https://img.freepik.com/free-vector/gradient-ui-ux-elements-background_23-2149056159.jpg?w=2000);
+    filter: brightness(0.6);
+    // min-height: 600px;
+    height: 200px;
+    object-fit: cover;
+
+    /* Create the parallax scrolling effect */
+    // background-attachment: fixed;
+    // background-position: center;
+    // background-repeat: no-repeat;
+    // background-size: cover;
+  }
+
+  // .heroTitle {
+  //   position: absolute;
+  //   top: 50%;
+  //   left: 50%;
+  //   transform: translate(-50%, -50%);
+  //   color: white;
+  //   font-size: 50px;
+  //   font-weight: 600;
+  //   text-align: center;
+  // }
+
+  .heroContent {
+    padding: 0 30px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: absolute;
+    top: 40%;
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+    text-align: left;
+
+    div {
+      align-self: flex-end;
+
+      .heroTitle {
+        font-size: 50px;
+        font-weight: 700;
+        font-style: bold;
+        text-align: left;
+        padding-bottom: 0px;
+      }
+
+      .heroRating {
+        // font-size: 30px;
+        // font-weight: 600;
+        // text-align: left;
+      }
+    }
+  }
+}
