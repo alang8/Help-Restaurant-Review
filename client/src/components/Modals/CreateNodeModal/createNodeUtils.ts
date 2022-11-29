@@ -17,7 +17,7 @@ export async function http<T>(request: AxiosRequestConfig): Promise<T> {
 }
 
 export interface ICreateNodeModalAttributes {
-  content: string
+  content: any
   nodeIdsToNodesMap: NodeIdsToNodesMap
   parentNodeId: string | null
   title: string

@@ -3,10 +3,17 @@ import INodePath, { makeINodePath } from './INodePath'
 import IImageDim, { makeIImageDim } from './IImageDim'
 
 // nodeTypes returns a string array of the types available
-export const nodeTypes: string[] = ['text', 'image', 'folder']
+export const nodeTypes: string[] = ['text', 'image', 'folder', 'restaurant']
 
 // Supported nodeTypes for file browser
-export type NodeType = 'text' | 'image' | 'folder' | 'pdf' | 'audio' | 'video'
+export type NodeType =
+  | 'text'
+  | 'image'
+  | 'folder'
+  | 'pdf'
+  | 'audio'
+  | 'video'
+  | 'restaurant'
 
 // INode with node metadata
 export interface INode {
@@ -34,6 +41,10 @@ export type FolderContentType = 'list' | 'grid'
 
 export interface IFolderNode extends INode {
   viewType: FolderContentType
+}
+
+export interface IRestaurantNode extends INode {
+  address: string
 }
 
 export type NodeFields = keyof INode | keyof IFolderNode
@@ -124,7 +135,7 @@ export function isINode(object: any): object is INode {
       typeof (object as INode).nodeId === 'string' &&
       typeof (object as INode).title === 'string' &&
       nodeTypes.includes((object as INode).type) &&
-      typeof (object as INode).content === 'string' &&
+      // typeof (object as INode).content === 'string' &&
       filePath.path.length > 0 &&
       filePath.path[filePath.path.length - 1] === (object as INode).nodeId
     )
