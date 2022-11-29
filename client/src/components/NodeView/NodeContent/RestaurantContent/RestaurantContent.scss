@@ -18,11 +18,11 @@
     }
 
     .itemTwo {
-      grid-row: 2/4;
+      grid-row: 2;
     }
 
     .itemThree {
-      grid-row: 4/7;
+      grid-row: 3/6;
 
       .hoursContainer {
         text-decoration: none;
@@ -43,7 +43,7 @@
     }
 
     .itemFour {
-      grid-row: 7;
+      grid-row: 6;
     }
   }
 
