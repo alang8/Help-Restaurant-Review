@@ -6,6 +6,7 @@ import { FolderContent } from './FolderContent'
 import { ImageContent } from './ImageContent'
 import './NodeContent.scss'
 import { TextContent } from './TextContent'
+import { RestaurantContent } from './RestaurantContent'
 
 /** Props needed to render any node content */
 
@@ -28,7 +29,8 @@ export const NodeContent = (props: INodeContentProps) => {
       return <ImageContent />
     case 'text':
       return <TextContent />
-      break
+    case 'restaurant':
+      return <RestaurantContent />
     case 'folder':
       if (childNodes) {
         return (

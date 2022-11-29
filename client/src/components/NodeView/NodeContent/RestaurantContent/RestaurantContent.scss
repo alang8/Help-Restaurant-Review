@@ -1,0 +1,66 @@
+@import '../../../../global/globalCssVariables';
+
+.restaurantContainer {
+  padding: 20px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  // border: 5px solid black;
+
+  .gridColOne {
+    text-align: left;
+    // border: 1px solid green;
+    display: grid;
+    grid-auto-rows: minmax(80px, auto);
+
+    .itemOne {
+      grid-row: 1;
+    }
+
+    .itemTwo {
+      grid-row: 2/4;
+    }
+
+    .itemThree {
+      grid-row: 4/7;
+
+      .hoursContainer {
+        text-decoration: none;
+        list-style: none;
+
+        li {
+          padding: 0;
+          display: grid;
+          grid-template-columns: repeat(8, 1fr);
+
+          strong {
+            font-weight: 700;
+            font-style: bold;
+            font-size: 15px;
+          }
+        }
+      }
+    }
+
+    .itemFour {
+      grid-row: 7;
+    }
+  }
+
+  .gridColTwo {
+    text-align: center;
+    // border: 1px solid blue;
+  }
+
+  .sectionTitle {
+    font-weight: 700;
+    font-style: bold;
+    font-size: 30px;
+    padding-bottom: 10px;
+  }
+
+  .sectionDivider {
+    width: 100%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  }
+}
