@@ -188,6 +188,7 @@ export const NodeView = (props: INodeViewProps) => {
     <div className="node">
       <div className="nodeView" style={{ width: nodeViewWidth }}>
         <NodeHeader
+          onCreateNodeButtonClick={onCreateNodeButtonClick}
           onDeleteButtonClick={onDeleteButtonClick}
           onMoveButtonClick={onMoveButtonClick}
           onHandleStartLinkClick={handleStartLinkClick}

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import * as bi from 'react-icons/bi'
 import * as ri from 'react-icons/ri'
 import * as si from 'react-icons/si'
+import * as ai from 'react-icons/ai'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import {
   alertMessageState,
@@ -22,6 +23,7 @@ import { EditableText } from '../../EditableText'
 import './NodeHeader.scss'
 
 interface INodeHeaderProps {
+  onCreateNodeButtonClick: () => void
   onDeleteButtonClick: (node: INode) => void
   onMoveButtonClick: (node: INode) => void
   onHandleStartLinkClick: () => void
@@ -31,6 +33,7 @@ interface INodeHeaderProps {
 
 export const NodeHeader = (props: INodeHeaderProps) => {
   const {
+    onCreateNodeButtonClick,
     onDeleteButtonClick,
     onMoveButtonClick,
     onHandleStartLinkClick,
@@ -148,6 +151,8 @@ export const NodeHeader = (props: INodeHeaderProps) => {
 
   const folder: boolean = currentNode.type === 'folder'
   const notRoot: boolean = currentNode.nodeId !== 'root'
+
+  const customButtonStyle = { height: 30, marginLeft: 10, width: 30 }
   return (
     <div className="nodeHeader">
       <div
@@ -163,6 +168,12 @@ export const NodeHeader = (props: INodeHeaderProps) => {
         />
       </div>
       <div className="nodeHeader-buttonBar">
+        <Button
+          isWhite={isLinking}
+          style={customButtonStyle}
+          icon={<ai.AiOutlinePlus />}
+          onClick={onCreateNodeButtonClick}
+        />
         {notRoot && (
           <>
             <Button

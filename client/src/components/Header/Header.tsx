@@ -20,7 +20,23 @@ export const Header = (props: IHeaderProps) => {
   const { onHomeClick, onCreateNodeButtonClick, onSearchButtonClick, nodeIdsToNodesMap } =
     props
   const customButtonStyle = { height: 30, marginLeft: 10, width: 30 }
-  const searchButtonStyle = { height: 30, marginLeft: 10, width: 80 }
+  const searchButtonStyle = { height: 30, width: 80 }
+  const loginButtonStyle = {
+    height: 30,
+    marginLeft: 10,
+    width: 100,
+    backgroundColor: '#EA3B2E',
+    color: '#f5f5f5',
+    fontWeight: 'bold',
+  }
+  const signupButtonStyle = {
+    height: 30,
+    marginLeft: 10,
+    width: 100,
+    backgroundColor: '#EA3B2E',
+    color: '#f5f5f5',
+    fontWeight: 'bold',
+  }
   const [isLinking, setIsLinking] = useRecoilState(isLinkingState)
   const [startAnchor, setStartAnchor] = useRecoilState(startAnchorState)
   const setSelectedExtent = useSetRecoilState(selectedExtentState)
@@ -41,39 +57,42 @@ export const Header = (props: IHeaderProps) => {
     <div className={isLinking ? 'header-linking' : 'header'}>
       <div className="left-bar">
         <Link to={'/'}>
-          <div className="name" onClick={onHomeClick}>
-            My<b>Hypermedia</b>
-          </div>
-        </Link>
-        <Link to={'/'}>
-          <Button
-            isWhite={isLinking}
-            style={customButtonStyle}
-            icon={<ri.RiHome2Line />}
+          <img
+            className="logo"
+            src="../../HelpLogo.png"
+            alt="logo"
             onClick={onHomeClick}
           />
         </Link>
-        <Button
+        {/* <Button
           isWhite={isLinking}
           style={customButtonStyle}
           icon={<ai.AiOutlinePlus />}
           onClick={onCreateNodeButtonClick}
-        />
+        /> */}
         <div className="search-bar">
-          <ri.RiSearch2Line />
           <input
             type="text"
             placeholder="Search.."
             className="search-input"
             value={searchTerm}
             onChange={handleSearchChange}
-          ></input>
+          />
+          <Button
+            style={searchButtonStyle}
+            text="Search"
+            icon={<ri.RiSearch2Line />}
+            onClick={() => onSearchButtonClick(searchTerm)}
+          />
         </div>
-        <Button
-          style={searchButtonStyle}
-          text="Search"
-          onClick={() => onSearchButtonClick(searchTerm)}
-        />
+        <Link to={'/login'}>
+          <Button
+            isWhite={isLinking}
+            style={loginButtonStyle}
+            onClick={onHomeClick}
+            text="Login"
+          />
+        </Link>
       </div>
       {isLinking && startAnchor && (
         <div className="right-bar">
