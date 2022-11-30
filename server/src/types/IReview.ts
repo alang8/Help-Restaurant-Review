@@ -7,7 +7,7 @@ export interface IReview {
   rating: number
   replies: string[]
   dateCreated?: Date
-  dateUpdated?: Date
+  dateModified?: Date
 }
 
 export function isIReview(object: any): object is IReview {
@@ -28,7 +28,7 @@ export function makeIReview(
   rating: number,
   replies: string[],
   dateCreated: Date,
-  dateUpdated: Date
+  dateModified: Date
 ): IReview {
   return {
     reviewId: reviewId,
@@ -38,7 +38,7 @@ export function makeIReview(
     rating: rating,
     replies: replies ?? [],
     dateCreated: dateCreated ?? new Date(),
-    dateUpdated: dateUpdated ?? new Date(),
+    dateModified: dateModified ?? new Date(),
   }
 }
 
