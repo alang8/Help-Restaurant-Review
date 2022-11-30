@@ -29,6 +29,7 @@ interface INodeHeaderProps {
   onHandleStartLinkClick: () => void
   onHandleCompleteLinkClick: () => void
   onOpenGraphClick: () => void
+  onReviewButtonClick: () => void
 }
 
 export const NodeHeader = (props: INodeHeaderProps) => {
@@ -39,6 +40,7 @@ export const NodeHeader = (props: INodeHeaderProps) => {
     onHandleStartLinkClick,
     onHandleCompleteLinkClick,
     onOpenGraphClick,
+    onReviewButtonClick,
   } = props
   const currentNode = useRecoilValue(currentNodeState)
   const [refresh, setRefresh] = useRecoilState(refreshState)
@@ -162,7 +164,6 @@ export const NodeHeader = (props: INodeHeaderProps) => {
     fontWeight: 'bold',
   }
   return (
-    // <div className="nodeHeader">
     <>
       {root ? (
         <div className="nodeHeader">
@@ -203,76 +204,12 @@ export const NodeHeader = (props: INodeHeaderProps) => {
               <Button
                 text="Write a Review"
                 style={reviewButtonStyle}
-                onClick={() => alert('You tryna write a review bruh?')}
+                onClick={() => onReviewButtonClick()}
               />
             </div>
           </div>
         )
       )}
-      {/* <div
-        className="nodeHeader-title"
-        onDoubleClick={(e) => setEditingTitle(true)}
-        onContextMenu={handleTitleRightClick}
-      >
-        <EditableText
-          text={title}
-          editing={editingTitle}
-          setEditing={setEditingTitle}
-          onEdit={handleUpdateTitle}
-        />
-      </div>
-      <div className="nodeHeader-buttonBar">
-        <Button
-          isWhite={isLinking}
-          style={customButtonStyle}
-          icon={<ai.AiOutlinePlus />}
-          onClick={onCreateNodeButtonClick}
-        />
-        {notRoot && (
-          <>
-            <Button
-              icon={<ri.RiDeleteBin6Line />}
-              text="Delete"
-              onClick={() => onDeleteButtonClick(currentNode)}
-            />
-            <Button
-              icon={<ri.RiDragDropLine />}
-              text="Move"
-              onClick={() => onMoveButtonClick(currentNode)}
-            />
-            <Button
-              icon={<si.SiGraphql />}
-              text="Show Graph"
-              onClick={onOpenGraphClick}
-            />
-            <Button
-              icon={<ri.RiExternalLinkLine />}
-              text="Start Link"
-              onClick={onHandleStartLinkClick}
-            />
-            {isLinking && (
-              <Button
-                text="Complete Link"
-                icon={<bi.BiLinkAlt />}
-                onClick={onHandleCompleteLinkClick}
-              />
-            )}
-            {folder && (
-              <div className="select">
-                <Select
-                  bg="f1f1f1"
-                  defaultValue={(currentNode as IFolderNode).viewType}
-                  onChange={handleUpdateFolderView}
-                  height={35}
-                >
-                  <option value="grid">Grid</option>
-                  <option value="list">List</option>
-                </Select>
-              </div>
-            )}
-          </>
-        )}
-      </div> */}
     </>
   )
 }

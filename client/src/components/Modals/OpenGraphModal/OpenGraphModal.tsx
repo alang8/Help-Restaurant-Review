@@ -1,3 +1,4 @@
+import React from 'react'
 import {
   Modal,
   ModalBody,
@@ -6,15 +7,10 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react'
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import {
-  refreshLinkListState,
-  refreshState,
-  selectedNodeState,
-} from '../../../global/Atoms'
+import { refreshState, selectedNodeState } from '../../../global/Atoms'
 import { FrontendNodeGateway } from '../../../nodes'
-import { INode } from '../../../types'
 import './OpenGraphModal.scss'
 // import BasicFlow from './Flow'
 import ReactFlow, {

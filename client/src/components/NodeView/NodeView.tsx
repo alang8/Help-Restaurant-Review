@@ -35,6 +35,8 @@ export interface INodeViewProps {
   onMoveButtonClick: (node: INode) => void
   // handler for opening graph view
   onOpenGraphClick: () => void
+  // handler for writing review
+  onReviewButtonClick: () => void
   // children used when rendering folder node
   childNodes?: INode[]
 }
@@ -49,6 +51,7 @@ export const NodeView = (props: INodeViewProps) => {
     onDeleteButtonClick,
     onMoveButtonClick,
     onOpenGraphClick,
+    onReviewButtonClick,
     childNodes,
   } = props
   const setIsLinking = useSetRecoilState(isLinkingState)
@@ -194,6 +197,7 @@ export const NodeView = (props: INodeViewProps) => {
           onHandleStartLinkClick={handleStartLinkClick}
           onHandleCompleteLinkClick={handleCompleteLinkClick}
           onOpenGraphClick={onOpenGraphClick}
+          onReviewButtonClick={onReviewButtonClick}
         />
         <div className="nodeView-scrollable">
           {hasBreadcrumb && (

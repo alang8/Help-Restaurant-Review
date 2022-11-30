@@ -23,6 +23,7 @@ import {
   CreateNodeModal,
   MoveNodeModal,
   OpenGraphModal,
+  WriteReviewModal,
 } from '../Modals'
 import { NodeView } from '../NodeView'
 import { TreeView } from '../TreeView'
@@ -39,6 +40,7 @@ export const MainView = React.memo(function MainView() {
   const [openGraphModal, setOpenGraphModal] = useState(false)
   const [completeLinkModalOpen, setCompleteLinkModalOpen] = useState(false)
   const [moveNodeModalOpen, setMoveNodeModalOpen] = useState(false)
+  const [writeReviewModal, setWriteReviewModal] = useState(false)
   // search states
   const [searchNode, setSearchNode] = useState(false)
   const [searchResults, setSearchResults] = useState<INode[]>([])
@@ -119,6 +121,10 @@ export const MainView = React.memo(function MainView() {
   const handleOpenGraphClick = useCallback(() => {
     setOpenGraphModal(true)
   }, [setOpenGraphModal])
+
+  const handleReviewButtonClick = useCallback(() => {
+    setWriteReviewModal(true)
+  }, [setWriteReviewModal])
 
   const handleSearchButtonClick = useCallback(
     async (query: string) => {
@@ -253,8 +259,11 @@ export const MainView = React.memo(function MainView() {
           <OpenGraphModal
             isOpen={openGraphModal}
             onClose={() => setOpenGraphModal(false)}
-            // roots={rootNodes}
-            // nodeIdsToNodesMap={nodeIdsToNodesMap}
+            onSubmit={loadRootsFromDB}
+          />
+          <WriteReviewModal
+            isOpen={writeReviewModal}
+            onClose={() => setWriteReviewModal(false)}
             onSubmit={loadRootsFromDB}
           />
           <CompleteLinkModal
@@ -296,6 +305,7 @@ export const MainView = React.memo(function MainView() {
                   onCompleteLinkClick={handleCompleteLinkClick}
                   onCreateNodeButtonClick={handleCreateNodeButtonClick}
                   onOpenGraphClick={handleOpenGraphClick}
+                  onReviewButtonClick={handleReviewButtonClick}
                   nodeIdsToNodesMap={nodeIdsToNodesMap}
                 />
               </div>
