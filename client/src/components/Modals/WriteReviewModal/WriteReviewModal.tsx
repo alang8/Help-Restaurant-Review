@@ -74,6 +74,7 @@ export const WriteReviewModal = (props: IWriteReviewModalProps) => {
     let review: IReview | null = null
 
     const reviewId = generateObjectId('review')
+    const date = new Date()
     const newReview: IReview = {
       reviewId: reviewId,
       author: name,
@@ -81,7 +82,10 @@ export const WriteReviewModal = (props: IWriteReviewModalProps) => {
       content: content,
       rating: rating,
       replies: [],
+      dateCreated: date,
+      dateModified: date,
     }
+    console.log('newReview', newReview)
     const reviewResponse = await FrontendReviewGateway.createReview(newReview)
     if (!reviewResponse.success) {
       setError('Error: Failed to create review')

@@ -59,6 +59,26 @@ export class ReviewRouter {
         }
       }
     )
+
+    /**
+     * Request to retrieve all the reviews by nodeId
+     *
+     * @param req request object coming from client
+     * @param res response object to send to client
+     */
+    ReviewExpressRouter.get(
+      '/getByNodeId/:nodeId',
+      async (req: Request, res: Response) => {
+        try {
+          const nodeId = req.params.nodeId
+          const resp: IServiceResponse<IReview[]> =
+            await this.backendReviewGateway.getReviewsByNodeId(nodeId)
+          res.status(200).send(resp)
+        } catch (e) {
+          res.status(500).send(e.message)
+        }
+      }
+    )
   }
 
   /**

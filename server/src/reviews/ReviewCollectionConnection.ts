@@ -85,4 +85,23 @@ export class ReviewCollectionConnection {
       return successfulServiceResponse(findResp)
     }
   }
+
+  /**
+   * Finds and returns all reviews attached to a given node.
+   *
+   * @param {string} nodeId
+   * @return successfulServiceResponse<IReview[]> on success
+   * failureServiceResponse on failure
+   */
+  async findReviewsByNodeId(nodeId: string): Promise<IServiceResponse<IReview[]>> {
+    const foundReviews = []
+    await this.client
+      .db()
+      .collection(this.collectionName)
+      .find({ nodeId: nodeId })
+      .forEach((review) => {
+        foundReviews.push(review)
+      })
+    return successfulServiceResponse(foundReviews)
+  }
 }

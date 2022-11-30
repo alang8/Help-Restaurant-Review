@@ -50,6 +50,15 @@ export class BackendReviewGateway {
   async getReviewById(reviewId: string): Promise<IServiceResponse<IReview>> {
     return this.reviewCollectionConnection.findReviewById(reviewId)
   }
+  /**
+   * Method that gets all reviews attached to a given node.
+   *
+   * @param nodeId - the nodeId of the node to retrieve reviews for.
+   * @returns IServiceResponse<IReview[]>
+   */
+  async getReviewsByNodeId(nodeId: string): Promise<IServiceResponse<IReview[]>> {
+    return this.reviewCollectionConnection.findReviewsByNodeId(nodeId)
+  }
 
   /**
    * Method to delete all reviews in the database.
