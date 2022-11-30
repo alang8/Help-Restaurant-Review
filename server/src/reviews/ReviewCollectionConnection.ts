@@ -66,7 +66,7 @@ export class ReviewCollectionConnection {
   }
 
   /**
-   * Find Review by its unique reviewId
+   * Finds review by its unique reviewId
    *
    * @param {string} reviewId
    * @return successfulServiceResponse<IReview> on success

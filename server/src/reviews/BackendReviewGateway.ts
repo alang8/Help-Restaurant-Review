@@ -50,4 +50,13 @@ export class BackendReviewGateway {
   async getReviewById(reviewId: string): Promise<IServiceResponse<IReview>> {
     return this.reviewCollectionConnection.findReviewById(reviewId)
   }
+
+  /**
+   * Method to delete all reviews in the database.
+   *
+   * @returns IServiceResponse<{}>
+   */
+  async deleteAll(): Promise<IServiceResponse<{}>> {
+    return await this.reviewCollectionConnection.clearReviewCollection()
+  }
 }
