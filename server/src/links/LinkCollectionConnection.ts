@@ -149,7 +149,7 @@ export class LinkCollectionConnection {
    * Finds and returns all links attached to a given anchor.
    *
    *
-   * @param {string[]} anchorIds
+   * @param {string} anchorId
    * @return successfulServiceResponse<ILink[]> on success
    *         failureServiceResponse on failure
    */
