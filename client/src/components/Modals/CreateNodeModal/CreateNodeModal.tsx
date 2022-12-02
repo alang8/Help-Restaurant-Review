@@ -222,11 +222,7 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
           <ModalHeader>Create new node</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Input
-              value={title}
-              onChange={handleTitleChange}
-              placeholder="Restaurant Name..."
-            />
+            <Input value={title} onChange={handleTitleChange} placeholder="Name..." />
             <div className="modal-input">
               <Select
                 value={selectedType}
@@ -310,7 +306,17 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
             {selectedType && isRestaurant && (
               <div className="modal-input">
                 Monday Hours (ET)
-                <NumberInput
+                <Input
+                  type="time"
+                  onChange={(valueString) => setMonStartHours(Number(valueString))}
+                  value={formatTime(monStartHours)}
+                />
+                <Input
+                  type="time"
+                  onChange={(valueString) => setMonEndHours(Number(valueString))}
+                  value={formatTime(monEndHours)}
+                />
+                {/* <NumberInput
                   onChange={(valueString) => setMonStartHours(Number(valueString))}
                   value={formatTime(monStartHours)}
                   step={1}
@@ -337,205 +343,97 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
                     <NumberIncrementStepper />
                     <NumberDecrementStepper />
                   </NumberInputStepper>
-                </NumberInput>
+                </NumberInput> */}
               </div>
             )}
             {selectedType && isRestaurant && (
               <div className="modal-input">
                 Tuesday Hours (ET)
-                <NumberInput
+                <Input
+                  type="time"
                   onChange={(valueString) => setTueStartHours(Number(valueString))}
                   value={formatTime(tueStartHours)}
-                  step={1}
-                  defaultValue={tueStartHours}
-                  min={0}
-                  max={24}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-                <NumberInput
+                />
+                <Input
+                  type="time"
                   onChange={(valueString) => setTueEndHours(Number(valueString))}
                   value={formatTime(tueEndHours)}
-                  step={1}
-                  defaultValue={tueEndHours}
-                  min={0}
-                  max={24}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
+                />
               </div>
             )}
             {selectedType && isRestaurant && (
               <div className="modal-input">
                 Wednesday Hours (ET)
-                <NumberInput
+                <Input
+                  type="time"
                   onChange={(valueString) => setWedStartHours(Number(valueString))}
                   value={formatTime(wedStartHours)}
-                  step={1}
-                  defaultValue={wedStartHours}
-                  min={0}
-                  max={24}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-                <NumberInput
+                />
+                <Input
+                  type="time"
                   onChange={(valueString) => setWedEndHours(Number(valueString))}
                   value={formatTime(wedEndHours)}
-                  step={1}
-                  defaultValue={wedEndHours}
-                  min={0}
-                  max={24}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
+                />
               </div>
             )}
             {selectedType && isRestaurant && (
               <div className="modal-input">
                 Thursday Hours (ET)
-                <NumberInput
+                <Input
+                  type="time"
                   onChange={(valueString) => setThuStartHours(Number(valueString))}
                   value={formatTime(thuStartHours)}
-                  step={1}
-                  defaultValue={thuStartHours}
-                  min={0}
-                  max={24}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-                <NumberInput
+                />
+                <Input
+                  type="time"
                   onChange={(valueString) => setThuEndHours(Number(valueString))}
                   value={formatTime(thuEndHours)}
-                  step={1}
-                  defaultValue={thuEndHours}
-                  min={0}
-                  max={24}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
+                />
               </div>
             )}
             {selectedType && isRestaurant && (
               <div className="modal-input">
                 Friday Hours (ET)
-                <NumberInput
+                <Input
+                  type="time"
                   onChange={(valueString) => setFriStartHours(Number(valueString))}
                   value={formatTime(friStartHours)}
-                  step={1}
-                  defaultValue={friStartHours}
-                  min={0}
-                  max={24}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-                <NumberInput
+                />
+                <Input
+                  type="time"
                   onChange={(valueString) => setFriEndHours(Number(valueString))}
                   value={formatTime(friEndHours)}
-                  step={1}
-                  defaultValue={friEndHours}
-                  min={0}
-                  max={24}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
+                />
               </div>
             )}
             {selectedType && isRestaurant && (
               <div className="modal-input">
                 Saturday Hours (ET)
-                <NumberInput
+                <Input
+                  type="time"
                   onChange={(valueString) => setSatStartHours(Number(valueString))}
                   value={formatTime(satStartHours)}
-                  step={1}
-                  defaultValue={satStartHours}
-                  min={0}
-                  max={24}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-                <NumberInput
+                />
+                <Input
+                  type="time"
                   onChange={(valueString) => setSatEndHours(Number(valueString))}
                   value={formatTime(satEndHours)}
-                  step={1}
-                  defaultValue={satEndHours}
-                  min={0}
-                  max={24}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
+                />
               </div>
             )}
             {selectedType && isRestaurant && (
               <div className="modal-input">
                 Sunday Hours (ET)
-                <NumberInput
+                <Input
+                  type="time"
                   onChange={(valueString) => setSunStartHours(Number(valueString))}
                   value={formatTime(sunStartHours)}
-                  step={1}
-                  defaultValue={sunStartHours}
-                  min={0}
-                  max={24}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-                <NumberInput
+                />
+                <Input
+                  type="time"
                   onChange={(valueString) => setSunEndHours(Number(valueString))}
                   value={formatTime(sunEndHours)}
-                  step={1}
-                  defaultValue={sunEndHours}
-                  min={0}
-                  max={24}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
+                />
               </div>
             )}
             <div className="modal-section">

@@ -28,7 +28,7 @@ export const Header = (props: IHeaderProps) => {
   }
   const loginButtonStyle = {
     height: 30,
-    marginLeft: 10,
+    marginRight: 30,
     width: 100,
     backgroundColor: '#EA3B2E',
     color: '#f5f5f5',
