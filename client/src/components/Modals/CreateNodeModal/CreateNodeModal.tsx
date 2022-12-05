@@ -9,16 +9,10 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
   Select,
+  Textarea,
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import { useSetRecoilState } from 'recoil'
-import { selectedNodeState } from '../../../global/Atoms'
 import {
   INode,
   NodeIdsToNodesMap,
@@ -30,6 +24,8 @@ import { Button } from '../../Button'
 import { TreeView } from '../../TreeView'
 import './CreateNodeModal.scss'
 import { createNodeFromModal, uploadImage } from './createNodeUtils'
+import { useSetRecoilState } from 'recoil'
+import { selectedNodeState } from '../../../global/Atoms'
 
 export interface ICreateNodeModalProps {
   isOpen: boolean
@@ -51,6 +47,11 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
   const setSelectedNode = useSetRecoilState(selectedNodeState)
   const [selectedParentNode, setSelectedParentNode] = useState<INode | null>(null)
   const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
+  const [selectedType, setSelectedType] = useState<NodeType>('' as NodeType)
+  const [error, setError] = useState<string>('')
+
+  // state variables (restaurant)
   const [location, setLocation] = useState('')
   const [description, setDescription] = useState('')
   const [websiteUrl, setWebsiteUrl] = useState('')
@@ -71,16 +72,23 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
   const [satEndHours, setSatEndHours] = React.useState(0)
   const [sunStartHours, setSunStartHours] = React.useState(0)
   const [sunEndHours, setSunEndHours] = React.useState(0)
-  const [selectedType, setSelectedType] = useState<NodeType>('' as NodeType)
-  const [error, setError] = useState<string>('')
 
   // event handlers for the modal inputs and dropdown selects
   const handleSelectedTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedType(event.target.value.toLowerCase() as NodeType)
+    setContent('')
   }
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value)
+  }
+
+  const handleTextContentChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(event.target.value)
+  }
+
+  const handleImageContentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setContent(event.target.value)
   }
 
   const handleLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,18 +101,6 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
 
   const handleWebsiteUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setWebsiteUrl(event.target.value)
-  }
-
-  const handleImageContentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setImageContent(event.target.value)
-  }
-
-  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files
-    console.log(files)
-    const link = files && files[0] && (await uploadImage(files[0]))
-    console.log(link)
-    link && setImageContent(link)
   }
 
   const handlePhoneNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -125,47 +121,6 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
       setError('Error: No title')
       return
     }
-    const content = {
-      location: location,
-      description: description,
-      phoneNumber: phoneNumber,
-      email: email,
-      hours: {
-        mon: {
-          start: monStartHours,
-          end: monEndHours,
-        },
-        tue: {
-          start: tueStartHours,
-          end: tueEndHours,
-        },
-        wed: {
-          start: wedStartHours,
-          end: wedEndHours,
-        },
-        thu: {
-          start: thuStartHours,
-          end: thuEndHours,
-        },
-        fri: {
-          start: friStartHours,
-          end: friEndHours,
-        },
-        sat: {
-          start: satStartHours,
-          end: satEndHours,
-        },
-        sun: {
-          start: sunStartHours,
-          end: sunEndHours,
-        },
-      },
-      rating: null,
-      reviews: [],
-      websiteUrl: websiteUrl,
-      imageContent: imageContent,
-    }
-
     const attributes = {
       content,
       nodeIdsToNodesMap,
@@ -185,6 +140,7 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
     setTitle('')
     setSelectedParentNode(null)
     setSelectedType('' as NodeType)
+    setContent('')
     setError('')
     setLocation('')
     setDescription('')
@@ -208,11 +164,32 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
     setSunEndHours(0)
   }
 
-  const isImage: boolean = selectedType === 'image'
-  const isRestaurant: boolean = selectedType === 'restaurant'
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files
+    const link = files && files[0] && (await uploadImage(files[0]))
+    link && setContent(link)
+  }
 
+  // content prompts for the different node types
+  let contentInputPlaceholder: string
+  switch (selectedType) {
+    case 'text':
+      contentInputPlaceholder = 'Text content...'
+      break
+    case 'image':
+      contentInputPlaceholder = 'Image URL...'
+      break
+    case 'restaurant':
+      contentInputPlaceholder = 'Description...'
+      break
+    default:
+      contentInputPlaceholder = 'Content...'
+  }
+
+  const isImage: boolean = selectedType === 'image'
+  const isText: boolean = selectedType === 'text'
+  const isRestaurant: boolean = selectedType === 'restaurant'
   const formatTime = (val: number) => val
-  // const formatTime = (val: number) => val + 'ET'
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose}>
@@ -222,7 +199,7 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
           <ModalHeader>Create new node</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Input value={title} onChange={handleTitleChange} placeholder="Name..." />
+            <Input value={title} onChange={handleTitleChange} placeholder="Title..." />
             <div className="modal-input">
               <Select
                 value={selectedType}
@@ -236,12 +213,40 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
                 ))}
               </Select>
             </div>
+            {selectedType && isText && (
+              <div className="modal-input">
+                <Textarea
+                  value={content}
+                  onChange={handleTextContentChange}
+                  placeholder={contentInputPlaceholder}
+                />
+              </div>
+            )}
+            {selectedType && isImage && (
+              <div className="modal-input">
+                <Input
+                  value={content}
+                  onChange={handleImageContentChange}
+                  placeholder={contentInputPlaceholder}
+                />
+              </div>
+            )}
+            {selectedType && isImage && (
+              <div className="modal-input">
+                <input
+                  type="file"
+                  onChange={handleImageUpload}
+                  placeholder={contentInputPlaceholder}
+                />
+              </div>
+            )}
+
             {selectedType && isRestaurant && (
               <div className="modal-input">
                 <Input
                   value={description}
                   onChange={handleDescriptionChange}
-                  placeholder="Description..."
+                  placeholder={contentInputPlaceholder}
                 />
               </div>
             )}
@@ -316,34 +321,6 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
                   onChange={(valueString) => setMonEndHours(Number(valueString))}
                   value={formatTime(monEndHours)}
                 />
-                {/* <NumberInput
-                  onChange={(valueString) => setMonStartHours(Number(valueString))}
-                  value={formatTime(monStartHours)}
-                  step={1}
-                  defaultValue={monStartHours}
-                  min={0}
-                  max={24}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-                <NumberInput
-                  onChange={(valueString) => setMonEndHours(Number(valueString))}
-                  value={formatTime(monEndHours)}
-                  step={1}
-                  defaultValue={monEndHours}
-                  min={0}
-                  max={24}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput> */}
               </div>
             )}
             {selectedType && isRestaurant && (
@@ -436,6 +413,7 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
                 />
               </div>
             )}
+
             <div className="modal-section">
               <span className="modal-title">
                 <div className="modal-title-header">Choose a parent node (optional):</div>
