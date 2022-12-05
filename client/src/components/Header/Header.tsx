@@ -64,7 +64,7 @@ export const Header = (props: IHeaderProps) => {
         <Link to={'/'}>
           <img
             className="logo"
-            src="../../HelpLogo.png"
+            src="../../logo.png"
             alt="logo"
             onClick={onHomeClick}
           />
