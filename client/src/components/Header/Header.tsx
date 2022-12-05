@@ -1,7 +1,6 @@
 import React from 'react'
 import { Button } from '../Button'
 import * as ri from 'react-icons/ri'
-import * as ai from 'react-icons/ai'
 
 import { NodeIdsToNodesMap } from '../../types'
 import { Link } from 'react-router-dom'
@@ -17,9 +16,9 @@ interface IHeaderProps {
 }
 
 export const Header = (props: IHeaderProps) => {
-  const { onHomeClick, onCreateNodeButtonClick, onSearchButtonClick, nodeIdsToNodesMap } =
-    props
-  const customButtonStyle = { height: 30, marginLeft: 10, width: 30 }
+  const { onHomeClick, onSearchButtonClick, nodeIdsToNodesMap } = props
+  // const customButtonStyle = { height: 30, marginLeft: 10, width: 30 }
+
   const searchButtonStyle = {
     height: 30,
     width: 80,
@@ -29,14 +28,6 @@ export const Header = (props: IHeaderProps) => {
   const loginButtonStyle = {
     height: 30,
     marginRight: 30,
-    width: 100,
-    backgroundColor: '#EA3B2E',
-    color: '#f5f5f5',
-    fontWeight: 'bold',
-  }
-  const signupButtonStyle = {
-    height: 30,
-    marginLeft: 10,
     width: 100,
     backgroundColor: '#EA3B2E',
     color: '#f5f5f5',
@@ -62,12 +53,7 @@ export const Header = (props: IHeaderProps) => {
     <div className={isLinking ? 'header-linking' : 'header'}>
       <div className="left-bar">
         <Link to={'/'}>
-          <img
-            className="logo"
-            src="../../logo.png"
-            alt="logo"
-            onClick={onHomeClick}
-          />
+          <img className="logo" src="../../logo.png" alt="logo" onClick={onHomeClick} />
         </Link>
         {/* <Button
           isWhite={isLinking}

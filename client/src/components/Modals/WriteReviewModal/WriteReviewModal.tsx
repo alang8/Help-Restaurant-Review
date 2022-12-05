@@ -14,7 +14,7 @@ import {
   NumberInputStepper,
   Textarea,
 } from '@chakra-ui/react'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useRecoilState } from 'recoil'
 import {
   refreshLinkListState,
@@ -23,18 +23,9 @@ import {
 } from '../../../global/Atoms'
 import { Button } from '../../Button'
 import { generateObjectId } from '../../../global'
-import { FrontendNodeGateway } from '../../../nodes'
 import { IReview } from '../../../types'
 import './WriteReviewModal.scss'
-// import BasicFlow from './Flow'
-import ReactFlow, {
-  addEdge,
-  applyEdgeChanges,
-  applyNodeChanges,
-} from 'react-flow-renderer'
 import { FrontendReviewGateway } from '../../../reviews'
-import { FrontendAnchorGateway } from '../../../anchors'
-import { FrontendLinkGateway } from '../../../links/FrontendLinkGateway'
 
 export interface IWriteReviewModalProps {
   isOpen: boolean
@@ -49,8 +40,10 @@ export interface IWriteReviewModalProps {
  */
 export const WriteReviewModal = (props: IWriteReviewModalProps) => {
   // const { isOpen, onClose, onSubmit, node, roots } = props
+  // eslint-disable-next-line
   const { isOpen, onClose, onSubmit } = props
   // state variables
+  // eslint-disable-next-line
   const [selectedNode, setSelectedNode] = useRecoilState(selectedNodeState)
   const [error, setError] = useState<string>('')
   const [refresh, setRefresh] = useRecoilState(refreshState)

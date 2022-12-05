@@ -1,8 +1,4 @@
-import { Select } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import * as bi from 'react-icons/bi'
-import * as ri from 'react-icons/ri'
-import * as si from 'react-icons/si'
 import * as ai from 'react-icons/ai'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import {
@@ -16,7 +12,7 @@ import {
   selectedNodeState,
 } from '../../../global/Atoms'
 import { FrontendNodeGateway } from '../../../nodes'
-import { IFolderNode, INode, INodeProperty, makeINodeProperty } from '../../../types'
+import { INode, INodeProperty, makeINodeProperty } from '../../../types'
 import { Button } from '../../Button'
 import { ContextMenuItems } from '../../ContextMenu'
 import { EditableText } from '../../EditableText'
@@ -33,15 +29,7 @@ interface INodeHeaderProps {
 }
 
 export const NodeHeader = (props: INodeHeaderProps) => {
-  const {
-    onCreateNodeButtonClick,
-    onDeleteButtonClick,
-    onMoveButtonClick,
-    onHandleStartLinkClick,
-    onHandleCompleteLinkClick,
-    onOpenGraphClick,
-    onReviewButtonClick,
-  } = props
+  const { onCreateNodeButtonClick, onReviewButtonClick } = props
   const currentNode = useRecoilValue(currentNodeState)
   const [refresh, setRefresh] = useRecoilState(refreshState)
   const isLinking = useRecoilValue(isLinkingState)
@@ -57,6 +45,7 @@ export const NodeHeader = (props: INodeHeaderProps) => {
   const [editingTitle, setEditingTitle] = useState<boolean>(false)
 
   /* Method to update the current folder view */
+  // eslint-disable-next-line
   const handleUpdateFolderView = async (e: React.ChangeEvent) => {
     const nodeProperty: INodeProperty = makeINodeProperty(
       'viewType',
@@ -151,7 +140,7 @@ export const NodeHeader = (props: INodeHeaderProps) => {
     document.addEventListener('keydown', nodeKeyHandlers)
   }, [editingTitle])
 
-  const folder: boolean = currentNode.type === 'folder'
+  // const folder: boolean = currentNode.type === 'folder'
   const root: boolean = currentNode.nodeId === 'root'
   const restaurant = currentNode.type === 'restaurant'
 

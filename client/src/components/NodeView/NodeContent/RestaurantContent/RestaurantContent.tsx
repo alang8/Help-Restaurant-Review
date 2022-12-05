@@ -1,28 +1,6 @@
-import {
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-} from '@chakra-ui/react'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { BiUndo } from 'react-icons/bi'
-import * as fa from 'react-icons/fa'
-import { useHistory } from 'react-router-dom'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { fetchLinks } from '..'
-import { FrontendAnchorGateway } from '../../../../anchors'
-import {
-  currentNodeState,
-  refreshLinkListState,
-  selectedAnchorsState,
-  selectedExtentState,
-  startAnchorState,
-} from '../../../../global/Atoms'
-import { FrontendNodeGateway } from '../../../../nodes'
-import { IAnchor, IImageExtent } from '../../../../types'
-import { IImageDim, makeIImageDim } from '../../../../types/IImageDim'
-import { Button } from '../../../Button'
+import React from 'react'
+import { useRecoilValue } from 'recoil'
+import { currentNodeState } from '../../../../global/Atoms'
 import './RestaurantContent.scss'
 
 /** The content of an image node, including any anchors */
@@ -31,6 +9,7 @@ export const RestaurantContent = () => {
   const currentNode = useRecoilValue(currentNodeState)
 
   // destructure content for a restaurant node
+  // eslint-disable-next-line
   const { location, description, phoneNumber, email, rating, reviews } =
     currentNode.content
   const { mon, tue, wed, thu, fri, sat, sun } = currentNode.content.hours
