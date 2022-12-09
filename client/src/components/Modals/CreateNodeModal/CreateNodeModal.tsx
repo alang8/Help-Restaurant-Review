@@ -47,7 +47,7 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
   const setSelectedNode = useSetRecoilState(selectedNodeState)
   const [selectedParentNode, setSelectedParentNode] = useState<INode | null>(null)
   const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
+  const [modalContent, setModalContent] = useState('')
   const [selectedType, setSelectedType] = useState<NodeType>('' as NodeType)
   const [error, setError] = useState<string>('')
 
@@ -58,25 +58,25 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
   const [phoneNumber, setPhoneNumber] = useState('')
   const [email, setEmail] = useState('')
   const [imageContent, setImageContent] = useState('')
-  const [monStartHours, setMonStartHours] = React.useState(0)
-  const [monEndHours, setMonEndHours] = React.useState(0)
-  const [tueStartHours, setTueStartHours] = React.useState(0)
-  const [tueEndHours, setTueEndHours] = React.useState(0)
-  const [wedStartHours, setWedStartHours] = React.useState(0)
-  const [wedEndHours, setWedEndHours] = React.useState(0)
-  const [thuStartHours, setThuStartHours] = React.useState(0)
-  const [thuEndHours, setThuEndHours] = React.useState(0)
-  const [friStartHours, setFriStartHours] = React.useState(0)
-  const [friEndHours, setFriEndHours] = React.useState(0)
-  const [satStartHours, setSatStartHours] = React.useState(0)
-  const [satEndHours, setSatEndHours] = React.useState(0)
-  const [sunStartHours, setSunStartHours] = React.useState(0)
-  const [sunEndHours, setSunEndHours] = React.useState(0)
+  const [monStartHours, setMonStartHours] = React.useState('00:00')
+  const [monEndHours, setMonEndHours] = React.useState('00:00')
+  const [tueStartHours, setTueStartHours] = React.useState('00:00')
+  const [tueEndHours, setTueEndHours] = React.useState('00:00')
+  const [wedStartHours, setWedStartHours] = React.useState('00:00')
+  const [wedEndHours, setWedEndHours] = React.useState('00:00')
+  const [thuStartHours, setThuStartHours] = React.useState('00:00')
+  const [thuEndHours, setThuEndHours] = React.useState('00:00')
+  const [friStartHours, setFriStartHours] = React.useState('00:00')
+  const [friEndHours, setFriEndHours] = React.useState('00:00')
+  const [satStartHours, setSatStartHours] = React.useState('00:00')
+  const [satEndHours, setSatEndHours] = React.useState('00:00')
+  const [sunStartHours, setSunStartHours] = React.useState('00:00')
+  const [sunEndHours, setSunEndHours] = React.useState('00:00')
 
   // event handlers for the modal inputs and dropdown selects
   const handleSelectedTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedType(event.target.value.toLowerCase() as NodeType)
-    setContent('')
+    setModalContent('')
   }
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,11 +84,11 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
   }
 
   const handleTextContentChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setContent(event.target.value)
+    setModalContent(event.target.value)
   }
 
   const handleImageContentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setContent(event.target.value)
+    setModalContent(event.target.value)
   }
 
   const handleLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -110,6 +110,51 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value)
   }
+
+  // content for the modal based on type
+  const content =
+    selectedType === 'restaurant'
+      ? {
+          location: location,
+          description: description,
+          phoneNumber: phoneNumber,
+          email: email,
+          hours: {
+            mon: {
+              start: monStartHours,
+              end: monEndHours,
+            },
+            tue: {
+              start: tueStartHours,
+              end: tueEndHours,
+            },
+            wed: {
+              start: wedStartHours,
+              end: wedEndHours,
+            },
+            thu: {
+              start: thuStartHours,
+              end: thuEndHours,
+            },
+            fri: {
+              start: friStartHours,
+              end: friEndHours,
+            },
+            sat: {
+              start: satStartHours,
+              end: satEndHours,
+            },
+            sun: {
+              start: sunStartHours,
+              end: sunEndHours,
+            },
+          },
+          rating: null,
+          reviews: [],
+          websiteUrl: websiteUrl,
+          imageContent: imageContent,
+        }
+      : { content: modalContent }
 
   // called when the "Create" button is clicked
   const handleSubmit = async () => {
@@ -140,7 +185,7 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
     setTitle('')
     setSelectedParentNode(null)
     setSelectedType('' as NodeType)
-    setContent('')
+    setModalContent('')
     setError('')
     setLocation('')
     setDescription('')
@@ -148,26 +193,26 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
     setPhoneNumber('')
     setEmail('')
     setImageContent('')
-    setMonStartHours(0)
-    setMonEndHours(0)
-    setTueStartHours(0)
-    setTueEndHours(0)
-    setWedStartHours(0)
-    setWedEndHours(0)
-    setThuStartHours(0)
-    setThuEndHours(0)
-    setFriStartHours(0)
-    setFriEndHours(0)
-    setSatStartHours(0)
-    setSatEndHours(0)
-    setSunStartHours(0)
-    setSunEndHours(0)
+    setMonStartHours('00:00')
+    setMonEndHours('00:00')
+    setTueStartHours('00:00')
+    setTueEndHours('00:00')
+    setWedStartHours('00:00')
+    setWedEndHours('00:00')
+    setThuStartHours('00:00')
+    setThuEndHours('00:00')
+    setFriStartHours('00:00')
+    setFriEndHours('00:00')
+    setSatStartHours('00:00')
+    setSatEndHours('00:00')
+    setSunStartHours('00:00')
+    setSunEndHours('00:00')
   }
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
     const link = files && files[0] && (await uploadImage(files[0]))
-    link && setContent(link)
+    link && setModalContent(link)
   }
 
   // content prompts for the different node types
@@ -189,7 +234,6 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
   const isImage: boolean = selectedType === 'image'
   const isText: boolean = selectedType === 'text'
   const isRestaurant: boolean = selectedType === 'restaurant'
-  const formatTime = (val: number) => val
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose}>
@@ -216,7 +260,7 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
             {selectedType && isText && (
               <div className="modal-input">
                 <Textarea
-                  value={content}
+                  value={modalContent}
                   onChange={handleTextContentChange}
                   placeholder={contentInputPlaceholder}
                 />
@@ -225,7 +269,7 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
             {selectedType && isImage && (
               <div className="modal-input">
                 <Input
-                  value={content}
+                  value={modalContent}
                   onChange={handleImageContentChange}
                   placeholder={contentInputPlaceholder}
                 />
@@ -313,13 +357,13 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
                 Monday Hours (ET)
                 <Input
                   type="time"
-                  onChange={(valueString) => setMonStartHours(Number(valueString))}
-                  value={formatTime(monStartHours)}
+                  onChange={(event) => setMonStartHours(event.target.value)}
+                  value={monStartHours}
                 />
                 <Input
                   type="time"
-                  onChange={(valueString) => setMonEndHours(Number(valueString))}
-                  value={formatTime(monEndHours)}
+                  onChange={(event) => setMonEndHours(event.target.value)}
+                  value={monEndHours}
                 />
               </div>
             )}
@@ -328,13 +372,13 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
                 Tuesday Hours (ET)
                 <Input
                   type="time"
-                  onChange={(valueString) => setTueStartHours(Number(valueString))}
-                  value={formatTime(tueStartHours)}
+                  onChange={(event) => setTueStartHours(event.target.value)}
+                  value={tueStartHours}
                 />
                 <Input
                   type="time"
-                  onChange={(valueString) => setTueEndHours(Number(valueString))}
-                  value={formatTime(tueEndHours)}
+                  onChange={(event) => setTueEndHours(event.target.value)}
+                  value={tueEndHours}
                 />
               </div>
             )}
@@ -343,13 +387,13 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
                 Wednesday Hours (ET)
                 <Input
                   type="time"
-                  onChange={(valueString) => setWedStartHours(Number(valueString))}
-                  value={formatTime(wedStartHours)}
+                  onChange={(event) => setWedStartHours(event.target.value)}
+                  value={wedStartHours}
                 />
                 <Input
                   type="time"
-                  onChange={(valueString) => setWedEndHours(Number(valueString))}
-                  value={formatTime(wedEndHours)}
+                  onChange={(event) => setWedEndHours(event.target.value)}
+                  value={wedEndHours}
                 />
               </div>
             )}
@@ -358,13 +402,13 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
                 Thursday Hours (ET)
                 <Input
                   type="time"
-                  onChange={(valueString) => setThuStartHours(Number(valueString))}
-                  value={formatTime(thuStartHours)}
+                  onChange={(event) => setThuStartHours(event.target.value)}
+                  value={thuStartHours}
                 />
                 <Input
                   type="time"
-                  onChange={(valueString) => setThuEndHours(Number(valueString))}
-                  value={formatTime(thuEndHours)}
+                  onChange={(event) => setThuEndHours(event.target.value)}
+                  value={thuEndHours}
                 />
               </div>
             )}
@@ -373,13 +417,13 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
                 Friday Hours (ET)
                 <Input
                   type="time"
-                  onChange={(valueString) => setFriStartHours(Number(valueString))}
-                  value={formatTime(friStartHours)}
+                  onChange={(event) => setFriStartHours(event.target.value)}
+                  value={friStartHours}
                 />
                 <Input
                   type="time"
-                  onChange={(valueString) => setFriEndHours(Number(valueString))}
-                  value={formatTime(friEndHours)}
+                  onChange={(event) => setFriEndHours(event.target.value)}
+                  value={friEndHours}
                 />
               </div>
             )}
@@ -388,13 +432,13 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
                 Saturday Hours (ET)
                 <Input
                   type="time"
-                  onChange={(valueString) => setSatStartHours(Number(valueString))}
-                  value={formatTime(satStartHours)}
+                  onChange={(event) => setSatStartHours(event.target.value)}
+                  value={satStartHours}
                 />
                 <Input
                   type="time"
-                  onChange={(valueString) => setSatEndHours(Number(valueString))}
-                  value={formatTime(satEndHours)}
+                  onChange={(event) => setSatEndHours(event.target.value)}
+                  value={satEndHours}
                 />
               </div>
             )}
@@ -403,13 +447,13 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
                 Sunday Hours (ET)
                 <Input
                   type="time"
-                  onChange={(valueString) => setSunStartHours(Number(valueString))}
-                  value={formatTime(sunStartHours)}
+                  onChange={(event) => setSunStartHours(event.target.value)}
+                  value={sunStartHours}
                 />
                 <Input
                   type="time"
-                  onChange={(valueString) => setSunEndHours(Number(valueString))}
-                  value={formatTime(sunEndHours)}
+                  onChange={(event) => setSunEndHours(event.target.value)}
+                  value={sunEndHours}
                 />
               </div>
             )}
