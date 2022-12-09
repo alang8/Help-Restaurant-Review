@@ -111,51 +111,6 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
     setEmail(event.target.value)
   }
 
-  // content for the modal based on type
-  const content =
-    selectedType === 'restaurant'
-      ? {
-          location: location,
-          description: description,
-          phoneNumber: phoneNumber,
-          email: email,
-          hours: {
-            mon: {
-              start: monStartHours,
-              end: monEndHours,
-            },
-            tue: {
-              start: tueStartHours,
-              end: tueEndHours,
-            },
-            wed: {
-              start: wedStartHours,
-              end: wedEndHours,
-            },
-            thu: {
-              start: thuStartHours,
-              end: thuEndHours,
-            },
-            fri: {
-              start: friStartHours,
-              end: friEndHours,
-            },
-            sat: {
-              start: satStartHours,
-              end: satEndHours,
-            },
-            sun: {
-              start: sunStartHours,
-              end: sunEndHours,
-            },
-          },
-          rating: null,
-          reviews: [],
-          websiteUrl: websiteUrl,
-          imageContent: imageContent,
-        }
-      : { content: modalContent }
-
   // called when the "Create" button is clicked
   const handleSubmit = async () => {
     if (!nodeTypes.includes(selectedType)) {
@@ -166,6 +121,50 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
       setError('Error: No title')
       return
     }
+    // content for the modal based on type
+    const content =
+      selectedType === 'restaurant'
+        ? {
+            location: location,
+            description: description,
+            phoneNumber: phoneNumber,
+            email: email,
+            hours: {
+              mon: {
+                start: monStartHours,
+                end: monEndHours,
+              },
+              tue: {
+                start: tueStartHours,
+                end: tueEndHours,
+              },
+              wed: {
+                start: wedStartHours,
+                end: wedEndHours,
+              },
+              thu: {
+                start: thuStartHours,
+                end: thuEndHours,
+              },
+              fri: {
+                start: friStartHours,
+                end: friEndHours,
+              },
+              sat: {
+                start: satStartHours,
+                end: satEndHours,
+              },
+              sun: {
+                start: sunStartHours,
+                end: sunEndHours,
+              },
+            },
+            rating: null,
+            reviews: [],
+            websiteUrl: websiteUrl,
+            imageContent: imageContent,
+          }
+        : modalContent
     const attributes = {
       content,
       nodeIdsToNodesMap,
