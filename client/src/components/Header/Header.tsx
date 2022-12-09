@@ -1,7 +1,6 @@
 import React from 'react'
 import { Button } from '../Button'
 import * as ri from 'react-icons/ri'
-
 import { NodeIdsToNodesMap } from '../../types'
 import { Link } from 'react-router-dom'
 import { useRecoilState, useSetRecoilState } from 'recoil'
