@@ -27,6 +27,7 @@ export const RestaurantContent = () => {
     // color: '#f5f5f5',
     backgroundColor: '#ffffff',
     color: '#000000',
+    border: '1px solid #000000',
     fontWeight: 'bold',
   }
 
