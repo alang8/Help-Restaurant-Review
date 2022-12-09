@@ -57,7 +57,6 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
   const [websiteUrl, setWebsiteUrl] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [email, setEmail] = useState('')
-  const [imageContent, setImageContent] = useState('')
   const [monStartHours, setMonStartHours] = React.useState('00:00')
   const [monEndHours, setMonEndHours] = React.useState('00:00')
   const [tueStartHours, setTueStartHours] = React.useState('00:00')
@@ -89,6 +88,12 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
 
   const handleImageContentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setModalContent(event.target.value)
+  }
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files
+    const link = files && files[0] && (await uploadImage(files[0]))
+    link && setModalContent(link)
   }
 
   const handleLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -162,7 +167,7 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
             rating: null,
             reviews: [],
             websiteUrl: websiteUrl,
-            imageContent: imageContent,
+            imageContent: modalContent,
           }
         : modalContent
     const attributes = {
@@ -191,7 +196,7 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
     setWebsiteUrl('')
     setPhoneNumber('')
     setEmail('')
-    setImageContent('')
+    setModalContent('')
     setMonStartHours('00:00')
     setMonEndHours('00:00')
     setTueStartHours('00:00')
@@ -206,12 +211,6 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
     setSatEndHours('00:00')
     setSunStartHours('00:00')
     setSunEndHours('00:00')
-  }
-
-  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files
-    const link = files && files[0] && (await uploadImage(files[0]))
-    link && setModalContent(link)
   }
 
   // content prompts for the different node types
@@ -314,7 +313,7 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
             {selectedType && isRestaurant && (
               <div className="modal-input">
                 <Input
-                  value={imageContent}
+                  value={modalContent}
                   onChange={handleImageContentChange}
                   placeholder="Image URL..."
                 />

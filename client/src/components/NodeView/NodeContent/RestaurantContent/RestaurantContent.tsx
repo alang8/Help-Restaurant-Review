@@ -115,7 +115,7 @@ export const RestaurantContent = () => {
                   text="Reply"
                   style={reviewButtonStyle}
                   onClick={() => {
-                    alert('Ayo u tryna click me bruh?')
+                    alert(review.reviewId)
                   }}
                 />
               </div>
