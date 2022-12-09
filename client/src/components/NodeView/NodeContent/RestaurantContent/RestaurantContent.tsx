@@ -1,18 +1,56 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
-import { currentNodeState } from '../../../../global/Atoms'
+import { refreshState, currentNodeState } from '../../../../global/Atoms'
 import './RestaurantContent.scss'
+import { FrontendReviewGateway } from '../../../../reviews/FrontendReviewGateway'
+import { IReview } from '../../../../types'
+import { Button } from '../../../Button'
 
 /** The content of an image node, including any anchors */
 export const RestaurantContent = () => {
   // recoil state management
   const currentNode = useRecoilValue(currentNodeState)
+  const refresh = useRecoilValue(refreshState)
 
   // destructure content for a restaurant node
-  // eslint-disable-next-line
   const { location, description, phoneNumber, email, rating, reviews } =
     currentNode.content
   const { mon, tue, wed, thu, fri, sat, sun } = currentNode.content.hours
+
+  // state for reviews
+  const [restaurantReviews, setRestaurantReviews] = useState<IReview[]>(reviews)
+
+  const reviewButtonStyle = {
+    height: 30,
+    width: 100,
+    // backgroundColor: '#EA3B2E',
+    // color: '#f5f5f5',
+    backgroundColor: '#ffffff',
+    color: '#000000',
+    fontWeight: 'bold',
+  }
+
+  const formatDate = (date: string) => {
+    const dateObj = new Date(date)
+    const time = dateObj.toLocaleTimeString()
+    const day = dateObj.toLocaleDateString()
+    return `${day} at ${time}`
+  }
+
+  useEffect(() => {
+    // Get the reviews for the restaurant
+    const getReviews = async () => {
+      const reviewResp = await FrontendReviewGateway.getReviewsByNodeId(
+        currentNode.nodeId
+      )
+      if (!reviewResp.success) {
+        console.log('Error getting reviews: ' + reviewResp.message)
+      }
+      const reviews = reviewResp.payload!
+      setRestaurantReviews(reviews)
+    }
+    getReviews()
+  }, [refresh])
 
   return (
     <div className="restaurantContainer">
@@ -62,7 +100,27 @@ export const RestaurantContent = () => {
       </div>
       <div className="gridColTwo">
         <h1 className="sectionTitle">Reviews</h1>
-        <p>{reviews}</p>
+        {restaurantReviews.map((review, idx) => {
+          return (
+            <div className="reviewContainer" key={idx}>
+              <div className="reviewTitleBar">
+                <img src="/anonymous.png" alt="anonymous" />
+                <strong>{review.author}</strong>
+              </div>
+              <div className="reviewContent">{review.content}</div>
+              <div className="reviewFooter">
+                <p>Last Modified: {formatDate(String(review.dateModified!))}</p>
+                <Button
+                  text="Reply"
+                  style={reviewButtonStyle}
+                  onClick={() => {
+                    alert('Ayo u tryna click me bruh?')
+                  }}
+                />
+              </div>
+            </div>
+          )
+        })}
       </div>
     </div>
   )

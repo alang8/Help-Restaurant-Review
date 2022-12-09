@@ -50,6 +50,7 @@ export class BackendReviewGateway {
   async getReviewById(reviewId: string): Promise<IServiceResponse<IReview>> {
     return this.reviewCollectionConnection.findReviewById(reviewId)
   }
+
   /**
    * Method that gets all reviews attached to a given node.
    *

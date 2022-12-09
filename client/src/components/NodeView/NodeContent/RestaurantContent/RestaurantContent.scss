@@ -64,3 +64,48 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.4);
   }
 }
+
+// Reviews
+.reviewContainer {
+  margin: auto;
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  border: 1px solid rgb(214, 214, 214);
+  border-radius: 15px;
+  margin-bottom: 20px;
+  text-align: left;
+
+  .reviewTitleBar {
+    padding-left: 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    height: 40px;
+    border-bottom: 1px solid rgb(214, 214, 214);
+
+    img {
+      width: 25px;
+      height: 25px;
+    }
+  }
+
+  .reviewContent {
+    padding: 10px 20px 0;
+  }
+
+  .reviewFooter {
+    padding: 10px 20px 10px;
+    display: flex;
+    justify-content: space-between;
+    // align the content at the bottom of the container
+    align-items: flex-end;
+
+    p {
+      font-size: 12px;
+      color: rgb(120, 120, 120);
+    }
+  }
+}

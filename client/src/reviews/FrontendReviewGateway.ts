@@ -39,4 +39,14 @@ export const FrontendReviewGateway = {
       return failureServiceResponse('[getReviewById] Unable to access backend')
     }
   },
+
+  getReviewsByNodeId: async (nodeId: string): Promise<IServiceResponse<IReview[]>> => {
+    try {
+      return await get<IServiceResponse<IReview[]>>(
+        baseEndpoint + servicePath + 'getByNodeId/' + nodeId
+      )
+    } catch (exception) {
+      return failureServiceResponse('[getReviewsByNodeId] Unable to access backend')
+    }
+  },
 }
