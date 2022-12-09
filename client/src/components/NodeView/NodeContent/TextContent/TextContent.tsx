@@ -261,9 +261,18 @@ export const TextContent = (props: ITextContentProps) => {
         text="Save"
         icon={<BiSave />}
         onClick={() => handleUpdateTextContent()}
-        style={{ background: '#ADD8E6', marginTop: '20px', height: '40px' }}
+        style={{
+          background: '#ADD8E6',
+          marginTop: '20px',
+          height: '40px',
+          marginLeft: '20px',
+        }}
       />
-      <EditorContent editor={editor} onPointerUp={onPointerUp} />
+      <EditorContent
+        editor={editor}
+        onPointerUp={onPointerUp}
+        style={{ marginLeft: '20px' }}
+      />
     </div>
   )
 }

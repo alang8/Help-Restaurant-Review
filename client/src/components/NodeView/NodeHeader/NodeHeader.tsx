@@ -1,5 +1,9 @@
+import { Select } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import * as ai from 'react-icons/ai'
+import * as bi from 'react-icons/bi'
+import * as ri from 'react-icons/ri'
+import * as si from 'react-icons/si'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import {
   alertMessageState,
@@ -12,7 +16,7 @@ import {
   selectedNodeState,
 } from '../../../global/Atoms'
 import { FrontendNodeGateway } from '../../../nodes'
-import { INode, INodeProperty, makeINodeProperty } from '../../../types'
+import { IFolderNode, INode, INodeProperty, makeINodeProperty } from '../../../types'
 import { Button } from '../../Button'
 import { ContextMenuItems } from '../../ContextMenu'
 import { EditableText } from '../../EditableText'
@@ -29,7 +33,15 @@ interface INodeHeaderProps {
 }
 
 export const NodeHeader = (props: INodeHeaderProps) => {
-  const { onCreateNodeButtonClick, onReviewButtonClick } = props
+  const {
+    onCreateNodeButtonClick,
+    onDeleteButtonClick,
+    onMoveButtonClick,
+    onHandleStartLinkClick,
+    onHandleCompleteLinkClick,
+    onOpenGraphClick,
+    onReviewButtonClick,
+  } = props
   const currentNode = useRecoilValue(currentNodeState)
   const [refresh, setRefresh] = useRecoilState(refreshState)
   const isLinking = useRecoilValue(isLinkingState)
@@ -142,6 +154,7 @@ export const NodeHeader = (props: INodeHeaderProps) => {
 
   // const folder: boolean = currentNode.type === 'folder'
   const root: boolean = currentNode.nodeId === 'root'
+  const folder: boolean = currentNode.type === 'folder'
   const restaurant = currentNode.type === 'restaurant'
 
   const customButtonStyle = { height: 30, marginLeft: 10, width: 30 }
@@ -177,27 +190,82 @@ export const NodeHeader = (props: INodeHeaderProps) => {
             />
           </div>
         </div>
-      ) : (
-        restaurant && (
-          <div className="heroContainer">
-            <img
-              src={currentNode.content.imageContent}
-              className="hero"
-              alt="Restaurant Image"
-            />
-            <div className="heroContent">
-              <div>
-                <h1 className="heroTitle">{currentNode.title}</h1>
-                <div className="heroRating">{currentNode.content.rating} / 5</div>
-              </div>
-              <Button
-                text="Write a Review"
-                style={reviewButtonStyle}
-                onClick={() => onReviewButtonClick()}
-              />
+      ) : restaurant ? (
+        <div className="heroContainer">
+          <img
+            src={currentNode.content.imageContent}
+            className="hero"
+            alt="Restaurant Image"
+          />
+          <div className="heroContent">
+            <div>
+              <h1 className="heroTitle">{currentNode.title}</h1>
+              <div className="heroRating">{currentNode.content.rating} / 5</div>
             </div>
+            <Button
+              text="Write a Review"
+              style={reviewButtonStyle}
+              onClick={() => onReviewButtonClick()}
+            />
           </div>
-        )
+        </div>
+      ) : (
+        <div className="nodeHeader">
+          <div
+            className="nodeHeader-title"
+            onDoubleClick={(e) => setEditingTitle(true)}
+            onContextMenu={handleTitleRightClick}
+          >
+            <EditableText
+              text={title}
+              editing={editingTitle}
+              setEditing={setEditingTitle}
+              onEdit={handleUpdateTitle}
+            />
+          </div>
+          <div className="nodeHeader-buttonBar">
+            <Button
+              icon={<ri.RiDeleteBin6Line />}
+              text="Delete"
+              onClick={() => onDeleteButtonClick(currentNode)}
+            />
+            <Button
+              icon={<ri.RiDragDropLine />}
+              text="Move"
+              onClick={() => onMoveButtonClick(currentNode)}
+            />
+            <Button
+              icon={<si.SiGraphql />}
+              text="Show Graph"
+              onClick={onOpenGraphClick}
+            />
+            <Button
+              icon={<ri.RiExternalLinkLine />}
+              text="Start Link"
+              onClick={onHandleStartLinkClick}
+            />
+            {isLinking && (
+              <Button
+                text="Complete Link"
+                icon={<bi.BiLinkAlt />}
+                onClick={onHandleCompleteLinkClick}
+              />
+            )}
+            {folder && (
+              <div className="select">
+                <Select
+                  bg="f1f1f1"
+                  defaultValue={(currentNode as IFolderNode).viewType}
+                  onChange={handleUpdateFolderView}
+                  height={35}
+                >
+                  <option value="grid">Grid</option>
+                  <option value="list">List</option>
+                </Select>
+              </div>
+            )}
+          </div>
+        </div>
       )}
     </>
   )

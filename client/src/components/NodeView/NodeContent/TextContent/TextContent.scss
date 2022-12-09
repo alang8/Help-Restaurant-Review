@@ -90,6 +90,8 @@ li {
 }
 
 #textMenu {
+  padding-top: 10px;
+  padding-left: 20px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -99,6 +101,8 @@ li {
 
 .textEditorButton {
   // flex: 1;
+  padding: 0 3px;
+  border-radius: 5px;
   background-color: #f1f1f1;
   padding: 0.2rem 1rem;
 }
