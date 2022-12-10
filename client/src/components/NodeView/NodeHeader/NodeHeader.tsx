@@ -161,12 +161,12 @@ export const NodeHeader = (props: INodeHeaderProps) => {
   const restaurant = currentNode.type === 'restaurant'
 
   const customButtonStyle = {
-    width: 'max-content',
+    width: 'fit-content',
     backgroundColor: 'grey',
-    marginRight: -360,
+    marginRight: '-100px',
   }
   const reviewButtonStyle = {
-    width: 'max-content',
+    width: 'fit-content',
     backgroundColor: '#EA3B2E',
     color: '#f5f5f5',
     fontWeight: 'bold',
