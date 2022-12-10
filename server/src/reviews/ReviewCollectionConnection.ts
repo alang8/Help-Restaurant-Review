@@ -39,10 +39,30 @@ export class ReviewCollectionConnection {
           'to reviewCollectionConnection.insertReview'
       )
     }
+    // Insert review into database
     const insertResp = await this.client
       .db()
       .collection(this.collectionName)
       .insertOne(review)
+    // Update parent review (if it exists) with this reviewId as a child
+    if (review.parentReviewId) {
+      const parentReview = await this.findReviewById(review.parentReviewId)
+      if (!parentReview.success) {
+        return failureServiceResponse(
+          'Failed to find parent review with this reviewId: ' + review.parentReviewId
+        )
+      }
+      const parent = parentReview.payload
+      parent.replies.push(review.reviewId)
+      const updateResp = await this.updateReview(review.parentReviewId, {
+        replies: parent.replies,
+      })
+      if (!updateResp.success) {
+        return failureServiceResponse(
+          'Failed to update parent review with this reviewId: ' + review.parentReviewId
+        )
+      }
+    }
     if (insertResp.insertedCount) {
       return successfulServiceResponse(insertResp.ops[0])
     }
@@ -103,5 +123,34 @@ export class ReviewCollectionConnection {
         foundReviews.push(review)
       })
     return successfulServiceResponse(foundReviews)
+  }
+
+  /**
+   * Updates review when given a reviewId and a set of properties to update.
+   *
+   * @param {string} reviewId
+   * @param {Object} properties to update in MongoDB
+   * @return successfulServiceResponse<INode> on success
+   *         failureServiceResponse on failure
+   */
+  async updateReview(
+    reviewId: string,
+    updatedProperties: Object
+  ): Promise<IServiceResponse<IReview>> {
+    const updateResponse = await this.client
+      .db()
+      .collection(this.collectionName)
+      .findOneAndUpdate(
+        { reviewId: reviewId },
+        { $set: updatedProperties },
+        { returnDocument: 'after' }
+      )
+    if (updateResponse.ok && updateResponse.lastErrorObject.n) {
+      return successfulServiceResponse(updateResponse.value)
+    }
+    return failureServiceResponse(
+      'Failed to update review, lastErrorObject: ' +
+        updateResponse.lastErrorObject.toString()
+    )
   }
 }

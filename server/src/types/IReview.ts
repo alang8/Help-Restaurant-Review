@@ -11,6 +11,20 @@ export interface IReview {
   dateModified?: Date
 }
 
+export type ReviewFields = keyof IReview
+
+export const allReviewFields: string[] = [
+  'reviewId',
+  'author',
+  'nodeId',
+  'parentReviewId',
+  'content',
+  'rating',
+  'replies',
+  'dateCreated',
+  'dateModified',
+]
+
 export function isIReview(object: any): object is IReview {
   return (
     typeof (object as IReview).reviewId === 'string' &&

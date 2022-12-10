@@ -107,37 +107,43 @@ export const RestaurantContent = () => {
         </div>
       </div>
       <div className="gridColTwo">
-        <div className="itemOne">
-          <h1 className="sectionTitle">&#129506; Reviews</h1>
-          <WriteReplyModal
-            isOpen={writeReplyModal}
-            onClose={() => setWriteReplyModal(false)}
-            // onSubmit={loadRootsFromDB}
-          />
-          <div className="scrollable">
-            {restaurantReviews.map((review, idx) => {
-              return (
-                <div className="reviewContainer" key={idx}>
-                  <div className="reviewTitleBar">
-                    <img src="/anonymous.png" alt="anonymous" />
-                    <strong>{review.author}</strong>
+        <h1 className="sectionTitle">Reviews</h1>
+        <WriteReplyModal
+          isOpen={writeReplyModal}
+          onClose={() => setWriteReplyModal(false)}
+        />
+        <div className="scrollable">
+          {
+            // If there are no reviews, display a message
+            restaurantReviews.length === 0 ? (
+              <div className="reviewContainerEmptyState">
+                There are no reviews for this restaurant yet. Leave the first review!
+              </div>
+            ) : (
+              restaurantReviews.map((review, idx) => {
+                return (
+                  <div className="reviewContainer" key={idx}>
+                    <div className="reviewTitleBar">
+                      <img src="/anonymous.png" alt="anonymous" />
+                      <strong>{review.author}</strong>
+                    </div>
+                    <div className="reviewContent">{review.content}</div>
+                    <div className="reviewFooter">
+                      <p>Last Modified: {formatDate(String(review.dateModified!))}</p>
+                      <Button
+                        text="Reply"
+                        style={reviewButtonStyle}
+                        onClick={() => {
+                          setParentReview(review.reviewId)
+                          setWriteReplyModal(true)
+                        }}
+                      />
+                    </div>
                   </div>
-                  <div className="reviewContent">{review.content}</div>
-                  <div className="reviewFooter">
-                    <p>Last Modified: {formatDate(String(review.dateModified!))}</p>
-                    <Button
-                      text="Reply"
-                      style={reviewButtonStyle}
-                      onClick={() => {
-                        setParentReview(review.reviewId)
-                        setWriteReplyModal(true)
-                      }}
-                    />
-                  </div>
-                </div>
-              )
-            })}
-          </div>
+                )
+              })
+            )
+          }
         </div>
       </div>
     </div>
