@@ -70,7 +70,10 @@ export const SearchContent = () => {
     setFilteredSearchResults(
       searchResults
         .filter(
-          (a) => (textNodes && a.type === 'text') || (imageNodes && a.type === 'image')
+          (a) =>
+            (textNodes && a.type === 'text') ||
+            (imageNodes && a.type === 'image') ||
+            (restaurantNodes && a.type === 'restaurant')
         )
         .sort((a, b) =>
           byDate
@@ -81,7 +84,7 @@ export const SearchContent = () => {
             : 0
         )
     )
-  }, [byDate, textNodes, imageNodes])
+  }, [byDate, textNodes, imageNodes, restaurantNodes])
 
   if (filteredSearchResults.length === 0) {
     return (
@@ -116,6 +119,13 @@ export const SearchContent = () => {
           onChange={(e) => displayImageNodes(e.target.checked)}
         >
           Image Nodes
+        </Checkbox>
+        <Checkbox
+          defaultChecked
+          isChecked={restaurantNodes}
+          onChange={(e) => displayRestaurantNodes(e.target.checked)}
+        >
+          Restaurant Nodes
         </Checkbox>
       </Stack>
       {filteredSearchResults.map((result) => (
