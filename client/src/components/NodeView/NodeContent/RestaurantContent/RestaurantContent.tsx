@@ -101,7 +101,7 @@ export const RestaurantContent = () => {
         </div>
         <div className="itemFour">
           <div className="sectionDivider" />
-          <h1 className="sectionTitle">&#129505; Contact Us</h1>
+          <h1 className="sectionTitle">&#129497; Contact Us</h1>
           <p>{phoneNumber}</p>
           <div>{email}</div>
         </div>
