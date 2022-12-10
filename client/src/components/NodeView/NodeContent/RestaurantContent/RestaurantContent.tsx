@@ -8,8 +8,10 @@ import {
 import './RestaurantContent.scss'
 import { FrontendReviewGateway } from '../../../../reviews/FrontendReviewGateway'
 import { IReview } from '../../../../types'
-import { Button } from '../../../Button'
 import { WriteReplyModal } from '../../../Modals/WriteReplyModal'
+import Reply from './Reply'
+import { Button } from '../../../Button'
+import Reply2 from './Reply2'
 
 /** The content of an image node, including any anchors */
 export const RestaurantContent = () => {
@@ -25,9 +27,17 @@ export const RestaurantContent = () => {
 
   // state for reviews
   const [restaurantReviews, setRestaurantReviews] = useState<IReview[]>(reviews)
+  const [restaurantRootReviews, setRestaurantRootReviews] = useState<IReview[]>(reviews)
 
   // modal state
   const [writeReplyModal, setWriteReplyModal] = useState(false)
+
+  const formatDate = (date: string) => {
+    const dateObj = new Date(date)
+    const time = dateObj.toLocaleTimeString()
+    const day = dateObj.toLocaleDateString()
+    return `${day} at ${time}`
+  }
 
   const reviewButtonStyle = {
     height: 30,
@@ -38,15 +48,8 @@ export const RestaurantContent = () => {
     fontWeight: 'bold',
   }
 
-  const formatDate = (date: string) => {
-    const dateObj = new Date(date)
-    const time = dateObj.toLocaleTimeString()
-    const day = dateObj.toLocaleDateString()
-    return `${day} at ${time}`
-  }
-
   useEffect(() => {
-    // Get the reviews for the restaurant
+    // Get the root reviews for the restaurant
     const getReviews = async () => {
       const reviewResp = await FrontendReviewGateway.getReviewsByNodeId(
         currentNode.nodeId
@@ -54,11 +57,27 @@ export const RestaurantContent = () => {
       if (!reviewResp.success) {
         console.log('Error getting reviews: ' + reviewResp.message)
       }
-      const reviews = reviewResp.payload!
+      let reviews = reviewResp.payload!
+      reviews = reviews.filter((review) => review.parentReviewId === null)
       setRestaurantReviews(reviews)
     }
     getReviews()
   }, [currentNode, refresh])
+
+  // useEffect(() => {
+  //   // Get the reviews for the restaurant
+  //   const getReviews = async () => {
+  //     const reviewResp = await FrontendReviewGateway.getReviewsByNodeId(
+  //       currentNode.nodeId
+  //     )
+  //     if (!reviewResp.success) {
+  //       console.log('Error getting reviews: ' + reviewResp.message)
+  //     }
+  //     const reviews = reviewResp.payload!
+  //     setRestaurantReviews(reviews)
+  //   }
+  //   getReviews()
+  // }, [currentNode, refresh])
 
   return (
     <div className="restaurantContainer">
@@ -107,23 +126,23 @@ export const RestaurantContent = () => {
         </div>
       </div>
       <div className="gridColTwo">
-        <div className="itemOne">
-          <h1 className="sectionTitle">&#129506; Reviews</h1>
-          <WriteReplyModal
-            isOpen={writeReplyModal}
-            onClose={() => setWriteReplyModal(false)}
-          />
-          <div className="scrollable">
-            {
-              // If there are no reviews, display a message
-              restaurantReviews.length === 0 ? (
-                <div className="reviewContainerEmptyState">
-                  There are no reviews for this restaurant yet. Leave the first review!
-                </div>
-              ) : (
-                restaurantReviews.map((review, idx) => {
-                  return (
-                    <div className="reviewContainer" key={idx}>
+        <h1 className="sectionTitle">Reviews</h1>
+        <WriteReplyModal
+          isOpen={writeReplyModal}
+          onClose={() => setWriteReplyModal(false)}
+        />
+        <div className="scrollable">
+          {
+            // If there are no reviews, display a message
+            restaurantReviews.length === 0 ? (
+              <div className="reviewContainerEmptyState">
+                There are no reviews for this restaurant yet. Leave the first review!
+              </div>
+            ) : (
+              restaurantReviews.map((review, idx) => {
+                return (
+                  <>
+                    {/* <div className="reviewContainer" key={idx}>
                       <div className="reviewTitleBar">
                         <img src="/anonymous.png" alt="anonymous" />
                         <strong>{review.author}</strong>
@@ -141,11 +160,27 @@ export const RestaurantContent = () => {
                         />
                       </div>
                     </div>
-                  )
-                })
-              )
-            }
-          </div>
+                    {review.replies.map((replyId, idx) => {
+                      return (
+                        <Reply2
+                          reviewId={replyId}
+                          setParentReview={setParentReview}
+                          setWriteReplyModal={setWriteReplyModal}
+                          key={idx}
+                        />
+                      )
+                    })} */}
+                    <Reply
+                      review={review}
+                      setParentReview={setParentReview}
+                      setWriteReplyModal={setWriteReplyModal}
+                      key={idx}
+                    />
+                  </>
+                )
+              })
+            )
+          }
         </div>
       </div>
     </div>
