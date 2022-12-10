@@ -107,7 +107,7 @@ export const RestaurantContent = () => {
         </div>
       </div>
       <div className="gridColTwo">
-        <h1 className="sectionTitle">Reviews</h1>
+        <h1 className="sectionTitle">&#129506; Reviews</h1>
         <WriteReplyModal
           isOpen={writeReplyModal}
           onClose={() => setWriteReplyModal(false)}
