@@ -5,11 +5,9 @@
   width: 100%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  // border: 5px solid black;
 
   .gridColOne {
     text-align: left;
-    // border: 1px solid green;
     display: grid;
     grid-auto-rows: minmax(80px, auto);
 
@@ -22,7 +20,7 @@
     }
 
     .itemThree {
-      grid-row: 3/6;
+      grid-row: 3/5;
 
       .hoursContainer {
         text-decoration: none;
@@ -43,13 +41,24 @@
     }
 
     .itemFour {
-      grid-row: 6;
+      grid-row: 5;
     }
   }
 
   .gridColTwo {
     text-align: center;
-    // border: 1px solid blue;
+    overflow: hidden;
+
+    .sectionTitle {
+      margin: auto;
+      width: 80%;
+      text-align: left;
+    }
+
+    .scrollable {
+      max-height: 70vh;
+      overflow: auto;
+    }
   }
 
   .sectionTitle {
@@ -100,7 +109,6 @@
     padding: 10px 20px 10px;
     display: flex;
     justify-content: space-between;
-    // align the content at the bottom of the container
     align-items: flex-end;
 
     p {

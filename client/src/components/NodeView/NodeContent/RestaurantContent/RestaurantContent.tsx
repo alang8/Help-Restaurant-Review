@@ -51,7 +51,7 @@ export const RestaurantContent = () => {
       setRestaurantReviews(reviews)
     }
     getReviews()
-  }, [refresh])
+  }, [currentNode, refresh])
 
   return (
     <div className="restaurantContainer">
@@ -101,27 +101,29 @@ export const RestaurantContent = () => {
       </div>
       <div className="gridColTwo">
         <h1 className="sectionTitle">Reviews</h1>
-        {restaurantReviews.map((review, idx) => {
-          return (
-            <div className="reviewContainer" key={idx}>
-              <div className="reviewTitleBar">
-                <img src="/anonymous.png" alt="anonymous" />
-                <strong>{review.author}</strong>
+        <div className="scrollable">
+          {restaurantReviews.map((review, idx) => {
+            return (
+              <div className="reviewContainer" key={idx}>
+                <div className="reviewTitleBar">
+                  <img src="/anonymous.png" alt="anonymous" />
+                  <strong>{review.author}</strong>
+                </div>
+                <div className="reviewContent">{review.content}</div>
+                <div className="reviewFooter">
+                  <p>Last Modified: {formatDate(String(review.dateModified!))}</p>
+                  <Button
+                    text="Reply"
+                    style={reviewButtonStyle}
+                    onClick={() => {
+                      alert(review.reviewId)
+                    }}
+                  />
+                </div>
               </div>
-              <div className="reviewContent">{review.content}</div>
-              <div className="reviewFooter">
-                <p>Last Modified: {formatDate(String(review.dateModified!))}</p>
-                <Button
-                  text="Reply"
-                  style={reviewButtonStyle}
-                  onClick={() => {
-                    alert(review.reviewId)
-                  }}
-                />
-              </div>
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
       </div>
     </div>
   )
