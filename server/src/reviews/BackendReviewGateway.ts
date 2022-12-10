@@ -1,5 +1,12 @@
 import { MongoClient } from 'mongodb'
-import { failureServiceResponse, IServiceResponse, isIReview, IReview } from '../types'
+import {
+  failureServiceResponse,
+  IServiceResponse,
+  isIReview,
+  IReview,
+  IRestaurantNode,
+} from '../types'
+import { IReviewProperty, isIReviewProperty } from '../types/IReviewProperty'
 import { ReviewCollectionConnection } from './ReviewCollectionConnection'
 
 /**
@@ -36,6 +43,15 @@ export class BackendReviewGateway {
     if (reviewResp.success) {
       return failureServiceResponse('Review with duplicate ID already exist in database.')
     }
+    // check if the parent of the review exists
+    if (review.parentReviewId) {
+      const parentResp = await this.getReviewById(review.parentReviewId)
+      if (!parentResp.success) {
+        return failureServiceResponse(
+          'Parent review does not exist in database. Unable to reply.'
+        )
+      }
+    }
     // if everything checks out, insert review
     const insertResp = await this.reviewCollectionConnection.insertReview(review)
     return insertResp
@@ -68,5 +84,35 @@ export class BackendReviewGateway {
    */
   async deleteAll(): Promise<IServiceResponse<{}>> {
     return await this.reviewCollectionConnection.clearReviewCollection()
+  }
+
+  /**
+   * Method to update the review with the given reviewId.
+   * @param reviewId the reviewId of the node
+   * @param toUpdate an array of IReviewProperty
+   *
+   * @returns IServiceResponse<INode>
+   */
+  async updateReview(
+    reviewId: string,
+    toUpdate: IReviewProperty[]
+  ): Promise<IServiceResponse<IReview>> {
+    const properties: any = {}
+    for (let i = 0; i < toUpdate.length; i++) {
+      if (!isIReviewProperty(toUpdate[i])) {
+        return failureServiceResponse('toUpdate parameters invalid')
+      }
+      const fieldName = toUpdate[i].fieldName
+      const value = toUpdate[i].value
+      properties[fieldName] = value
+    }
+    const reviewResponse = await this.reviewCollectionConnection.updateReview(
+      reviewId,
+      properties
+    )
+    if (!reviewResponse.success) {
+      return failureServiceResponse('This review does not exist in the database!')
+    }
+    return reviewResponse
   }
 }

@@ -1,7 +1,9 @@
 import express, { Request, Response, Router } from 'express'
 import { MongoClient } from 'mongodb'
 import { IServiceResponse, isIReview, IReview } from '../types'
+import { IReviewProperty } from '../types/IReviewProperty'
 import { BackendReviewGateway } from './BackendReviewGateway'
+const bodyJsonParser = require('body-parser').json()
 
 // eslint-disable-next-line new-cap
 export const ReviewExpressRouter = express.Router()
@@ -74,6 +76,30 @@ export class ReviewRouter {
           const resp: IServiceResponse<IReview[]> =
             await this.backendReviewGateway.getReviewsByNodeId(nodeId)
           res.status(200).send(resp)
+        } catch (e) {
+          res.status(500).send(e.message)
+        }
+      }
+    )
+
+    /**
+     * Request to update the review with the given reviewId
+     *
+     * @param req request object coming from client
+     * @param res response object to send to client
+     */
+    ReviewExpressRouter.put(
+      '/:reviewId',
+      bodyJsonParser,
+      async (req: Request, res: Response) => {
+        try {
+          const reviewId = req.params.reviewId
+          const toUpdate: IReviewProperty[] = req.body.data
+          const response = await this.backendReviewGateway.updateReview(
+            reviewId,
+            toUpdate
+          )
+          res.status(200).send(response)
         } catch (e) {
           res.status(500).send(e.message)
         }

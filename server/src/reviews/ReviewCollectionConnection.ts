@@ -104,4 +104,33 @@ export class ReviewCollectionConnection {
       })
     return successfulServiceResponse(foundReviews)
   }
+
+  /**
+   * Updates review when given a reviewId and a set of properties to update.
+   *
+   * @param {string} reviewId
+   * @param {Object} properties to update in MongoDB
+   * @return successfulServiceResponse<INode> on success
+   *         failureServiceResponse on failure
+   */
+  async updateReview(
+    reviewId: string,
+    updatedProperties: Object
+  ): Promise<IServiceResponse<IReview>> {
+    const updateResponse = await this.client
+      .db()
+      .collection(this.collectionName)
+      .findOneAndUpdate(
+        { reviewId: reviewId },
+        { $set: updatedProperties },
+        { returnDocument: 'after' }
+      )
+    if (updateResponse.ok && updateResponse.lastErrorObject.n) {
+      return successfulServiceResponse(updateResponse.value)
+    }
+    return failureServiceResponse(
+      'Failed to update review, lastErrorObject: ' +
+        updateResponse.lastErrorObject.toString()
+    )
+  }
 }
