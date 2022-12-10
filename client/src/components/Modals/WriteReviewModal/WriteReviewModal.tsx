@@ -72,6 +72,7 @@ export const WriteReviewModal = (props: IWriteReviewModalProps) => {
       reviewId: reviewId,
       author: name,
       nodeId: selectedNode!.nodeId,
+      parentReviewId: null,
       content: content,
       rating: rating,
       replies: [],

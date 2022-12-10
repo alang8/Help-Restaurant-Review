@@ -23,8 +23,6 @@ export const RestaurantContent = () => {
   const reviewButtonStyle = {
     height: 30,
     width: 100,
-    // backgroundColor: '#EA3B2E',
-    // color: '#f5f5f5',
     backgroundColor: '#ffffff',
     color: '#000000',
     border: '1px solid #000000',
