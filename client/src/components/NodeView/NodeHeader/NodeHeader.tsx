@@ -160,10 +160,13 @@ export const NodeHeader = (props: INodeHeaderProps) => {
   const folder: boolean = currentNode.type === 'folder'
   const restaurant = currentNode.type === 'restaurant'
 
-  const customButtonStyle = { height: 30, marginLeft: 10, width: 30 }
+  const customButtonStyle = {
+    width: 'max-content',
+    backgroundColor: 'grey',
+    marginRight: -360,
+  }
   const reviewButtonStyle = {
-    height: 40,
-    width: 150,
+    width: 'max-content',
     backgroundColor: '#EA3B2E',
     color: '#f5f5f5',
     fontWeight: 'bold',
@@ -202,6 +205,57 @@ export const NodeHeader = (props: INodeHeaderProps) => {
               <h1 className="heroTitle">{currentNode.title}</h1>
               <div className="heroRating">{currentNode.content.rating} / 5</div>
             </div>
+            <>
+              {!isLinking && (
+                <>
+                  <Button
+                    icon={<ri.RiDeleteBin6Line />}
+                    style={customButtonStyle}
+                    text="Delete"
+                    onClick={() => onDeleteButtonClick(currentNode)}
+                  />
+                  <Button
+                    icon={<ri.RiDragDropLine />}
+                    style={customButtonStyle}
+                    text="Move"
+                    onClick={() => onMoveButtonClick(currentNode)}
+                  />
+                  <Button
+                    icon={<ri.RiExternalLinkLine />}
+                    style={customButtonStyle}
+                    text="Start Link"
+                    onClick={onHandleStartLinkClick}
+                  />
+                  <Button
+                    icon={<si.SiGraphql />}
+                    style={customButtonStyle}
+                    text="Open Graph"
+                    onClick={onOpenGraphClick}
+                  />
+                </>
+              )}
+              {isLinking && (
+                <Button
+                  text="Complete Link"
+                  style={customButtonStyle}
+                  icon={<bi.BiLinkAlt />}
+                  onClick={onHandleCompleteLinkClick}
+                />
+              )}
+              {folder && (
+                <div className="select">
+                  <Select
+                    bg="f1f1f1"
+                    defaultValue={(currentNode as IFolderNode).viewType}
+                    onChange={handleUpdateFolderView}
+                    height={35}
+                  >
+                    <option value="grid">Grid</option>
+                    <option value="list">List</option>
+                  </Select>
+                </div>
+              )}
+            </>
             <Button
               text="Write a Review"
               style={reviewButtonStyle}
@@ -224,45 +278,53 @@ export const NodeHeader = (props: INodeHeaderProps) => {
             />
           </div>
           <div className="nodeHeader-buttonBar">
-            <Button
-              icon={<ri.RiDeleteBin6Line />}
-              text="Delete"
-              onClick={() => onDeleteButtonClick(currentNode)}
-            />
-            <Button
-              icon={<ri.RiDragDropLine />}
-              text="Move"
-              onClick={() => onMoveButtonClick(currentNode)}
-            />
-            <Button
-              icon={<si.SiGraphql />}
-              text="Show Graph"
-              onClick={onOpenGraphClick}
-            />
-            <Button
-              icon={<ri.RiExternalLinkLine />}
-              text="Start Link"
-              onClick={onHandleStartLinkClick}
-            />
-            {isLinking && (
-              <Button
-                text="Complete Link"
-                icon={<bi.BiLinkAlt />}
-                onClick={onHandleCompleteLinkClick}
-              />
-            )}
-            {folder && (
-              <div className="select">
-                <Select
-                  bg="f1f1f1"
-                  defaultValue={(currentNode as IFolderNode).viewType}
-                  onChange={handleUpdateFolderView}
-                  height={35}
-                >
-                  <option value="grid">Grid</option>
-                  <option value="list">List</option>
-                </Select>
-              </div>
+            {!root && (
+              <>
+                {!isLinking && (
+                  <>
+                    <Button
+                      icon={<ri.RiDeleteBin6Line />}
+                      text="Delete"
+                      onClick={() => onDeleteButtonClick(currentNode)}
+                    />
+                    <Button
+                      icon={<ri.RiDragDropLine />}
+                      text="Move"
+                      onClick={() => onMoveButtonClick(currentNode)}
+                    />
+                    <Button
+                      icon={<ri.RiExternalLinkLine />}
+                      text="Start Link"
+                      onClick={onHandleStartLinkClick}
+                    />
+                    <Button
+                      icon={<si.SiGraphql />}
+                      text="Open Graph"
+                      onClick={onOpenGraphClick}
+                    />
+                  </>
+                )}
+                {isLinking && (
+                  <Button
+                    text="Complete Link"
+                    icon={<bi.BiLinkAlt />}
+                    onClick={onHandleCompleteLinkClick}
+                  />
+                )}
+                {folder && (
+                  <div className="select">
+                    <Select
+                      bg="f1f1f1"
+                      defaultValue={(currentNode as IFolderNode).viewType}
+                      onChange={handleUpdateFolderView}
+                      height={35}
+                    >
+                      <option value="grid">Grid</option>
+                      <option value="list">List</option>
+                    </Select>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
