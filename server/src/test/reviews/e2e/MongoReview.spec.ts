@@ -25,6 +25,7 @@ describe('E2E Test: Review CRUD', () => {
     reviewId: testReviewId,
     author: 'test.author',
     nodeId: testNodeId,
+    parentReviewId: null,
     content: 'test.content',
     rating: 5,
     replies: [],
@@ -64,18 +65,9 @@ describe('E2E Test: Review CRUD', () => {
   })
 
   // test('updates review', async () => {
-  //   const updateResp = await backendNodeGateway.updateNode(testNodeId, [
-  //     makeINodeProperty('content', 'new content'),
-  //     makeINodeProperty('title', 'new title'),
-  //   ])
+  //   const updateResp = await backendReviewGateway.updateReview(testReview.reviewId, {
+  //     makeIReviewProperty('content', 'new.content'),
+  //   })
   //   expect(updateResp.success).toBeTruthy()
   // })
-
-  //   test('deletes node', async () => {
-  //     const deleteResponse = await backendNodeGateway.deleteNode(testNode.nodeId)
-  //     expect(deleteResponse.success).toBeTruthy()
-
-  //     const getResponse = await backendNodeGateway.getNodeById(testNode.nodeId)
-  //     expect(getResponse.success).toBeFalsy()
-  //   })
 })

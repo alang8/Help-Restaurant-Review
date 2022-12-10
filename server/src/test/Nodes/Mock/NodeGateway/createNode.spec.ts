@@ -115,7 +115,7 @@ describe('Unit Test: Create Node', () => {
       title: 'invalidNode',
       nodeId: '1',
       type: 'text',
-      asdfasdf: '',
+      asdf: '',
       filePath: makeINodePath(['1']),
     }
     const response = await backendNodeGateway.createNode(invalidNode)
@@ -124,10 +124,10 @@ describe('Unit Test: Create Node', () => {
 
   test('fails to insert node when field value is mistyped', async () => {
     const invalidNode = {
-      title: 'invalidNode',
+      title: 1,
       nodeId: '1',
       type: 'text',
-      content: 1,
+      content: 'content',
       filePath: makeINodePath(['1']),
     }
     const response = await backendNodeGateway.createNode(invalidNode)

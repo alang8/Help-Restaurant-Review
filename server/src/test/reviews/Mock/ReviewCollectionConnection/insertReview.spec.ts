@@ -30,6 +30,7 @@ describe('Unit Test: InsertReview', () => {
       'review1',
       'author1',
       'node1',
+      null,
       'content1',
       1,
       ['reply1'],
@@ -46,18 +47,19 @@ describe('Unit Test: InsertReview', () => {
     expect(response.success).toBeFalsy()
   })
 
-  // test('fails to insert invalid document with correct shape', async () => {
-  //   const doc: IReview = makeIReview(
-  //     'review1',
-  //     'author1',
-  //     'review1',
-  //     'content1',
-  //     1,
-  //     ['reply1'],
-  //     new Date(),
-  //     new Date()
-  //   )
-  //   const response = await reviewCollectionConnection.insertReview(doc)
-  //   expect(response.success).toBeFalsy()
-  // })
+  test('fails to insert invalid document with correct shape', async () => {
+    const doc: IReview = makeIReview(
+      'review1',
+      'author1',
+      'node1',
+      'review2',
+      'content1',
+      1,
+      ['reply1'],
+      new Date(),
+      new Date()
+    )
+    const response = await reviewCollectionConnection.insertReview(doc)
+    expect(response.success).toBeFalsy()
+  })
 })

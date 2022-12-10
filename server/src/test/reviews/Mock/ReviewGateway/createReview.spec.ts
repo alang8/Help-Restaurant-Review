@@ -35,6 +35,7 @@ describe('Unit Test: Create Review', () => {
       'review1',
       'author1',
       'node1',
+      null,
       'content1',
       1,
       ['reply1'],
@@ -51,6 +52,7 @@ describe('Unit Test: Create Review', () => {
       'review1',
       'author1',
       'node1',
+      null,
       'content1',
       1,
       ['reply1'],
@@ -63,6 +65,7 @@ describe('Unit Test: Create Review', () => {
       'review1',
       'author1',
       'node1',
+      null,
       'content1',
       1,
       ['reply1'],
@@ -73,26 +76,28 @@ describe('Unit Test: Create Review', () => {
     expect(invalidResponse.success).toBeFalsy()
   })
 
-  // test('fails to insert review with the same review and node id', async () => {
-  //   const invalidReview: IReview = makeIReview(
-  //     'review1',
-  //     'author1',
-  //     'review1',
-  //     'content1',
-  //     1,
-  //     ['reply1'],
-  //     new Date(),
-  //     new Date()
-  //   )
-  //   const invalidResponse = await backendReviewGateway.createReview(invalidReview)
-  //   expect(invalidResponse.success).toBeFalsy()
-  // })
+  test('fails to insert review with the same review and parent id', async () => {
+    const invalidReview: IReview = makeIReview(
+      'review1',
+      'author1',
+      'node1',
+      'review1',
+      'content1',
+      1,
+      ['reply1'],
+      new Date(),
+      new Date()
+    )
+    const invalidResponse = await backendReviewGateway.createReview(invalidReview)
+    expect(invalidResponse.success).toBeFalsy()
+  })
 
   test('fails to insert review when review is of invalid type', async () => {
     const invalidReview = {
       reviewId: 1,
       author: 'author1',
       nodeId: 'node1',
+      parentReviewId: null,
       content: 'content1',
       rating: 'rating1',
       replies: ['reply1'],
@@ -108,6 +113,7 @@ describe('Unit Test: Create Review', () => {
       reviewId: 'review1',
       author: 'author1',
       nodeId: 1,
+      parentReviewId: null,
       content: 'content1',
       rating: 'rating1',
       replies: ['reply1'],
@@ -123,6 +129,7 @@ describe('Unit Test: Create Review', () => {
       reviewId: 'review1',
       author: 'author1',
       nodeId: 'node1',
+      parentReviewId: null,
       content: 'content1',
       rating: 'rating1',
       replies: ['reply1'],
@@ -138,6 +145,7 @@ describe('Unit Test: Create Review', () => {
       undefined,
       'author1',
       'review1',
+      null,
       'content1',
       1,
       ['reply1'],
@@ -148,10 +156,11 @@ describe('Unit Test: Create Review', () => {
     expect(response.success).toBeFalsy()
   })
 
-  test('fails to insert review when nodeId is not defined', async () => {
+  test('fails to insert review when parentReviewId is not defined', async () => {
     const invalidReview = makeIReview(
       'review1',
       'author1',
+      'node1',
       undefined,
       'content1',
       1,
@@ -168,6 +177,7 @@ describe('Unit Test: Create Review', () => {
       'review1',
       'author1',
       'node1',
+      null,
       'content1',
       undefined,
       ['reply1'],
@@ -182,6 +192,7 @@ describe('Unit Test: Create Review', () => {
     const invalidReview = {
       reviewId: 'review1',
       nodeId: 'node1',
+      parentReviewId: null,
       content: 'content1',
       rating: 1,
       replies: ['reply1'],
@@ -192,18 +203,33 @@ describe('Unit Test: Create Review', () => {
     expect(response.success).toBeFalsy()
   })
 
-  // test('fails to insert review with wrong shape', async () => {
-  //   const invalidReview = {
-  //     reviewId: 'review1',
-  //     author: 'author1',
-  //     nodeId: 'node1',
-  //     content: 'content1',
-  //     rating: 1,
-  //     replies: ['reply1'],
-  //     dateCreated: new Date(),
-  //     dateUpdated: new Date(),
-  //   }
-  //   const response = await backendReviewGateway.createReview(invalidReview)
-  //   expect(response.success).toBeFalsy()
-  // })
+  test('fails to insert review when fieldName is misnamed', async () => {
+    const invalidReview = {
+      reviewId: 'review1',
+      nodeId: 'node1',
+      parentReviewId: null,
+      asdf: 'content1',
+      rating: 1,
+      replies: ['reply1'],
+      dateCreated: new Date(),
+      dateUpdated: new Date(),
+    }
+    const response = await backendReviewGateway.createReview(invalidReview)
+    expect(response.success).toBeFalsy()
+  })
+
+  test('fails to insert review with wrong shape', async () => {
+    const invalidReview = {
+      reviewId: 'review1',
+      author: 'author1',
+      nodeId: 'node1',
+      content: 'content1',
+      rating: 1,
+      replies: ['reply1'],
+      dateCreated: new Date(),
+      dateUpdated: new Date(),
+    }
+    const response = await backendReviewGateway.createReview(invalidReview)
+    expect(response.success).toBeFalsy()
+  })
 })
