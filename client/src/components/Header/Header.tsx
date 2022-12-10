@@ -12,9 +12,8 @@ import {
   selectedExtentState,
   searchTermState,
   isSearchingState,
-  currentNodeState,
 } from '../../global/Atoms'
-import { Input, InputGroup, InputLeftElement, InputRightElement } from '@chakra-ui/react'
+import { Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import './Header.scss'
 
 interface IHeaderProps {
@@ -27,18 +26,11 @@ interface IHeaderProps {
 export const Header = (props: IHeaderProps) => {
   const { onHomeClick, onSearchButtonClick, nodeIdsToNodesMap, onCreateNodeButtonClick } =
     props
-  const customButtonStyle = { height: 30, marginLeft: 30, width: 30 }
-  const searchButtonStyle = {
-    height: 30,
-    width: 80,
-    backgroundColor: '#fff',
-    hoverColor: '#000',
-  }
-  const loginButtonStyle = {
+  const registerButtonStyle = {
     height: 30,
     marginLeft: 30,
     marginRight: 30,
-    width: 220,
+    width: 180,
     backgroundColor: '#EA3B2E',
     color: '#f5f5f5',
     fontWeight: 'bold',
@@ -81,40 +73,32 @@ export const Header = (props: IHeaderProps) => {
 
   return (
     <div className={isLinking ? 'header-linking' : 'header'}>
-      <div className="left-bar">
-        <Link to={'/'}>
-          <img
-            className="logo"
-            src="../../logo.png"
-            alt="logo"
-            onClick={onHomeClick}
-            style={{ width: '150px' }}
-          />
-        </Link>
-        <InputGroup>
-          <Input
-            style={{ height: 32, marginLeft: 10, backgroundColor: '#fff' }}
-            value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
-            placeholder="Search"
-          />
-          <InputRightElement width="3rem" style={{ marginTop: '-4px' }}>
-            <Button
-              style={{ height: 28, width: 44 }}
-              icon={<go.GoSearch />}
-              onClick={handleSearch}
-            />
-          </InputRightElement>
-        </InputGroup>
-        <Link to={'/login'}>
+      <Link to={'/'}>
+        <img className="logo" src="../../logo.png" alt="logo" onClick={onHomeClick} />
+      </Link>
+      <InputGroup style={{ width: '50%' }}>
+        <Input
+          style={{ height: 32, marginLeft: 10, backgroundColor: '#fff' }}
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
+          placeholder="Search"
+        />
+        <InputRightElement width="3rem" style={{ marginTop: '-4px' }}>
           <Button
-            isWhite={isLinking}
-            style={loginButtonStyle}
-            onClick={onCreateNodeButtonClick}
-            text="Register Your Restaurant"
+            style={{ height: 28, width: 44 }}
+            icon={<go.GoSearch />}
+            onClick={handleSearch}
           />
-        </Link>
-      </div>
+        </InputRightElement>
+      </InputGroup>
+      <Link to={'/login'}>
+        <Button
+          isWhite={isLinking}
+          style={registerButtonStyle}
+          onClick={onCreateNodeButtonClick}
+          text="Register Restaurant"
+        />
+      </Link>
 
       {isLinking && startAnchor && (
         <div className="right-bar">
