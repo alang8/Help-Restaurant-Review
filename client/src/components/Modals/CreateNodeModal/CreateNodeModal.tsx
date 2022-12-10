@@ -126,6 +126,57 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
       setError('Error: No title')
       return
     }
+    // form validation
+    if (selectedType === 'restaurant') {
+      if (description.length === 0) {
+        setError('Error: No description')
+        return
+      }
+      if (location.length === 0) {
+        setError('Error: No location')
+        return
+      }
+      if (websiteUrl.length === 0) {
+        setError('Error: No website URL')
+        return
+      }
+      if (phoneNumber.length === 0) {
+        setError('Error: No phone number')
+        return
+      }
+      if (email.length === 0) {
+        setError('Error: No email')
+        return
+      }
+      if (monStartHours >= monEndHours) {
+        setError('Error: Invalid Monday hours')
+        return
+      }
+      if (tueStartHours >= tueEndHours) {
+        setError('Error: Invalid Tuesday hours')
+        return
+      }
+      if (wedStartHours >= wedEndHours) {
+        setError('Error: Invalid Wednesday hours')
+        return
+      }
+      if (thuStartHours >= thuEndHours) {
+        setError('Error: Invalid Thursday hours')
+        return
+      }
+      if (friStartHours >= friEndHours) {
+        setError('Error: Invalid Friday hours')
+        return
+      }
+      if (satStartHours >= satEndHours) {
+        setError('Error: Invalid Saturday hours')
+        return
+      }
+      if (sunStartHours >= sunEndHours) {
+        setError('Error: Invalid Sunday hours')
+        return
+      }
+    }
     // content for the modal based on type
     const content =
       selectedType === 'restaurant'
