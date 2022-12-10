@@ -111,7 +111,7 @@ export const Header = (props: IHeaderProps) => {
             isWhite={isLinking}
             style={loginButtonStyle}
             onClick={onCreateNodeButtonClick}
-            text="Register your restaurant"
+            text="Register Your Restaurant"
           />
         </Link>
       </div>
