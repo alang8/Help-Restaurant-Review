@@ -13,6 +13,8 @@
 
     .itemOne {
       grid-row: 1;
+      margin-top: 10px;
+      margin-bottom: -10px;
     }
 
     .itemTwo {
@@ -48,6 +50,12 @@
   .gridColTwo {
     text-align: center;
     overflow: hidden;
+
+    .itemOne {
+      grid-row: 1;
+      margin-top: 10px;
+      margin-bottom: -10px;
+    }
 
     .sectionTitle {
       margin: auto;

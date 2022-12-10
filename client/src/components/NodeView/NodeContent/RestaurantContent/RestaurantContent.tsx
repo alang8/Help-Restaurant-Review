@@ -64,17 +64,17 @@ export const RestaurantContent = () => {
     <div className="restaurantContainer">
       <div className="gridColOne">
         <div className="itemOne">
-          <h1 className="sectionTitle">Description</h1>
-          <p>{description}</p>
+          <h1 className="sectionTitle">&#128512; Description</h1>
+          {description}
         </div>
         <div className="itemTwo">
           <div className="sectionDivider" />
-          <h1 className="sectionTitle">Location</h1>
+          <h1 className="sectionTitle">&#128205; Location</h1>
           {location}
         </div>
         <div className="itemThree">
           <div className="sectionDivider" />
-          <h1 className="sectionTitle">Hours</h1>
+          <h1 className="sectionTitle">&#128302; Hours</h1>
           <ul className="hoursContainer">
             <li>
               <strong>Mon</strong> {mon.start} - {mon.end}
@@ -101,41 +101,43 @@ export const RestaurantContent = () => {
         </div>
         <div className="itemFour">
           <div className="sectionDivider" />
-          <h1 className="sectionTitle">Contact Us</h1>
+          <h1 className="sectionTitle">&#129505; Contact Us</h1>
           <p>{phoneNumber}</p>
           <div>{email}</div>
         </div>
       </div>
       <div className="gridColTwo">
-        <h1 className="sectionTitle">Reviews</h1>
-        <WriteReplyModal
-          isOpen={writeReplyModal}
-          onClose={() => setWriteReplyModal(false)}
-          // onSubmit={loadRootsFromDB}
-        />
-        <div className="scrollable">
-          {restaurantReviews.map((review, idx) => {
-            return (
-              <div className="reviewContainer" key={idx}>
-                <div className="reviewTitleBar">
-                  <img src="/anonymous.png" alt="anonymous" />
-                  <strong>{review.author}</strong>
+        <div className="itemOne">
+          <h1 className="sectionTitle">&#129506; Reviews</h1>
+          <WriteReplyModal
+            isOpen={writeReplyModal}
+            onClose={() => setWriteReplyModal(false)}
+            // onSubmit={loadRootsFromDB}
+          />
+          <div className="scrollable">
+            {restaurantReviews.map((review, idx) => {
+              return (
+                <div className="reviewContainer" key={idx}>
+                  <div className="reviewTitleBar">
+                    <img src="/anonymous.png" alt="anonymous" />
+                    <strong>{review.author}</strong>
+                  </div>
+                  <div className="reviewContent">{review.content}</div>
+                  <div className="reviewFooter">
+                    <p>Last Modified: {formatDate(String(review.dateModified!))}</p>
+                    <Button
+                      text="Reply"
+                      style={reviewButtonStyle}
+                      onClick={() => {
+                        setParentReview(review.reviewId)
+                        setWriteReplyModal(true)
+                      }}
+                    />
+                  </div>
                 </div>
-                <div className="reviewContent">{review.content}</div>
-                <div className="reviewFooter">
-                  <p>Last Modified: {formatDate(String(review.dateModified!))}</p>
-                  <Button
-                    text="Reply"
-                    style={reviewButtonStyle}
-                    onClick={() => {
-                      setParentReview(review.reviewId)
-                      setWriteReplyModal(true)
-                    }}
-                  />
-                </div>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
       </div>
     </div>
