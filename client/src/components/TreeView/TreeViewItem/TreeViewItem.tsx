@@ -5,6 +5,8 @@ import { nodeTypeIcon, pathToString } from '../../../global'
 import { INode, NodeType } from '../../../types'
 import { RecursiveNodeTree } from '../../../types/RecursiveNodeTree'
 import './TreeViewItem.scss'
+import { useRecoilState } from 'recoil'
+import { isSearchingState } from '../../../global/Atoms'
 
 interface ITreeViewProps {
   changeUrlOnClick?: boolean
@@ -26,11 +28,17 @@ export const TreeViewItem = ({
   changeUrlOnClick,
 }: ITreeViewProps) => {
   let childrenItems: JSX.Element[] = []
+  const [isSearching, setIsSearching] = useRecoilState(isSearchingState)
+
   // glr: why does this not work?
   if (childNodes.length) {
     childrenItems = childNodes.map((child: RecursiveNodeTree) => {
       return changeUrlOnClick ? (
-        <Link to={`/${pathToString(child.node.filePath)}`} key={child.node.nodeId}>
+        <Link
+          to={`/${pathToString(child.node.filePath)}`}
+          key={child.node.nodeId}
+          onClick={() => setIsSearching(false)}
+        >
           <TreeViewItem
             node={child.node}
             parentNode={parentNode}
@@ -95,7 +103,10 @@ export const TreeViewItem = ({
   return (
     <div className="treeView-item">
       {changeUrlOnClick ? (
-        <Link to={`/${pathToString(node.filePath)}`}>
+        <Link
+          to={`/${pathToString(node.filePath)}`}
+          onClick={() => setIsSearching(false)}
+        >
           <TreeViewChild />
         </Link>
       ) : (

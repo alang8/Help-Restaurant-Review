@@ -137,6 +137,7 @@ export const MainView = React.memo(function MainView() {
         )
         return
       }
+      console.log('get here if search result is successful')
       const searchResults = searchResp.payload as INode[]
       history.push('/')
       setSearchResults(searchResults)

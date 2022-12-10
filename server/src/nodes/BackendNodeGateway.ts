@@ -426,4 +426,14 @@ export class BackendNodeGateway {
       ? successfulServiceResponse(searchResp.payload)
       : failureServiceResponse(`failed to search for nodes with query: ${query}`)
   }
+
+  /**
+   * Method to retrieve relevant nodes given a search term.
+   *
+   * @param searchTerm the search term to be queried
+   * @returns IServiceResponse<INode[]>
+   */
+  async getSearchResults(searchTerm: string): Promise<IServiceResponse<INode[]>> {
+    return await this.nodeCollectionConnection.getSearchResults(searchTerm)
+  }
 }

@@ -167,4 +167,14 @@ export const FrontendNodeGateway = {
       return failureServiceResponse('[getNode] Unable to access backend')
     }
   },
+
+  getSearchResults: async (searchTerm: string): Promise<IServiceResponse<INode[]>> => {
+    try {
+      return await get<IServiceResponse<INode[]>>(
+        baseEndpoint + servicePath + 'search/' + searchTerm
+      )
+    } catch (exception) {
+      return failureServiceResponse('[getSearchResults] Unable to access backend')
+    }
+  },
 }

@@ -1,0 +1,46 @@
+@import '../../../../global/globalCssVariables';
+
+.searchWrapper {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+  padding: 10px;
+}
+
+.resultItem {
+  cursor: pointer;
+  margin: 10px;
+  padding: 2px 4px 4px;
+  border-radius: 4px;
+  max-height: 200px;
+  max-width: 70vw;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    transform: scale(1.01);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.resultBody {
+  padding: 8px;
+}
+
+.resultNode {
+  font-size: x-small;
+  font-weight: 240;
+  color: rgb(80, 80, 80);
+}
+
+.resultTitle {
+  font-size: medium;
+  font-weight: bold;
+}
+
+.resultContent {
+  font-size: small;
+  font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -92,3 +92,15 @@ export const alertMessageState = atom<string>({
   key: 'alertMessageState',
   default: '',
 })
+
+// search term
+export const searchTermState = atom<string>({
+  key: 'searchTermState',
+  default: '',
+})
+
+// signal to display search results
+export const isSearchingState = atom<boolean>({
+  key: 'isSearchingState',
+  default: false,
+})

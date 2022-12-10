@@ -1,12 +1,13 @@
 import React from 'react'
 import { useRecoilValue } from 'recoil'
-import { currentNodeState } from '../../../global/Atoms'
+import { currentNodeState, isSearchingState } from '../../../global/Atoms'
 import { IFolderNode, INode } from '../../../types'
 import { FolderContent } from './FolderContent'
 import { ImageContent } from './ImageContent'
 import './NodeContent.scss'
 import { TextContent } from './TextContent'
 import { RestaurantContent } from './RestaurantContent'
+import { SearchContent } from './SearchContent'
 
 /** Props needed to render any node content */
 
@@ -24,6 +25,10 @@ export interface INodeContentProps {
 export const NodeContent = (props: INodeContentProps) => {
   const { onCreateNodeButtonClick, childNodes } = props
   const currentNode = useRecoilValue(currentNodeState)
+  const isSearching = useRecoilValue(isSearchingState)
+  if (isSearching) {
+    return <SearchContent />
+  }
   switch (currentNode.type) {
     case 'image':
       return <ImageContent />

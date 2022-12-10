@@ -73,7 +73,7 @@ export class NodeCollectionConnection {
   }
 
   /**
-   * Clears the entire node collection in the database.
+   * Finds node when given a nodeId.
    *
    * @param {string} nodeId
    * @return successfulServiceResponse<INode> on success
@@ -235,5 +235,32 @@ export class NodeCollectionConnection {
       return successfulServiceResponse({})
     }
     return failureServiceResponse('Failed to update node ' + nodeId + ' filePath.path')
+  }
+
+  /**
+   * Finds relevant nodes when given a search term.
+   *
+   * @param {string} searchTerm
+   * @return successfulServiceResponse<INode[]>
+   */
+  async getSearchResults(searchTerm: string): Promise<IServiceResponse<INode[]>> {
+    const query = { $text: { $search: searchTerm } }
+    const sort = { score: { $meta: 'textScore' } }
+    const foundNodes: INode[] = []
+
+    await this.client.db().collection(this.collectionName).createIndex({
+      title: 'text',
+      content: 'text',
+    })
+
+    await this.client
+      .db()
+      .collection(this.collectionName)
+      .find(query)
+      .sort(sort)
+      .forEach(function(doc) {
+        foundNodes.push(doc)
+      })
+    return successfulServiceResponse(foundNodes)
   }
 }

@@ -188,6 +188,23 @@ export class NodeRouter {
         res.status(500).send(e.message)
       }
     })
+
+    /**
+     * Request to retrieve a list of nodes related to search term
+     *
+     * @param req request object coming from client
+     * @param res response object to send to client
+     */
+    NodeExpressRouter.get('/search/:searchTerm', async (req: Request, res: Response) => {
+      try {
+        const searchTerm = req.params.searchTerm
+        const response: IServiceResponse<INode[]> =
+          await this.BackendNodeGateway.getSearchResults(searchTerm)
+        res.status(200).send(response)
+      } catch (e) {
+        res.status(500).send(e.message)
+      }
+    })
   }
 
   /**

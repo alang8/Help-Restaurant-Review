@@ -14,6 +14,7 @@ import {
   refreshLinkListState,
   refreshState,
   selectedNodeState,
+  isSearchingState,
 } from '../../../global/Atoms'
 import { FrontendNodeGateway } from '../../../nodes'
 import { IFolderNode, INode, INodeProperty, makeINodeProperty } from '../../../types'
@@ -55,6 +56,8 @@ export const NodeHeader = (props: INodeHeaderProps) => {
   const [title, setTitle] = useState(currentNode.title)
   // State variable for whether the title is being edited
   const [editingTitle, setEditingTitle] = useState<boolean>(false)
+  // Recoil variable for whether search results are being displayed
+  const isSearching = useRecoilValue(isSearchingState)
 
   /* Method to update the current folder view */
   // eslint-disable-next-line
@@ -165,6 +168,11 @@ export const NodeHeader = (props: INodeHeaderProps) => {
     color: '#f5f5f5',
     fontWeight: 'bold',
   }
+
+  if (isSearching) {
+    return <div className="nodeHeader">Search Results</div>
+  }
+
   return (
     <>
       {root ? (
@@ -179,14 +187,6 @@ export const NodeHeader = (props: INodeHeaderProps) => {
               editing={editingTitle}
               setEditing={setEditingTitle}
               onEdit={handleUpdateTitle}
-            />
-          </div>
-          <div className="nodeHeader-buttonBar">
-            <Button
-              isWhite={isLinking}
-              style={customButtonStyle}
-              icon={<ai.AiOutlinePlus />}
-              onClick={onCreateNodeButtonClick}
             />
           </div>
         </div>

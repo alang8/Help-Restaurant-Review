@@ -4,6 +4,7 @@ import {
   currentNodeState,
   refreshLinkListState,
   selectedAnchorsState,
+  isSearchingState,
 } from '../../../global/Atoms'
 import { IAnchor, ILink, INode, NodeIdsToNodesMap } from '../../../types'
 import { AnchorItem, LinkItem } from './AnchorItem'
@@ -19,6 +20,7 @@ export const NodeLinkMenu = (props: INodeLinkMenuProps) => {
   const currentNode = useRecoilValue(currentNodeState)
   const linkMenuRefresh = useRecoilValue(refreshLinkListState)
   const selectedAnchors = useRecoilValue(selectedAnchorsState)
+  const isSearching = useRecoilValue(isSearchingState)
   const [anchorsMap, setAnchorsMap] = useState<{
     [anchorId: string]: {
       anchor: IAnchor
@@ -74,6 +76,10 @@ export const NodeLinkMenu = (props: INodeLinkMenuProps) => {
     }
 
     return anchorItems
+  }
+
+  if (isSearching) {
+    return null
   }
 
   return <div className="linkMenu">{loadMenu()}</div>
