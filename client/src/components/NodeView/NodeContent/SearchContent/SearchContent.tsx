@@ -86,46 +86,6 @@ export const SearchContent = () => {
     )
   }, [byDate, textNodes, imageNodes, restaurantNodes])
 
-  if (filteredSearchResults.length === 0) {
-    return (
-      <div className="searchWrapper">
-        <Stack spacing={5} direction="row" style={{ margin: '0px 10px 10px' }}>
-          <Checkbox isChecked={byDate} onChange={(e) => sortByDate(e.target.checked)}>
-            Sort by Date Created
-          </Checkbox>
-          <Checkbox
-            defaultChecked
-            isChecked={textNodes}
-            onChange={(e) => displayTextNodes(e.target.checked)}
-          >
-            Text Nodes
-          </Checkbox>
-          <Checkbox
-            defaultChecked
-            isChecked={imageNodes}
-            onChange={(e) => displayImageNodes(e.target.checked)}
-          >
-            Image Nodes
-          </Checkbox>
-          <Checkbox
-            defaultChecked
-            isChecked={restaurantNodes}
-            onChange={(e) => displayRestaurantNodes(e.target.checked)}
-          >
-            Restaurant Nodes
-          </Checkbox>
-        </Stack>
-        <pre>{`No results...
-             __
-            / ^_)
-     .-^^^-/ /
-  __/       /
- <__.|_|-|_|
-            `}</pre>
-      </div>
-    )
-  }
-
   return (
     <div className="searchWrapper">
       <Stack spacing={5} direction="row" style={{ margin: '0px 10px 10px' }}>
@@ -154,31 +114,43 @@ export const SearchContent = () => {
           Restaurant Nodes
         </Checkbox>
       </Stack>
-      {filteredSearchResults.map((result) => (
-        <Link
-          to={`/${pathToString(result.filePath)}`}
-          key={result.nodeId}
-          onClick={() => {
-            handleSelectResult(result.nodeId)
-          }}
-        >
-          <div className="resultItem">
-            <div className="resultBody">
-              <div className="resultNode">
-                {result.type} node created at {result.dateCreated}
+      {filteredSearchResults.length === 0 ? (
+        <pre>
+          {`No results...
+              __
+            / ^_)
+     .-^^^-/ /
+  __/       /
+ <__.|_|-|_|
+       `}
+        </pre>
+      ) : (
+        filteredSearchResults.map((result) => (
+          <Link
+            to={`/${pathToString(result.filePath)}`}
+            key={result.nodeId}
+            onClick={() => {
+              handleSelectResult(result.nodeId)
+            }}
+          >
+            <div className="resultItem">
+              <div className="resultBody">
+                <div className="resultNode">
+                  {result.type} node created at {result.dateCreated}
+                </div>
+                <div className="resultTitle">
+                  <a href="#">{result.title}</a>
+                </div>
+                {result.type === 'restaurant' ? (
+                  <div className="resultContent">{result.content.description}</div>
+                ) : (
+                  <div className="resultContent">{result.content}</div>
+                )}
               </div>
-              <div className="resultTitle">
-                <a href="#">{result.title}</a>
-              </div>
-              {result.type == 'restaurant' ? (
-                <div className="resultContent">{result.content.description}</div>
-              ) : (
-                <div className="resultContent">{result.content}</div>
-              )}
             </div>
-          </div>
-        </Link>
-      ))}
+          </Link>
+        ))
+      )}
     </div>
   )
 }
