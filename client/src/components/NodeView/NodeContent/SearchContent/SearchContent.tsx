@@ -89,6 +89,32 @@ export const SearchContent = () => {
   if (filteredSearchResults.length === 0) {
     return (
       <div className="searchWrapper">
+        <Stack spacing={5} direction="row" style={{ margin: '0px 10px 10px' }}>
+          <Checkbox isChecked={byDate} onChange={(e) => sortByDate(e.target.checked)}>
+            Sort by Date Created
+          </Checkbox>
+          <Checkbox
+            defaultChecked
+            isChecked={textNodes}
+            onChange={(e) => displayTextNodes(e.target.checked)}
+          >
+            Text Nodes
+          </Checkbox>
+          <Checkbox
+            defaultChecked
+            isChecked={imageNodes}
+            onChange={(e) => displayImageNodes(e.target.checked)}
+          >
+            Image Nodes
+          </Checkbox>
+          <Checkbox
+            defaultChecked
+            isChecked={restaurantNodes}
+            onChange={(e) => displayRestaurantNodes(e.target.checked)}
+          >
+            Restaurant Nodes
+          </Checkbox>
+        </Stack>
         <pre>{`No results...
              __
             / ^_)
