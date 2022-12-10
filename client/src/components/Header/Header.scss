@@ -40,6 +40,7 @@
   border-bottom: $standard-border;
   position: fixed;
   justify-content: space-between;
+  z-index: 99;
 
   .right-bar {
     width: max-content;
