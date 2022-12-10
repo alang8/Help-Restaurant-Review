@@ -7,45 +7,39 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
   Textarea,
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import {
   refreshLinkListState,
   refreshState,
   selectedNodeState,
+  selectedParentReviewState,
 } from '../../../global/Atoms'
 import { Button } from '../../Button'
 import { generateObjectId } from '../../../global'
 import { IReview } from '../../../types'
-import './WriteReviewModal.scss'
+import './WriteReplyModal.scss'
 import { FrontendReviewGateway } from '../../../reviews'
 
-export interface IWriteReviewModalProps {
+export interface IWriteReplyModal {
   isOpen: boolean
-  // node: INode
-  onSubmit: () => void
   onClose: () => void
-  // roots: RecursiveNodeTree[]
 }
 
 /**
- * Modal for writing a review for a restaurant
+ * Modal for moving a reply to restaurant review
  */
-export const WriteReviewModal = (props: IWriteReviewModalProps) => {
-  // const { isOpen, onClose, onSubmit, node, roots } = props
-  const { isOpen, onClose, onSubmit } = props
+export const WriteReplyModal = (props: IWriteReplyModal) => {
+  const { isOpen, onClose } = props
+
   // state variables
-  const [selectedNode, setSelectedNode] = useRecoilState(selectedNodeState)
+  const selectedNode = useRecoilValue(selectedNodeState)
   const [error, setError] = useState<string>('')
   const [refresh, setRefresh] = useRecoilState(refreshState)
   const [refreshLinkList, setRefreshLinkList] = useRecoilState(refreshLinkListState)
+  const parentReview = useRecoilValue(selectedParentReviewState)
 
   const [name, setName] = useState('')
   const [rating, setRating] = useState(0)
@@ -70,7 +64,7 @@ export const WriteReviewModal = (props: IWriteReviewModalProps) => {
       reviewId: reviewId,
       author: name,
       nodeId: selectedNode!.nodeId,
-      parentReviewId: null,
+      parentReviewId: parentReview,
       content: content,
       rating: rating,
       replies: [],
@@ -105,7 +99,7 @@ export const WriteReviewModal = (props: IWriteReviewModalProps) => {
       <div className="modal-font">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Write Review</ModalHeader>
+          <ModalHeader>Write Reply</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <span className="modal-title">
@@ -113,28 +107,11 @@ export const WriteReviewModal = (props: IWriteReviewModalProps) => {
             </span>
             <Input value={name} onChange={handleNameChange} placeholder="Name..." />
             <div className="modal-input">
-              Rating (Out of 5)
-              <NumberInput
-                onChange={(valueString) => setRating(Number(valueString))}
-                value={rating}
-                step={1}
-                defaultValue={rating}
-                min={0}
-                max={5}
-              >
-                <NumberInputField />
-                <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
-              </NumberInput>
-            </div>
-            <div className="modal-input">
-              Leave a Review
+              Reply
               <Textarea
                 value={content}
                 onChange={handleContentChange}
-                placeholder="Review..."
+                placeholder="Reply..."
               />
             </div>
           </ModalBody>

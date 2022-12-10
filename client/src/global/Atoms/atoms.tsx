@@ -1,9 +1,15 @@
 import { atom } from 'recoil'
-import { INode, IAnchor, Extent, makeIFolderNode } from '../../types'
+import { INode, IAnchor, IReview, Extent, makeIFolderNode } from '../../types'
 
 // the selected node
 export const selectedNodeState = atom<INode | null>({
   key: 'selectedNodeState',
+  default: null,
+})
+
+// the parent review of the current review being written
+export const selectedParentReviewState = atom<string | null>({
+  key: 'selectedParentReviewState',
   default: null,
 })
 

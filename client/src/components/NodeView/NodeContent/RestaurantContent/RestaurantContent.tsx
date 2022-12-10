@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import { useRecoilValue } from 'recoil'
-import { refreshState, currentNodeState } from '../../../../global/Atoms'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import {
+  refreshState,
+  currentNodeState,
+  selectedParentReviewState,
+} from '../../../../global/Atoms'
 import './RestaurantContent.scss'
 import { FrontendReviewGateway } from '../../../../reviews/FrontendReviewGateway'
 import { IReview } from '../../../../types'
 import { Button } from '../../../Button'
+import { WriteReplyModal } from '../../../Modals/WriteReplyModal'
 
 /** The content of an image node, including any anchors */
 export const RestaurantContent = () => {
   // recoil state management
   const currentNode = useRecoilValue(currentNodeState)
   const refresh = useRecoilValue(refreshState)
+  const [, setParentReview] = useRecoilState(selectedParentReviewState)
 
   // destructure content for a restaurant node
   const { location, description, phoneNumber, email, rating, reviews } =
@@ -19,6 +25,9 @@ export const RestaurantContent = () => {
 
   // state for reviews
   const [restaurantReviews, setRestaurantReviews] = useState<IReview[]>(reviews)
+
+  // modal state
+  const [writeReplyModal, setWriteReplyModal] = useState(false)
 
   const reviewButtonStyle = {
     height: 30,
@@ -99,6 +108,11 @@ export const RestaurantContent = () => {
       </div>
       <div className="gridColTwo">
         <h1 className="sectionTitle">Reviews</h1>
+        <WriteReplyModal
+          isOpen={writeReplyModal}
+          onClose={() => setWriteReplyModal(false)}
+          // onSubmit={loadRootsFromDB}
+        />
         <div className="scrollable">
           {restaurantReviews.map((review, idx) => {
             return (
@@ -114,7 +128,8 @@ export const RestaurantContent = () => {
                     text="Reply"
                     style={reviewButtonStyle}
                     onClick={() => {
-                      alert(review.reviewId)
+                      setParentReview(review.reviewId)
+                      setWriteReplyModal(true)
                     }}
                   />
                 </div>
