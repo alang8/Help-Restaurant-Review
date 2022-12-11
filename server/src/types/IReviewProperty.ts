@@ -14,6 +14,7 @@ export function makeIReviewProperty(
     value: newValue,
   }
 }
+
 export function isIReviewProperty(object: any): boolean {
   const propsDefined: boolean =
     typeof (object as IReviewProperty).fieldName !== 'undefined' &&

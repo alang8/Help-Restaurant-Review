@@ -1,6 +1,7 @@
 export * from './INode'
 export * from './INodePath'
 export * from './INodeProperty'
+export * from './IReviewProperty'
 export * from './RecursiveNodeTree'
 export * from './IServiceResponse'
 export * from '../utils/comparators'
