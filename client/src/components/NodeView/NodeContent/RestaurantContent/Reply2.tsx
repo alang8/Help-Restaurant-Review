@@ -33,25 +33,30 @@ export default function Reply2({
   useEffect(() => {
     // Get the reviews for the restaurant
     const getReviews = async () => {
+      console.log(reviewId)
       const reviewResp = await FrontendReviewGateway.getReviewById(reviewId)
       if (!reviewResp.success) {
         console.log('Error getting reviews: ' + reviewResp.message)
       }
       const review = reviewResp.payload!
       setRestaurantReview(review)
+      console.log(review)
     }
     getReviews()
   }, [])
   return (
-    <div className="reviewContainer">
-      <div className="reviewTitleBar">
-        <img src="/anonymous.png" alt="anonymous" />
-        <strong>{review?.author}</strong>
-      </div>
-      <div className="reviewContent">{review?.content}</div>
-      <div className="reviewFooter">
-        <p>Last Modified: {formatDate(String(review?.dateModified!))}</p>
-        <Button text="Reply" style={reviewButtonStyle} />
+    <div className="reply-container">
+      <img src="https://cdn0.iconfinder.com/data/icons/navigation-set-arrows-part-one/32/SubdirectoryArrowDownRight-512.png" />
+      <div className="reviewContainer reply">
+        <div className="reviewTitleBar">
+          <img src="/anonymous.png" alt="anonymous" />
+          <strong>{review?.author}</strong>
+        </div>
+        <div className="reviewContent">{review?.content}</div>
+        <div className="reviewFooter">
+          <p>Last Modified: {formatDate(String(review?.dateModified!))}</p>
+          {/* <Button text="Reply" style={reviewButtonStyle} /> */}
+        </div>
       </div>
     </div>
   )

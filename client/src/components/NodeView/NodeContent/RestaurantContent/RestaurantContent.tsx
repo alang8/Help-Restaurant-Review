@@ -142,24 +142,12 @@ export const RestaurantContent = () => {
               restaurantReviews.map((review, idx) => {
                 return (
                   <React.Fragment key={idx}>
-                    {/* <div className="reviewContainer" key={idx}>
-                      <div className="reviewTitleBar">
-                        <img src="/anonymous.png" alt="anonymous" />
-                        <strong>{review.author}</strong>
-                      </div>
-                      <div className="reviewContent">{review.content}</div>
-                      <div className="reviewFooter">
-                        <p>Last Modified: {formatDate(String(review.dateModified!))}</p>
-                        <Button
-                          text="Reply"
-                          style={reviewButtonStyle}
-                          onClick={() => {
-                            setParentReview(review.reviewId)
-                            setWriteReplyModal(true)
-                          }}
-                        />
-                      </div>
-                    </div>
+                    <Reply
+                      review={review}
+                      setParentReview={setParentReview}
+                      setWriteReplyModal={setWriteReplyModal}
+                      key={idx}
+                    />
                     {review.replies.map((replyId, idx) => {
                       return (
                         <Reply2
@@ -169,13 +157,13 @@ export const RestaurantContent = () => {
                           key={idx}
                         />
                       )
-                    })} */}
-                    <Reply
+                    })}
+                    {/* <Reply
                       review={review}
                       setParentReview={setParentReview}
                       setWriteReplyModal={setWriteReplyModal}
                       key={idx}
-                    />
+                    /> */}
                   </React.Fragment>
                 )
               })

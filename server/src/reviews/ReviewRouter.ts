@@ -49,7 +49,7 @@ export class ReviewRouter {
      * @param res response object to send to client
      */
     ReviewExpressRouter.get(
-      '/getByReviewId/:reviewId',
+      '/getReviewById/:reviewId',
       async (req: Request, res: Response) => {
         try {
           const reviewId = req.params.reviewId

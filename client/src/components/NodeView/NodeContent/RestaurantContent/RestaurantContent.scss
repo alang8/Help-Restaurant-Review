@@ -92,8 +92,9 @@
 }
 
 .reviewContainer {
+  float: right;
   margin: auto;
-  width: 80%;
+  width: 90%;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -135,6 +136,20 @@
 }
 
 // Replies
-.replyContainer {
-  padding-left: 50px;
+.reply-container {
+  display: flex;
+  width: 85%;
+  align-items: center;
+  float: right;
+  gap: 20px;
+
+  img {
+    height: 30px;
+    width: 30px;
+  }
+}
+.reply {
+  display: flex;
+  flex-direction: flex-start;
+  width: 100%;
 }
