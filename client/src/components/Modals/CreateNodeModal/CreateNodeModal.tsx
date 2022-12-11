@@ -118,6 +118,7 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
 
   // called when the "Create" button is clicked
   const handleSubmit = async () => {
+    // form validation
     if (!nodeTypes.includes(selectedType)) {
       setError('Error: No type selected')
       return
@@ -126,7 +127,6 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
       setError('Error: No title')
       return
     }
-    // form validation
     // TODO: UNCOMMENT THIS CODE BEFORE FINAL SUBMISSION
     // if (selectedType === 'restaurant') {
     //   if (description.length === 0) {
@@ -178,6 +178,7 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
     //     return
     //   }
     // }
+
     // content for the modal based on type
     const content =
       selectedType === 'restaurant'

@@ -64,6 +64,16 @@ export const WriteReviewModal = (props: IWriteReviewModalProps) => {
   const handleSubmit = async () => {
     let review: IReview | null = null
 
+    // form validation
+    if (name.length === 0) {
+      setError('Error: Name cannot be empty')
+      return
+    }
+    if (content.length === 0) {
+      setError('Error: Review cannot be empty')
+      return
+    }
+
     const reviewId = generateObjectId('review')
     const date = new Date()
     const newReview: IReview = {
@@ -77,7 +87,6 @@ export const WriteReviewModal = (props: IWriteReviewModalProps) => {
       dateCreated: date,
       dateModified: date,
     }
-    console.log('newReview', newReview)
     const reviewResponse = await FrontendReviewGateway.createReview(newReview)
     if (!reviewResponse.success) {
       setError('Error: Failed to create review')
