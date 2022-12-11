@@ -48,7 +48,7 @@ export const WriteReviewModal = (props: IWriteReviewModalProps) => {
   const [refreshLinkList, setRefreshLinkList] = useRecoilState(refreshLinkListState)
 
   const [name, setName] = useState('')
-  const [rating, setRating] = useState(0)
+  const [rating, setRating] = useState(3)
   const [content, setContent] = useState('')
 
   // event handlers for the modal inputs and dropdown selects
