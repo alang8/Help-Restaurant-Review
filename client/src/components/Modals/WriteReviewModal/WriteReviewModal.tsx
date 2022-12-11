@@ -105,7 +105,7 @@ export const WriteReviewModal = (props: IWriteReviewModalProps) => {
     onClose()
     setError('')
     setName('')
-    setRating(0)
+    setRating(3)
     setContent('')
   }
 
