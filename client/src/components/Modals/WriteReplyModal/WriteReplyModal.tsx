@@ -58,6 +58,16 @@ export const WriteReplyModal = (props: IWriteReplyModal) => {
   const handleSubmit = async () => {
     let review: IReview | null = null
 
+    // form validation
+    if (name.length === 0) {
+      setError('Error: Name cannot be empty')
+      return
+    }
+    if (content.length === 0) {
+      setError('Error: Reply cannot be empty')
+      return
+    }
+
     const reviewId = generateObjectId('review')
     const date = new Date()
     const newReview: IReview = {
