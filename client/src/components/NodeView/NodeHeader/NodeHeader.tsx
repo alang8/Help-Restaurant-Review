@@ -17,6 +17,7 @@ import {
   isSearchingState,
 } from '../../../global/Atoms'
 import { FrontendNodeGateway } from '../../../nodes'
+import { FrontendReviewGateway } from '../../../reviews/FrontendReviewGateway'
 import { IFolderNode, INode, INodeProperty, makeINodeProperty } from '../../../types'
 import { Button } from '../../Button'
 import { ContextMenuItems } from '../../ContextMenu'
@@ -44,6 +45,7 @@ export const NodeHeader = (props: INodeHeaderProps) => {
     onReviewButtonClick,
   } = props
   const currentNode = useRecoilValue(currentNodeState)
+  const selectedNode = useRecoilValue(selectedNodeState)
   const [refresh, setRefresh] = useRecoilState(refreshState)
   const isLinking = useRecoilValue(isLinkingState)
   const setSelectedNode = useSetRecoilState(selectedNodeState)
@@ -58,6 +60,8 @@ export const NodeHeader = (props: INodeHeaderProps) => {
   const [editingTitle, setEditingTitle] = useState<boolean>(false)
   // Recoil variable for whether search results are being displayed
   const isSearching = useRecoilValue(isSearchingState)
+  // State variable for restaurant rating
+  const [rating, setRating] = useState(-1)
 
   /* Method to update the current folder view */
   // eslint-disable-next-line
@@ -118,6 +122,33 @@ export const NodeHeader = (props: INodeHeaderProps) => {
     setTitle(currentNode.title)
     setEditingTitle(false)
   }, [currentNode])
+
+  // useEffect which updates the restaurant rating when there is a new review
+  useEffect(() => {
+    const getReviews = async () => {
+      const reviewResp = await FrontendReviewGateway.getReviewsByNodeId(
+        currentNode.nodeId
+      )
+      if (!reviewResp.success) {
+        console.log('Error getting reviews: ' + reviewResp.message)
+      }
+      let reviews = reviewResp.payload!
+      reviews = reviews.filter((review) => review.parentReviewId === null)
+      if (reviews.length === 0) {
+        return
+      }
+      let restaurantRating = reviews.reduce(
+        (accumulator, review) => accumulator + review.rating,
+        0
+      )
+      restaurantRating /= reviews.length
+      restaurantRating = Math.round(restaurantRating * 100) / 100
+      setRating(restaurantRating)
+    }
+    if (currentNode.type === 'restaurant') {
+      getReviews()
+    }
+  }, [currentNode, selectedNode, refresh])
 
   /* Node key handlers*/
   const nodeKeyHandlers = (e: KeyboardEvent) => {
@@ -203,7 +234,11 @@ export const NodeHeader = (props: INodeHeaderProps) => {
           <div className="heroContent">
             <div>
               <h1 className="heroTitle">{currentNode.title}</h1>
-              <div className="heroRating">{currentNode.content.rating} / 5</div>
+              {rating === -1 ? (
+                <div className="heroRating">No rating yet!</div>
+              ) : (
+                <div className="heroRating">{rating} / 5</div>
+              )}
             </div>
             <>
               {!isLinking && (
