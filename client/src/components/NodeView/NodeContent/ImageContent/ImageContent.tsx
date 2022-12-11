@@ -210,7 +210,7 @@ export const ImageContent = () => {
     const imageLeft = imageContainer.current?.getBoundingClientRect().left
 
     const x = e.clientX // The x location of the pointer in the browser
-    const y = e.clientY // The y location of the poitner in the browser
+    const y = e.clientY // The y location of the pointer in the browser
     xLast = e.clientX
     yLast = e.clientY
     if (selection.current && imageLeft && imageTop) {
@@ -232,7 +232,7 @@ export const ImageContent = () => {
     e.stopPropagation()
     if (dragging) {
       const x = e.clientX // The x location of the pointer in the browser
-      const y = e.clientY // The y location of the poitner in the browser
+      const y = e.clientY // The y location of the pointer in the browser
       const deltaX = x - xLast // The change in the x location
       const deltaY = y - yLast // The change in the y location
       xLast = e.clientX
