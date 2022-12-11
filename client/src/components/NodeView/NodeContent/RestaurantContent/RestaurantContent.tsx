@@ -141,7 +141,7 @@ export const RestaurantContent = () => {
             ) : (
               restaurantReviews.map((review, idx) => {
                 return (
-                  <>
+                  <React.Fragment key={idx}>
                     {/* <div className="reviewContainer" key={idx}>
                       <div className="reviewTitleBar">
                         <img src="/anonymous.png" alt="anonymous" />
@@ -176,7 +176,7 @@ export const RestaurantContent = () => {
                       setWriteReplyModal={setWriteReplyModal}
                       key={idx}
                     />
-                  </>
+                  </React.Fragment>
                 )
               })
             )

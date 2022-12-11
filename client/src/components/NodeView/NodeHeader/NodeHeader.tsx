@@ -192,12 +192,37 @@ export const NodeHeader = (props: INodeHeaderProps) => {
   const restaurant = currentNode.type === 'restaurant'
 
   const customButtonStyle = {
-    width: 'fit-content',
+    // width: 'fit-content',
+    width: '85px',
     backgroundColor: 'grey',
-    marginRight: '-100px',
+    marginRight: '10px',
+  }
+  const bigButtonStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '140px',
+    backgroundColor: 'grey',
+    marginRight: '10px',
+  }
+  const startLinkButtonStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '130px',
+    backgroundColor: 'grey',
+    marginRight: '10px',
+  }
+  const completeLinkButtonStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '170px',
+    backgroundColor: 'grey',
+    marginRight: '10px',
   }
   const reviewButtonStyle = {
-    width: 'fit-content',
+    width: '140px',
     backgroundColor: '#EA3B2E',
     color: '#f5f5f5',
     fontWeight: 'bold',
@@ -242,7 +267,7 @@ export const NodeHeader = (props: INodeHeaderProps) => {
             </div>
             <>
               {!isLinking && (
-                <>
+                <div className="restaurantButtons">
                   <Button
                     icon={<ri.RiDeleteBin6Line />}
                     style={customButtonStyle}
@@ -257,22 +282,27 @@ export const NodeHeader = (props: INodeHeaderProps) => {
                   />
                   <Button
                     icon={<ri.RiExternalLinkLine />}
-                    style={customButtonStyle}
+                    style={startLinkButtonStyle}
                     text="Start Link"
                     onClick={onHandleStartLinkClick}
                   />
                   <Button
                     icon={<si.SiGraphql />}
-                    style={customButtonStyle}
+                    style={bigButtonStyle}
                     text="Open Graph"
                     onClick={onOpenGraphClick}
                   />
-                </>
+                  <Button
+                    text="Write a Review"
+                    style={reviewButtonStyle}
+                    onClick={() => onReviewButtonClick()}
+                  />
+                </div>
               )}
               {isLinking && (
                 <Button
                   text="Complete Link"
-                  style={customButtonStyle}
+                  style={completeLinkButtonStyle}
                   icon={<bi.BiLinkAlt />}
                   onClick={onHandleCompleteLinkClick}
                 />
@@ -291,11 +321,11 @@ export const NodeHeader = (props: INodeHeaderProps) => {
                 </div>
               )}
             </>
-            <Button
+            {/* <Button
               text="Write a Review"
               style={reviewButtonStyle}
               onClick={() => onReviewButtonClick()}
-            />
+            /> */}
           </div>
         </div>
       ) : (

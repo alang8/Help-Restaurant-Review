@@ -70,7 +70,7 @@
       align-self: flex-end;
 
       .heroTitle {
-        font-size: 50px;
+        font-size: 40px;
         font-weight: 700;
         font-style: bold;
         text-align: left;
@@ -84,4 +84,14 @@
       }
     }
   }
+}
+
+.restaurantButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  // gap: 20px;
+  // width: 50%;
 }
