@@ -52,7 +52,6 @@ export default function Comment({
         <div className="reviewTitleBar">
           <img src="/anonymous.png" alt="anonymous" />
           <strong>{review?.author}</strong>
-          <p>{depth}</p>
         </div>
         <div className="reviewContent">{review?.content}</div>
         <div className="reviewFooter">
