@@ -223,7 +223,7 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
             websiteUrl: websiteUrl,
             imageContent:
               modalContent == ''
-                ? 'https://img.favpng.com/9/7/16/clip-art-restaurant-vector-graphics-illustration-building-png-favpng-anqXKNQTViWvfD0E4E2PrxtkE.jpg'
+                ? 'https://clipart.world/wp-content/uploads/2021/01/Restaurant-Building-clipart.png'
                 : modalContent,
           }
         : modalContent
