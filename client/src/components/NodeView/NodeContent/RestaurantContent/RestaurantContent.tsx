@@ -147,6 +147,19 @@ export const RestaurantContent = () => {
     buildCommentTree()
   }, [restaurantReviews])
 
+  // format the hours of operation
+  const formatTime = (time: string) => {
+    if (time === '00:00') {
+      return '12 AM'
+    } else if (time === '12:00') {
+      return '12 PM'
+    } else if (time > '12') {
+      return Number(time.substring(0, 2)) - 12 + time.substring(2) + ' PM'
+    } else {
+      return time + ' AM'
+    }
+  }
+
   return (
     <div className="restaurantContainer">
       <div className="gridColOne">
@@ -184,25 +197,46 @@ export const RestaurantContent = () => {
           <h1 className="sectionTitle">&#128302; Hours</h1>
           <ul className="hoursContainer">
             <li>
-              <strong>Mon</strong> {mon.start} - {mon.end}
+              <strong>Mon</strong>
+              <p>
+                {formatTime(mon.start)} - {formatTime(mon.end)}
+              </p>
             </li>
             <li>
-              <strong>Tue</strong> {tue.start} - {tue.end}
+              <strong>Tue</strong>
+              <p>
+                {formatTime(tue.start)} - {formatTime(tue.end)}
+              </p>
             </li>
             <li>
-              <strong>Wed</strong> {wed.start} - {wed.end}
+              <strong>Wed</strong>
+              <p>
+                {formatTime(wed.start)} - {formatTime(wed.end)}
+              </p>
             </li>
             <li>
-              <strong>Thu</strong> {thu.start} - {thu.end}
+              <strong>Thu</strong>
+              <p>
+                {formatTime(thu.start)} - {formatTime(thu.end)}
+              </p>
             </li>
             <li>
-              <strong>Fri</strong> {fri.start} - {fri.end}
+              <strong>Fri</strong>
+              <p>
+                {formatTime(fri.start)} - {formatTime(fri.end)}
+              </p>
             </li>
             <li>
-              <strong>Sat</strong> {sat.start} - {sat.end}
+              <strong>Sat</strong>
+              <p>
+                {formatTime(sat.start)} - {formatTime(sat.end)}
+              </p>
             </li>
             <li>
-              <strong>Sun</strong> {sun.start} - {sun.end}
+              <strong>Sun</strong>
+              <p>
+                {formatTime(sun.start)} - {formatTime(sun.end)}
+              </p>
             </li>
           </ul>
         </div>

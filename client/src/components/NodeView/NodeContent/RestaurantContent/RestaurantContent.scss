@@ -31,11 +31,17 @@
         li {
           padding: 0;
           display: grid;
-          grid-template-columns: repeat(2, 22%);
+          grid-template-columns: repeat(5, 1fr);
 
           strong {
+            grid-column: 1;
             font-weight: 700;
             font-style: bold;
+            font-size: 15px;
+          }
+
+          p {
+            grid-column: 2/6;
             font-size: 15px;
           }
         }
