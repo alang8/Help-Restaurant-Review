@@ -1,19 +1,19 @@
+import 'mapbox-gl/dist/mapbox-gl.css'
 import React, { useEffect, useState } from 'react'
+import Map, { Marker } from 'react-map-gl'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import {
-  refreshState,
   currentNodeState,
-  selectedParentReviewState,
   refreshLinkListState,
+  refreshState,
+  selectedParentReviewState,
 } from '../../../../global/Atoms'
-import './RestaurantContent.scss'
 import { FrontendReviewGateway } from '../../../../reviews/FrontendReviewGateway'
 import { IReview } from '../../../../types'
 import { WriteReplyModal } from '../../../Modals/WriteReplyModal'
-import Review from './Review'
 import Comment from './Comment'
-import Map, { Marker } from 'react-map-gl'
-import 'mapbox-gl/dist/mapbox-gl.css'
+import './RestaurantContent.scss'
+import Review from './Review'
 
 /** The content of an image node, including any anchors */
 export const RestaurantContent = () => {
@@ -23,8 +23,7 @@ export const RestaurantContent = () => {
   const [, setParentReview] = useRecoilState(selectedParentReviewState)
 
   // destructure content for a restaurant node
-  const { location, description, phoneNumber, email, rating, reviews } =
-    currentNode.content
+  const { location, description, phoneNumber, email, reviews } = currentNode.content
   const { mon, tue, wed, thu, fri, sat, sun } = currentNode.content.hours
 
   // state for reviews
@@ -48,13 +47,6 @@ export const RestaurantContent = () => {
 
   // modal state
   const [writeReplyModal, setWriteReplyModal] = useState(false)
-
-  const formatDate = (date: string) => {
-    const dateObj = new Date(date)
-    const time = dateObj.toLocaleTimeString()
-    const day = dateObj.toLocaleDateString()
-    return `${day} at ${time}`
-  }
 
   useEffect(() => {
     // Get the root reviews for the restaurant
@@ -96,7 +88,7 @@ export const RestaurantContent = () => {
       setViewState({
         longitude: coordinates[0],
         latitude: coordinates[1],
-        zoom: 10,
+        zoom: 13,
       })
       setMarker({
         longitude: coordinates[0],
@@ -106,6 +98,7 @@ export const RestaurantContent = () => {
     getCoordinates()
   }, [currentNode, refresh])
 
+  // useEffect to build the reply and comment thread
   useEffect(() => {
     const buildCommentTree = async () => {
       const buildComments = async (reviewId: string, depth: number) => {
