@@ -209,8 +209,14 @@ export const RestaurantContent = () => {
         <div className="itemFour">
           <div className="sectionDivider" />
           <h1 className="sectionTitle">&#129497; Contact Us</h1>
-          <p>{phoneNumber}</p>
-          <div>{email}</div>
+          <p>
+            <strong>Phone Number: </strong>
+            {phoneNumber}
+          </p>
+          <div>
+            <strong>Email: </strong>
+            {email}
+          </div>
         </div>
       </div>
       <div className="gridColTwo">
