@@ -1,8 +1,14 @@
-# Unit 3: Editable Nodes
+# Final Project: Help
+
+Hi everyone, welcome to our web application: Help. Help is a hypertext system inspired by Yelp, a service that publishes user reviews and recommendations for restaurants.
+
+## Project Goals
+
+The overarching goal of our project is to build upon the existing hypertext features from the entirety of this course to develop a user-friendly restaurant review system.
 
 ## Setup
 
-From the `unit3` directory, you should `cd` into either `server` or `client`
+From the root directory, `cd` into either `server` or `client`
 and then run the following commands:
 
 ### `yarn install`
@@ -77,23 +83,8 @@ I am not doing any extra credit for this assignment.
 
 ## Known Bugs
 
-I made a Slack post regarding two bugs on November 2nd, 10:34 PM inside the #assignments channel.
-I have gone to TA hours and could not get these bugs resolved.
-
-The two bugs are as follows:
-
-1. When I complete a link, no mark immediately shows up in the editor for the new anchor.
-   How can I fix this / how important is this?
-
-2. When I delete an anchor, the anchor successfully gets deleted from my database.
-   However in the `NodeLinkMenu` , the link gets deleted but not the anchor name. I suspect this
-   has to do with async and `loadAnchorToLinksMap`, but I am unsure. When I refresh the page or
-   click on the anchor, the anchor title gets removed.
-
-Additionally, I also discovered that you cannot start a link using double click or the
-keyboard highlighting. Brynn made an announcement about this in Slack. Please bear this
-in mind when creating a link!
+There are no known bugs.
 
 ## Estimated Hours Taken
 
-20 Hours
+40 Hours
