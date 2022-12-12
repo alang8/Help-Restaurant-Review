@@ -64,7 +64,6 @@ export const NodeHeader = (props: INodeHeaderProps) => {
   const [rating, setRating] = useState(-1)
 
   /* Method to update the current folder view */
-  // eslint-disable-next-line
   const handleUpdateFolderView = async (e: React.ChangeEvent) => {
     const nodeProperty: INodeProperty = makeINodeProperty(
       'viewType',

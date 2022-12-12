@@ -34,14 +34,10 @@ export interface IOpenGraphModalProps {
  */
 export const OpenGraphModal = (props: IOpenGraphModalProps) => {
   // const { isOpen, onClose, onSubmit, node, roots } = props
-  // eslint-disable-next-line
   const { isOpen, onClose, onSubmit } = props
   // state variables
-  // eslint-disable-next-line
   const [selectedNode, setSelectedNode] = useRecoilState(selectedNodeState)
-  // eslint-disable-next-line
   const [error, setError] = useState<string>('')
-  // eslint-disable-next-line
   const [refresh, setRefresh] = useRecoilState(refreshState)
 
   // Reset our state variables and close the modal
