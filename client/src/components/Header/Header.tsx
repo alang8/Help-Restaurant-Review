@@ -91,14 +91,12 @@ export const Header = (props: IHeaderProps) => {
           />
         </InputRightElement>
       </InputGroup>
-      <Link to={'/login'}>
-        <Button
-          isWhite={isLinking}
-          style={registerButtonStyle}
-          onClick={onCreateNodeButtonClick}
-          text="Register Restaurant"
-        />
-      </Link>
+      <Button
+        isWhite={isLinking}
+        style={registerButtonStyle}
+        onClick={onCreateNodeButtonClick}
+        text="Register Restaurant"
+      />
 
       {isLinking && startAnchor && (
         <div className="right-bar">

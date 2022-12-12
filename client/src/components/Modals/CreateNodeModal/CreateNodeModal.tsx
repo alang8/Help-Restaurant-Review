@@ -24,8 +24,8 @@ import { Button } from '../../Button'
 import { TreeView } from '../../TreeView'
 import './CreateNodeModal.scss'
 import { createNodeFromModal, uploadImage } from './createNodeUtils'
-import { useSetRecoilState } from 'recoil'
-import { selectedNodeState } from '../../../global/Atoms'
+import { useRecoilState, useSetRecoilState } from 'recoil'
+import { refreshState, selectedNodeState } from '../../../global/Atoms'
 
 export interface ICreateNodeModalProps {
   isOpen: boolean
@@ -50,6 +50,7 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
   const [modalContent, setModalContent] = useState('')
   const [selectedType, setSelectedType] = useState<NodeType>('' as NodeType)
   const [error, setError] = useState<string>('')
+  const [refresh, setRefresh] = useRecoilState(refreshState)
 
   // state variables (restaurant)
   const [location, setLocation] = useState('')
@@ -232,6 +233,7 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
     }
     const node = await createNodeFromModal(attributes)
     node && setSelectedNode(node)
+    setRefresh(!refresh)
     onSubmit()
     handleClose()
   }

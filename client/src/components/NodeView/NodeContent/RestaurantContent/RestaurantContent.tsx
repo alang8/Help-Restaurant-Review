@@ -12,6 +12,8 @@ import { WriteReplyModal } from '../../../Modals/WriteReplyModal'
 import Reply from './Reply'
 import { Button } from '../../../Button'
 import Reply2 from './Reply2'
+import Map, { Marker } from 'react-map-gl'
+import 'mapbox-gl/dist/mapbox-gl.css'
 
 /** The content of an image node, including any anchors */
 export const RestaurantContent = () => {
@@ -27,7 +29,17 @@ export const RestaurantContent = () => {
 
   // state for reviews
   const [restaurantReviews, setRestaurantReviews] = useState<IReview[]>(reviews)
-  const [restaurantRootReviews, setRestaurantRootReviews] = useState<IReview[]>(reviews)
+
+  // restaurant coordinates for map
+  const [viewState, setViewState] = useState({
+    longitude: 0,
+    latitude: 0,
+    zoom: 10,
+  })
+  const [marker, setMarker] = useState({
+    longitude: 0,
+    latitude: 0,
+  })
 
   // modal state
   const [writeReplyModal, setWriteReplyModal] = useState(false)
@@ -37,15 +49,6 @@ export const RestaurantContent = () => {
     const time = dateObj.toLocaleTimeString()
     const day = dateObj.toLocaleDateString()
     return `${day} at ${time}`
-  }
-
-  const reviewButtonStyle = {
-    height: 30,
-    width: 100,
-    backgroundColor: '#ffffff',
-    color: '#000000',
-    border: '1px solid #000000',
-    fontWeight: 'bold',
   }
 
   useEffect(() => {
@@ -64,20 +67,30 @@ export const RestaurantContent = () => {
     getReviews()
   }, [currentNode, refresh])
 
-  // useEffect(() => {
-  //   // Get the reviews for the restaurant
-  //   const getReviews = async () => {
-  //     const reviewResp = await FrontendReviewGateway.getReviewsByNodeId(
-  //       currentNode.nodeId
-  //     )
-  //     if (!reviewResp.success) {
-  //       console.log('Error getting reviews: ' + reviewResp.message)
-  //     }
-  //     const reviews = reviewResp.payload!
-  //     setRestaurantReviews(reviews)
-  //   }
-  //   getReviews()
-  // }, [currentNode, refresh])
+  useEffect(() => {
+    // Make API call to get the coordinates of the restaurant
+    const getCoordinates = async () => {
+      const resp = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${location}.json?
+        country=us&autocomplete=false&limit=1&access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`
+      )
+      const data = await resp.json()
+      if (data.features.length === 0) {
+        return
+      }
+      const coordinates = data.features[0].geometry.coordinates
+      setViewState({
+        longitude: coordinates[0],
+        latitude: coordinates[1],
+        zoom: 10,
+      })
+      setMarker({
+        longitude: coordinates[0],
+        latitude: coordinates[1],
+      })
+    }
+    getCoordinates()
+  }, [currentNode, refresh])
 
   return (
     <div className="restaurantContainer">
@@ -90,6 +103,22 @@ export const RestaurantContent = () => {
           <div className="sectionDivider" />
           <h1 className="sectionTitle">&#128205; Location</h1>
           {location}
+          <Map
+            {...viewState}
+            onMove={(evt) => setViewState(evt.viewState)}
+            style={{ width: '100%', height: '50vh' }}
+            mapStyle="mapbox://styles/mapbox/streets-v9"
+            mapboxAccessToken="pk.eyJ1IjoiYW5kcmV3c2xpIiwiYSI6ImNsYms1cGplMDBiMmkzc3F2aDFjendmMzIifQ.Y1fKkQtlBerceH_I6Eo2Xw"
+          >
+            <Marker
+              longitude={marker.longitude}
+              latitude={marker?.latitude}
+              anchor="bottom"
+              style={{ width: 20, height: 20 }}
+            >
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Google_Maps_pin.svg/1200px-Google_Maps_pin.svg.png" />
+            </Marker>
+          </Map>
         </div>
         <div className="itemThree">
           <div className="sectionDivider" />
@@ -158,12 +187,6 @@ export const RestaurantContent = () => {
                         />
                       )
                     })}
-                    {/* <Reply
-                      review={review}
-                      setParentReview={setParentReview}
-                      setWriteReplyModal={setWriteReplyModal}
-                      key={idx}
-                    /> */}
                   </React.Fragment>
                 )
               })

@@ -148,7 +148,7 @@ export const NodeHeader = (props: INodeHeaderProps) => {
     if (currentNode.type === 'restaurant') {
       getReviews()
     }
-  }, [currentNode, selectedNode, refresh])
+  }, [currentNode, selectedNode, refresh, refreshLinkList])
 
   /* Node key handlers*/
   const nodeKeyHandlers = (e: KeyboardEvent) => {
