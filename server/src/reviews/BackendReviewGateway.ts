@@ -1,11 +1,5 @@
 import { MongoClient } from 'mongodb'
-import {
-  failureServiceResponse,
-  IServiceResponse,
-  isIReview,
-  IReview,
-  IRestaurantNode,
-} from '../types'
+import { failureServiceResponse, IServiceResponse, isIReview, IReview } from '../types'
 import { IReviewProperty, isIReviewProperty } from '../types/IReviewProperty'
 import { ReviewCollectionConnection } from './ReviewCollectionConnection'
 

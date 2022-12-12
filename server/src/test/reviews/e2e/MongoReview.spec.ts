@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb'
 import { BackendReviewGateway } from '../../../reviews'
-import { IReview, makeIReviewProperty, NodeType } from '../../../types'
+import { IReview, NodeType } from '../../../types'
 import uniqid from 'uniqid'
 
 jest.setTimeout(50000)
