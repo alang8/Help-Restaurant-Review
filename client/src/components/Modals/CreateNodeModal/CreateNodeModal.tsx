@@ -221,10 +221,7 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
             rating: null,
             reviews: [],
             websiteUrl: websiteUrl,
-            imageContent:
-              modalContent == ''
-                ? 'https://clipart.world/wp-content/uploads/2021/01/Restaurant-Building-clipart.png'
-                : modalContent,
+            imageContent: modalContent == '' ? 'https://shorturl.at/ijm46' : modalContent,
           }
         : modalContent
     const attributes = {
