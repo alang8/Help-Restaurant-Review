@@ -115,7 +115,7 @@ export const RestaurantContent = () => {
           <Map
             {...viewState}
             onMove={(evt) => setViewState(evt.viewState)}
-            style={{ width: '100%', height: '50vh' }}
+            style={{ width: '100%', height: '40vh' }}
             mapStyle="mapbox://styles/mapbox/streets-v9"
             mapboxAccessToken="pk.eyJ1IjoiYW5kcmV3c2xpIiwiYSI6ImNsYms1cGplMDBiMmkzc3F2aDFjendmMzIifQ.Y1fKkQtlBerceH_I6Eo2Xw"
           >
