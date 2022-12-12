@@ -203,11 +203,9 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
     setSunEndHours(0)
   }
 
-  const isImage: boolean = selectedType === 'image'
   const isRestaurant: boolean = selectedType === 'restaurant'
 
   const formatTime = (val: number) => val
-  // const formatTime = (val: number) => val + 'ET'
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose}>

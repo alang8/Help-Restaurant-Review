@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import {
-  currentNodeState,
   alertMessageState,
   alertOpenState,
   alertTitleState,
@@ -21,13 +20,11 @@ import { pathToString } from '../../../../global'
 
 /** The contents of search result */
 export const SearchContent = () => {
-  const currentNode = useRecoilValue(currentNodeState)
-
   const setAlertIsOpen = useSetRecoilState(alertOpenState)
   const setAlertTitle = useSetRecoilState(alertTitleState)
   const setAlertMessage = useSetRecoilState(alertMessageState)
 
-  const [searchTerm, setSearchTerm] = useRecoilState(searchTermState)
+  const searchTerm = useRecoilValue(searchTermState)
   const [isSearching, setIsSearching] = useRecoilState(isSearchingState)
   const [searchResults, setSearchResults] = useState<INode[]>([])
   const [filteredSearchResults, setFilteredSearchResults] = useState<INode[]>([])

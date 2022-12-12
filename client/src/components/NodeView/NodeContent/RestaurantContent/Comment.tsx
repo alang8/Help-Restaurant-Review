@@ -47,7 +47,7 @@ export default function Comment({
   }, [])
   return (
     <div className="reply-container" style={{ paddingLeft: 30 * depth }}>
-      <img src="https://cdn0.iconfinder.com/data/icons/navigation-set-arrows-part-one/32/SubdirectoryArrowDownRight-512.png" />
+      <img src="https://tinyurl.com/4ttx78fw" />
       <div className="reviewContainer reply">
         <div className="reviewTitleBar">
           <img src="/anonymous.png" alt="anonymous" />

@@ -1,5 +1,5 @@
 import { atom } from 'recoil'
-import { INode, IAnchor, IReview, Extent, makeIFolderNode } from '../../types'
+import { INode, IAnchor, Extent, makeIFolderNode } from '../../types'
 
 // the selected node
 export const selectedNodeState = atom<INode | null>({

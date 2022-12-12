@@ -1,6 +1,5 @@
 import { Select } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import * as ai from 'react-icons/ai'
 import * as bi from 'react-icons/bi'
 import * as ri from 'react-icons/ri'
 import * as si from 'react-icons/si'
@@ -36,7 +35,6 @@ interface INodeHeaderProps {
 
 export const NodeHeader = (props: INodeHeaderProps) => {
   const {
-    onCreateNodeButtonClick,
     onDeleteButtonClick,
     onMoveButtonClick,
     onHandleStartLinkClick,

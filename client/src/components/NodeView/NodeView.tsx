@@ -87,7 +87,8 @@ export const NodeView = (props: INodeViewProps) => {
       setAlertIsOpen(true)
       setAlertTitle('Cannot start link from this anchor')
       setAlertMessage(
-        'There are overlapping anchors, or this anchor contains other anchors. Before you create this anchor you must remove the other anchors.'
+        `There are overlapping anchors, or this anchor contains other anchors.
+        Before you create this anchor you must remove the other anchors.`
       )
     } else {
       const anchor = {

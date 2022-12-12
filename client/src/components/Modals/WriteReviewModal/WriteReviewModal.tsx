@@ -15,7 +15,7 @@ import {
   Textarea,
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import {
   refreshLinkListState,
   refreshState,
@@ -29,10 +29,8 @@ import { FrontendReviewGateway } from '../../../reviews'
 
 export interface IWriteReviewModalProps {
   isOpen: boolean
-  // node: INode
   onSubmit: () => void
   onClose: () => void
-  // roots: RecursiveNodeTree[]
 }
 
 /**
@@ -40,9 +38,9 @@ export interface IWriteReviewModalProps {
  */
 export const WriteReviewModal = (props: IWriteReviewModalProps) => {
   // const { isOpen, onClose, onSubmit, node, roots } = props
-  const { isOpen, onClose, onSubmit } = props
+  const { isOpen, onClose } = props
   // state variables
-  const [selectedNode, setSelectedNode] = useRecoilState(selectedNodeState)
+  const selectedNode = useRecoilValue(selectedNodeState)
   const [error, setError] = useState<string>('')
   const [refresh, setRefresh] = useRecoilState(refreshState)
   const [refreshLinkList, setRefreshLinkList] = useRecoilState(refreshLinkListState)

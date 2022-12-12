@@ -5,7 +5,7 @@ import { nodeTypeIcon, pathToString } from '../../../global'
 import { INode, NodeType } from '../../../types'
 import { RecursiveNodeTree } from '../../../types/RecursiveNodeTree'
 import './TreeViewItem.scss'
-import { useRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
 import { isSearchingState } from '../../../global/Atoms'
 
 interface ITreeViewProps {
@@ -28,7 +28,7 @@ export const TreeViewItem = ({
   changeUrlOnClick,
 }: ITreeViewProps) => {
   let childrenItems: JSX.Element[] = []
-  const [isSearching, setIsSearching] = useRecoilState(isSearchingState)
+  const setIsSearching = useSetRecoilState(isSearchingState)
 
   // glr: why does this not work?
   if (childNodes.length) {

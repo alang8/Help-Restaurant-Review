@@ -62,7 +62,7 @@ export const MainView = React.memo(function MainView() {
   // history
   const history = useHistory()
   // search state
-  const [isSearching, setIsSearching] = useRecoilState(isSearchingState)
+  const setIsSearching = useSetRecoilState(isSearchingState)
 
   /** update our frontend root nodes from the database */
   const loadRootsFromDB = useCallback(async () => {

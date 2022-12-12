@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { INode } from '../../types'
+// eslint-disable-next-line
 import { TextPreviewContent } from '../NodeView/NodeContent/FolderContent/NodePreview/NodePreviewContent'
 import './Search.scss'
 

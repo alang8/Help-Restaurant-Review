@@ -8,7 +8,7 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react'
 import { useCallback, useEffect, useState } from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { refreshState, selectedNodeState } from '../../../global/Atoms'
 import { FrontendNodeGateway } from '../../../nodes'
 import './OpenGraphModal.scss'
@@ -23,10 +23,8 @@ import { FrontendLinkGateway } from '../../../links/FrontendLinkGateway'
 
 export interface IOpenGraphModalProps {
   isOpen: boolean
-  // node: INode
   onSubmit: () => void
   onClose: () => void
-  // roots: RecursiveNodeTree[]
 }
 
 /**
@@ -34,16 +32,14 @@ export interface IOpenGraphModalProps {
  */
 export const OpenGraphModal = (props: IOpenGraphModalProps) => {
   // const { isOpen, onClose, onSubmit, node, roots } = props
-  const { isOpen, onClose, onSubmit } = props
+  const { isOpen, onClose } = props
   // state variables
-  const [selectedNode, setSelectedNode] = useRecoilState(selectedNodeState)
-  const [error, setError] = useState<string>('')
-  const [refresh, setRefresh] = useRecoilState(refreshState)
+  const selectedNode = useRecoilValue(selectedNodeState)
+  const refresh = useRecoilValue(refreshState)
 
   // Reset our state variables and close the modal
   const handleClose = () => {
     onClose()
-    setError('')
   }
 
   interface ReactFlowNode {
@@ -199,25 +195,7 @@ export const OpenGraphModal = (props: IOpenGraphModalProps) => {
                 onConnect={onConnect}
               />
             </div>
-
-            {/* <div className="modal-treeView">
-              <TreeView
-                roots={roots}
-                parentNode={selectedParentNode}
-                setParentNode={setSelectedParentNode}
-                changeUrlOnClick={false}
-              />
-            </div> */}
           </ModalBody>
-          {/* <ModalFooter>
-            {error.length > 0 && <div className="modal-error">{error}</div>}
-            <div className="modal-footer-buttons">
-              <Button
-                text={selectedParentNode ? 'Move to selected node' : 'Move to root'}
-                onClick={handleSubmit}
-              />
-            </div>
-          </ModalFooter> */}
         </ModalContent>
       </div>
     </Modal>

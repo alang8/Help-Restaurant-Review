@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Button } from '../Button'
 import * as ri from 'react-icons/ri'
-import * as ai from 'react-icons/ai'
 import * as go from 'react-icons/go'
 import { NodeIdsToNodesMap } from '../../types'
 import { Link } from 'react-router-dom'
@@ -24,8 +23,7 @@ interface IHeaderProps {
 }
 
 export const Header = (props: IHeaderProps) => {
-  const { onHomeClick, onSearchButtonClick, nodeIdsToNodesMap, onCreateNodeButtonClick } =
-    props
+  const { onHomeClick, nodeIdsToNodesMap, onCreateNodeButtonClick } = props
   const registerButtonStyle = {
     height: 30,
     marginLeft: 30,
@@ -41,7 +39,7 @@ export const Header = (props: IHeaderProps) => {
 
   // search states
   const [searchTerm, setSearchTerm] = useRecoilState(searchTermState)
-  const [isSearching, setIsSearching] = useRecoilState(isSearchingState)
+  const setIsSearching = useSetRecoilState(isSearchingState)
 
   const nodeKeyHandlers = (e: KeyboardEvent) => {
     switch (e.key) {

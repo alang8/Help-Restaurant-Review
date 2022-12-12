@@ -68,8 +68,8 @@ export const RestaurantContent = () => {
     // Make API call to get the coordinates of the restaurant
     const getCoordinates = async () => {
       const resp = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${location}.json?
-        country=us&autocomplete=false&limit=1&access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${location}.json?country
+        =us&autocomplete=false&limit=1&access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`
       )
       const data = await resp.json()
       if (data.features.length === 0) {
@@ -163,7 +163,7 @@ export const RestaurantContent = () => {
             onMove={(evt) => setViewState(evt.viewState)}
             style={{ width: '100%', height: '40vh' }}
             mapStyle="mapbox://styles/mapbox/streets-v9"
-            mapboxAccessToken="pk.eyJ1IjoiYW5kcmV3c2xpIiwiYSI6ImNsYms1cGplMDBiMmkzc3F2aDFjendmMzIifQ.Y1fKkQtlBerceH_I6Eo2Xw"
+            mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
           >
             {marker.latitude === -99999999 && marker.longitude === -99999999 ? (
               <div />
@@ -174,7 +174,7 @@ export const RestaurantContent = () => {
                 anchor="bottom"
                 style={{ width: 20, height: 20 }}
               >
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Google_Maps_pin.svg/1200px-Google_Maps_pin.svg.png" />
+                <img src="http://shorturl.at/cgjnM" />
               </Marker>
             )}
           </Map>
