@@ -221,7 +221,10 @@ export const CreateNodeModal = (props: ICreateNodeModalProps) => {
             rating: null,
             reviews: [],
             websiteUrl: websiteUrl,
-            imageContent: modalContent,
+            imageContent:
+              modalContent == ''
+                ? 'https://img.favpng.com/9/7/16/clip-art-restaurant-vector-graphics-illustration-building-png-favpng-anqXKNQTViWvfD0E4E2PrxtkE.jpg'
+                : modalContent,
           }
         : modalContent
     const attributes = {
