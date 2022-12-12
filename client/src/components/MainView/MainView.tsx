@@ -10,6 +10,7 @@ import {
   alertTitleState,
   alertMessageState,
   currentNodeState,
+  isSearchingState,
 } from '../../global/Atoms'
 import { useLocation } from 'react-router-dom'
 import { FrontendNodeGateway } from '../../nodes'
@@ -60,6 +61,8 @@ export const MainView = React.memo(function MainView() {
   const setAlertMessage = useSetRecoilState(alertMessageState)
   // history
   const history = useHistory()
+  // search state
+  const [isSearching, setIsSearching] = useRecoilState(isSearchingState)
 
   /** update our frontend root nodes from the database */
   const loadRootsFromDB = useCallback(async () => {
@@ -188,6 +191,7 @@ export const MainView = React.memo(function MainView() {
     setSelectedNode(null)
     setSearchNode(false)
     setSearchResults([])
+    setIsSearching(false)
   }, [])
 
   const getSelectedNodeChildren = useCallback(() => {
