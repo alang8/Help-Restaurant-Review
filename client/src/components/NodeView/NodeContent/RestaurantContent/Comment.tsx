@@ -35,7 +35,6 @@ export default function Comment({
   useEffect(() => {
     // Get the reviews for the restaurant
     const getReviews = async () => {
-      console.log(reviewId)
       const reviewResp = await FrontendReviewGateway.getReviewById(reviewId)
       if (!reviewResp.success) {
         console.log('Error getting reviews: ' + reviewResp.message)

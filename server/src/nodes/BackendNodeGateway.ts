@@ -100,6 +100,15 @@ export class BackendNodeGateway {
   }
 
   /**
+   * Method to retrieve all nodes in the database.
+   *
+   * @returns IServiceResponse<INode[]>
+   */
+  async getAllNodes(): Promise<IServiceResponse<INode[]>> {
+    return this.nodeCollectionConnection.findAllNodes()
+  }
+
+  /**
    * Method to delete all nodes in the database.
    *
    * @returns IServiceResponse<{}>

@@ -18,16 +18,27 @@ import './Header.scss'
 interface IHeaderProps {
   nodeIdsToNodesMap: NodeIdsToNodesMap
   onCreateNodeButtonClick: () => void
+  onOpenMapviewButtonClick: () => void
   onSearchButtonClick: (query: string) => void
   onHomeClick: () => void
 }
 
 export const Header = (props: IHeaderProps) => {
-  const { onHomeClick, nodeIdsToNodesMap, onCreateNodeButtonClick } = props
+  const {
+    onHomeClick,
+    nodeIdsToNodesMap,
+    onCreateNodeButtonClick,
+    onOpenMapviewButtonClick,
+  } = props
+  const mapviewButtonStyle = {
+    height: 30,
+    width: 100,
+    backgroundColor: '#EA3B2E',
+    color: '#f5f5f5',
+    fontWeight: 'bold',
+  }
   const registerButtonStyle = {
     height: 30,
-    marginLeft: 30,
-    marginRight: 30,
     width: 180,
     backgroundColor: '#EA3B2E',
     color: '#f5f5f5',
@@ -89,13 +100,20 @@ export const Header = (props: IHeaderProps) => {
           />
         </InputRightElement>
       </InputGroup>
-      <Button
-        isWhite={isLinking}
-        style={registerButtonStyle}
-        onClick={onCreateNodeButtonClick}
-        text="Register Restaurant"
-      />
-
+      <div className="buttons">
+        <Button
+          isWhite={isLinking}
+          style={mapviewButtonStyle}
+          onClick={onOpenMapviewButtonClick}
+          text="Mapview"
+        />
+        <Button
+          isWhite={isLinking}
+          style={registerButtonStyle}
+          onClick={onCreateNodeButtonClick}
+          text="Register Restaurant"
+        />
+      </div>
       {isLinking && startAnchor && (
         <div className="right-bar">
           <div>

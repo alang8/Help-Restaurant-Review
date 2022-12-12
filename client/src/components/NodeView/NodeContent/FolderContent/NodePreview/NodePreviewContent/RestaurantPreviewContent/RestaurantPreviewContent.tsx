@@ -8,7 +8,6 @@ interface IRestaurantPreviewProps {
 /** The content of an image node, including any anchors */
 export const RestaurantPreviewContent = (props: IRestaurantPreviewProps) => {
   const { content } = props
-  console.log(content)
   /**
    * Return the preview container if we are rendering a restaurant preview
    */

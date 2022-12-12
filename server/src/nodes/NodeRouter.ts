@@ -83,6 +83,22 @@ export class NodeRouter {
     })
 
     /**
+     * Request to retrieve all nodes
+     *
+     * @param req request object coming from client
+     * @param res response object to send to client
+     */
+    NodeExpressRouter.get('/all', async (req: Request, res: Response) => {
+      try {
+        const response: IServiceResponse<INode[]> =
+          await this.BackendNodeGateway.getAllNodes()
+        res.status(200).send(response)
+      } catch (e) {
+        res.status(500).send(e.message)
+      }
+    })
+
+    /**
      * Request to update the node with the given nodeId
      *
      * @param req request object coming from client

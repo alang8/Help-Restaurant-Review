@@ -22,6 +22,7 @@ import { LoadingScreen } from '../LoadingScreen'
 import {
   CompleteLinkModal,
   CreateNodeModal,
+  OpenMapviewModal,
   MoveNodeModal,
   OpenGraphModal,
   WriteReviewModal,
@@ -42,6 +43,8 @@ export const MainView = React.memo(function MainView() {
   const [completeLinkModalOpen, setCompleteLinkModalOpen] = useState(false)
   const [moveNodeModalOpen, setMoveNodeModalOpen] = useState(false)
   const [writeReviewModal, setWriteReviewModal] = useState(false)
+  const [mapviewModalOpen, setMapviewModalOpen] = useState(false)
+
   // search states
   const [searchNode, setSearchNode] = useState(false)
   const [searchResults, setSearchResults] = useState<INode[]>([])
@@ -183,6 +186,10 @@ export const MainView = React.memo(function MainView() {
     setMoveNodeModalOpen(true)
   }, [])
 
+  const handleOpenMapviewButtonClick = useCallback(() => {
+    setMapviewModalOpen(true)
+  }, [])
+
   const handleCompleteLinkClick = useCallback(() => {
     setCompleteLinkModalOpen(true)
   }, [])
@@ -251,6 +258,7 @@ export const MainView = React.memo(function MainView() {
           <Header
             onHomeClick={handleHomeClick}
             onCreateNodeButtonClick={handleCreateNodeButtonClick}
+            onOpenMapviewButtonClick={handleOpenMapviewButtonClick}
             onSearchButtonClick={handleSearchButtonClick}
             nodeIdsToNodesMap={nodeIdsToNodesMap}
           />
@@ -259,6 +267,11 @@ export const MainView = React.memo(function MainView() {
             onClose={() => setCreateNodeModalOpen(false)}
             roots={rootNodes}
             nodeIdsToNodesMap={nodeIdsToNodesMap}
+            onSubmit={loadRootsFromDB}
+          />
+          <OpenMapviewModal
+            isOpen={mapviewModalOpen}
+            onClose={() => setMapviewModalOpen(false)}
             onSubmit={loadRootsFromDB}
           />
           <OpenGraphModal

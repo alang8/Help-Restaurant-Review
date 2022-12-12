@@ -1,5 +1,6 @@
 export * from './CompleteLinkModal'
 export * from './CreateNodeModal'
+export * from './OpenMapviewModal'
 export * from './MoveNodeModal'
 export * from './OpenGraphModal'
 export * from './WriteReviewModal'

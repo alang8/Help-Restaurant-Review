@@ -111,6 +111,24 @@ export class NodeCollectionConnection {
   }
 
   /**
+   * Finds all nodes in the database.
+   * Returns successfulServiceResponse with empty array when no nodes found.
+   *
+   * @return successfulServiceResponse<INode[]>
+   */
+  async findAllNodes(): Promise<IServiceResponse<INode[]>> {
+    const foundNodes: INode[] = []
+    await this.client
+      .db()
+      .collection(this.collectionName)
+      .find()
+      .forEach(function(doc) {
+        foundNodes.push(doc)
+      })
+    return successfulServiceResponse(foundNodes)
+  }
+
+  /**
    * Updates node when given a nodeId and a set of properties to update.
    *
    * @param {string} nodeId
