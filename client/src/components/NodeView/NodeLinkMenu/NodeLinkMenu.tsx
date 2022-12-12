@@ -82,5 +82,10 @@ export const NodeLinkMenu = (props: INodeLinkMenuProps) => {
     return null
   }
 
-  return <div className="linkMenu">{loadMenu()}</div>
+  return (
+    <div className="linkMenu">
+      <strong>Link Menu</strong>
+      {loadMenu()}
+    </div>
+  )
 }

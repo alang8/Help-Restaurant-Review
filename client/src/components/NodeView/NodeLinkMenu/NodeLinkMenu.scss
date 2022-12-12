@@ -8,6 +8,12 @@
   display: flex;
   flex-direction: column;
 
+  strong {
+    padding-left: 10px;
+    text-align: left;
+    font-size: 20px;
+  }
+
   .imagePreviewContainer {
     width: fit-content;
     height: fit-content;
