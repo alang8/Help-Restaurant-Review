@@ -2,15 +2,18 @@ import React, { useEffect, useState } from 'react'
 import { IReview } from '../../../../types'
 import { FrontendReviewGateway } from '../../../../reviews/FrontendReviewGateway'
 import { Button } from '../../../Button'
+import { Margin } from '@mui/icons-material'
 
 interface IProps {
   reviewId: string
+  depth: number
   setParentReview(reviewId: string): void
   setWriteReplyModal(modal: boolean): void
 }
 
 export default function Reply2({
   reviewId,
+  depth,
   setParentReview,
   setWriteReplyModal,
 }: IProps) {
@@ -40,22 +43,29 @@ export default function Reply2({
       }
       const review = reviewResp.payload!
       setRestaurantReview(review)
-      console.log(review)
     }
     getReviews()
   }, [])
   return (
-    <div className="reply-container">
+    <div className="reply-container" style={{ paddingLeft: 30 * depth }}>
       <img src="https://cdn0.iconfinder.com/data/icons/navigation-set-arrows-part-one/32/SubdirectoryArrowDownRight-512.png" />
       <div className="reviewContainer reply">
         <div className="reviewTitleBar">
           <img src="/anonymous.png" alt="anonymous" />
           <strong>{review?.author}</strong>
+          <p>{depth}</p>
         </div>
         <div className="reviewContent">{review?.content}</div>
         <div className="reviewFooter">
           <p>Last Modified: {formatDate(String(review?.dateModified!))}</p>
-          {/* <Button text="Reply" style={reviewButtonStyle} /> */}
+          <Button
+            text="Reply"
+            style={reviewButtonStyle}
+            onClick={() => {
+              setParentReview(review!.reviewId)
+              setWriteReplyModal(true)
+            }}
+          />
         </div>
       </div>
     </div>

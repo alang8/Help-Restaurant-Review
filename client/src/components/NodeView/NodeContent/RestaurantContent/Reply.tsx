@@ -4,11 +4,17 @@ import { Button } from '../../../Button'
 
 interface IProps {
   review: IReview
+  depth: number
   setParentReview(reviewId: string): void
   setWriteReplyModal(modal: boolean): void
 }
 
-export default function Reply({ review, setParentReview, setWriteReplyModal }: IProps) {
+export default function Reply({
+  review,
+  depth,
+  setParentReview,
+  setWriteReplyModal,
+}: IProps) {
   const formatDate = (date: string) => {
     const dateObj = new Date(date)
     const time = dateObj.toLocaleTimeString()

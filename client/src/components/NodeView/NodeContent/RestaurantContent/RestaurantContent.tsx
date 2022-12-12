@@ -4,13 +4,13 @@ import {
   refreshState,
   currentNodeState,
   selectedParentReviewState,
+  refreshLinkListState,
 } from '../../../../global/Atoms'
 import './RestaurantContent.scss'
 import { FrontendReviewGateway } from '../../../../reviews/FrontendReviewGateway'
 import { IReview } from '../../../../types'
 import { WriteReplyModal } from '../../../Modals/WriteReplyModal'
 import Reply from './Reply'
-import { Button } from '../../../Button'
 import Reply2 from './Reply2'
 import Map, { Marker } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -29,6 +29,11 @@ export const RestaurantContent = () => {
 
   // state for reviews
   const [restaurantReviews, setRestaurantReviews] = useState<IReview[]>(reviews)
+  const [reviewJSX, setReviewJSX] = useState<JSX.Element[]>([
+    <div className="reviewContainerEmptyState" key={1}>
+      There are no reviews for this restaurant yet. Leave the first review!
+    </div>,
+  ])
 
   // restaurant coordinates for map
   const [viewState, setViewState] = useState({
@@ -65,7 +70,7 @@ export const RestaurantContent = () => {
       setRestaurantReviews(reviews)
     }
     getReviews()
-  }, [currentNode, refresh])
+  }, [currentNode, refresh, refreshLinkListState, setParentReview])
 
   useEffect(() => {
     // Make API call to get the coordinates of the restaurant
@@ -100,6 +105,55 @@ export const RestaurantContent = () => {
     }
     getCoordinates()
   }, [currentNode, refresh])
+
+  useEffect(() => {
+    const buildCommentTree = async () => {
+      const buildComments = async (reviewId: string, depth: number) => {
+        const reviewResp = await FrontendReviewGateway.getReviewById(reviewId)
+        if (!reviewResp.success) {
+          console.log('Error getting review: ' + reviewResp.message)
+          return
+        }
+        const review = reviewResp.payload!
+        const children = await Promise.all(
+          review.replies.map((replyId) => buildComments(replyId, depth + 1))
+        )
+        return (
+          <React.Fragment key={reviewId}>
+            <Reply2
+              reviewId={reviewId}
+              depth={depth}
+              setParentReview={setParentReview}
+              setWriteReplyModal={setWriteReplyModal}
+            />
+            {children}
+          </React.Fragment>
+        )
+      }
+
+      const returnJSX = await Promise.all(
+        restaurantReviews.map(async (review, idx) => {
+          const comments = await Promise.all(
+            review.replies.map((replyId) => buildComments(replyId, 1))
+          )
+          return (
+            <React.Fragment key={idx}>
+              <Reply
+                review={review}
+                depth={0}
+                setParentReview={setParentReview}
+                setWriteReplyModal={setWriteReplyModal}
+                key={idx}
+              />
+              {comments}
+            </React.Fragment>
+          )
+        })
+      )
+      setReviewJSX(returnJSX)
+    }
+    buildCommentTree()
+  }, [restaurantReviews])
 
   return (
     <div className="restaurantContainer">
@@ -175,34 +229,13 @@ export const RestaurantContent = () => {
         />
         <div className="scrollable">
           {
-            // If there are no reviews, display a message
+            // If there are no reviews, display an empty state
             restaurantReviews.length === 0 ? (
               <div className="reviewContainerEmptyState">
                 There are no reviews for this restaurant yet. Leave the first review!
               </div>
             ) : (
-              restaurantReviews.map((review, idx) => {
-                return (
-                  <React.Fragment key={idx}>
-                    <Reply
-                      review={review}
-                      setParentReview={setParentReview}
-                      setWriteReplyModal={setWriteReplyModal}
-                      key={idx}
-                    />
-                    {review.replies.map((replyId, idx) => {
-                      return (
-                        <Reply2
-                          reviewId={replyId}
-                          setParentReview={setParentReview}
-                          setWriteReplyModal={setWriteReplyModal}
-                          key={idx}
-                        />
-                      )
-                    })}
-                  </React.Fragment>
-                )
-              })
+              reviewJSX
             )
           }
         </div>
