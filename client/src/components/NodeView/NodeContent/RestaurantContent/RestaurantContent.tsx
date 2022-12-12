@@ -10,8 +10,8 @@ import './RestaurantContent.scss'
 import { FrontendReviewGateway } from '../../../../reviews/FrontendReviewGateway'
 import { IReview } from '../../../../types'
 import { WriteReplyModal } from '../../../Modals/WriteReplyModal'
-import Reply from './Reply'
-import Reply2 from './Reply2'
+import Review from './Review'
+import Comment from './Comment'
 import Map, { Marker } from 'react-map-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
@@ -120,7 +120,7 @@ export const RestaurantContent = () => {
         )
         return (
           <React.Fragment key={reviewId}>
-            <Reply2
+            <Comment
               reviewId={reviewId}
               depth={depth}
               setParentReview={setParentReview}
@@ -138,9 +138,8 @@ export const RestaurantContent = () => {
           )
           return (
             <React.Fragment key={idx}>
-              <Reply
+              <Review
                 review={review}
-                depth={0}
                 setParentReview={setParentReview}
                 setWriteReplyModal={setWriteReplyModal}
                 key={idx}

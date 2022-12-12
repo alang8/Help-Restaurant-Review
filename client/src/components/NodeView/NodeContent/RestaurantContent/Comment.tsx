@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { IReview } from '../../../../types'
 import { FrontendReviewGateway } from '../../../../reviews/FrontendReviewGateway'
 import { Button } from '../../../Button'
-import { Margin } from '@mui/icons-material'
 
 interface IProps {
   reviewId: string
@@ -11,7 +10,7 @@ interface IProps {
   setWriteReplyModal(modal: boolean): void
 }
 
-export default function Reply2({
+export default function Comment({
   reviewId,
   depth,
   setParentReview,
