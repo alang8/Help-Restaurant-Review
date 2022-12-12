@@ -76,6 +76,15 @@ export const RestaurantContent = () => {
       )
       const data = await resp.json()
       if (data.features.length === 0) {
+        setViewState({
+          longitude: -100,
+          latitude: 40,
+          zoom: 3,
+        })
+        setMarker({
+          longitude: -99999999,
+          latitude: -99999999,
+        })
         return
       }
       const coordinates = data.features[0].geometry.coordinates
@@ -110,14 +119,18 @@ export const RestaurantContent = () => {
             mapStyle="mapbox://styles/mapbox/streets-v9"
             mapboxAccessToken="pk.eyJ1IjoiYW5kcmV3c2xpIiwiYSI6ImNsYms1cGplMDBiMmkzc3F2aDFjendmMzIifQ.Y1fKkQtlBerceH_I6Eo2Xw"
           >
-            <Marker
-              longitude={marker.longitude}
-              latitude={marker?.latitude}
-              anchor="bottom"
-              style={{ width: 20, height: 20 }}
-            >
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Google_Maps_pin.svg/1200px-Google_Maps_pin.svg.png" />
-            </Marker>
+            {marker.latitude === -99999999 && marker.longitude === -99999999 ? (
+              <div />
+            ) : (
+              <Marker
+                longitude={marker.longitude}
+                latitude={marker?.latitude}
+                anchor="bottom"
+                style={{ width: 20, height: 20 }}
+              >
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Google_Maps_pin.svg/1200px-Google_Maps_pin.svg.png" />
+              </Marker>
+            )}
           </Map>
         </div>
         <div className="itemThree">
