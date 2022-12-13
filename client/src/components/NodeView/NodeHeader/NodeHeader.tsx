@@ -59,7 +59,7 @@ export const NodeHeader = (props: INodeHeaderProps) => {
   // Recoil variable for whether search results are being displayed
   const isSearching = useRecoilValue(isSearchingState)
   // State variable for restaurant rating
-  const [rating, setRating] = useState(-1)
+  const [rating, setRating] = useState<number>(-1)
 
   /* Method to update the current folder view */
   const handleUpdateFolderView = async (e: React.ChangeEvent) => {
@@ -132,7 +132,7 @@ export const NodeHeader = (props: INodeHeaderProps) => {
       let reviews = reviewResp.payload!
       reviews = reviews.filter((review) => review.parentReviewId === null)
       if (reviews.length === 0) {
-        return
+        setRating(-1)
       }
       let restaurantRating = reviews.reduce(
         (accumulator, review) => accumulator + review.rating,
@@ -145,7 +145,7 @@ export const NodeHeader = (props: INodeHeaderProps) => {
     if (currentNode.type === 'restaurant') {
       getReviews()
     }
-  }, [currentNode, selectedNode, refresh, refreshLinkList])
+  }, [currentNode, refresh])
 
   /* Node key handlers*/
   const nodeKeyHandlers = (e: KeyboardEvent) => {
