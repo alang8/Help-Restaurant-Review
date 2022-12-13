@@ -29,7 +29,9 @@ export default function Review({ review, setParentReview, setWriteReplyModal }: 
     <div className="reviewContainer">
       <div className="reviewTitleBar">
         <img src="/anonymous.png" alt="anonymous" />
-        <strong>{review.author}</strong>
+        <strong>
+          {review.author} - {review.rating} / 5
+        </strong>
       </div>
       <div className="reviewContent">{review.content}</div>
       <div className="reviewFooter">
